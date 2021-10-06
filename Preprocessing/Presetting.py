@@ -23,10 +23,16 @@ def set_DistReading_directory(system_name):
 
 def set_system_data_directory(system_name):
     """
-    :param system_name: "my_mac", "my_xps", or "wcph104". Here, the respective Computer system with its respective directory structure has to be selected"
+    :param system_name: "my_mac", "my_xps", "wcph113" or "wcph104". Here, the respective Computer system with its respective directory structure has to be selected"
     :return: the path for the the working project data
     """
-    return os.path.join(set_DistReading_directory(system_name), "data")
+    if system_name in ["wcph104", "my_mac", "my_xps"]:
+        return os.path.join(set_DistReading_directory(system_name), "data")
+        pass
+    elif system_name == "wcph113":
+        return "/mnt/data/users/schroeter"
+        pass
+
 
 
 def local_temp_directory(system_name):
