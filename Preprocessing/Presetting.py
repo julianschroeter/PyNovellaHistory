@@ -17,7 +17,7 @@ def set_DistReading_directory(system_name):
         return os.path.join( "C:" + os.sep, "Users", "jus71hy", "Documents", "Spaces", "DistReading")
         pass
     else:
-        print("Warning: The file system has not been specified correctly!")
+        print("Warning: The file system has not been specified correctly! Filepath is set to my_xps per default")
         return "/home/julian/Spaces/DistReading"
 
 
@@ -31,10 +31,10 @@ def set_system_data_directory(system_name):
 
 def local_temp_directory(system_name):
     if system_name == "my_mac":
-        return "/Users/karolineschroter/Documents/temp_CLS"
-    if system_name == "my_xps":
-        pass
-    if system_name == "wcph104":
+        return "/Users/karolineschroter/Documents/CLS_temp"
+    elif system_name == "my_xps":
+        return "/home/julian/Documents/CLS_temp"
+    elif system_name == "wcph104":
         return os.path.join("C:" + os.sep, "Users", "jus71hy", "Documents", "CLS_temp")
 
 def global_corpus_directory(system_name, test=False):
@@ -67,6 +67,15 @@ def global_corpus_raw_dtm_directory(system_name):
 
 def mallet_directory(system_name):
     return os.path.join(set_DistReading_directory(system_name), "mallet")
+
+def language_model_path(system_name, lang="de"):
+    if system_name == "my_mac" and lang == "de":
+        path = os.path.join(local_temp_directory(system_name), "language_models", "my_model_de")
+    else:
+        pass
+    return path
+
+
 
 """
 2. Load preprocessing files such as stop word lists etc.

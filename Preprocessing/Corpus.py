@@ -38,8 +38,8 @@ class DocFeatureMatrix():
         self.metadata_df = metadata_df
         self.mallet = mallet
 
-        print("data_csv_filepath ist", self.data_matrix_filepath)
-        print("metadata_csv_filepath ist", self.metadata_csv_filepath)
+        print("data_csv_filepath is:", self.data_matrix_filepath)
+        print("metadata_csv_filepath is:", self.metadata_csv_filepath)
 
 
         if self.metadata_csv_filepath is not None:

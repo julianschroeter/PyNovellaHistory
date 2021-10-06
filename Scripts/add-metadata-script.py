@@ -9,13 +9,7 @@ infile_name = "raw_dtm_lemmatized_tfidf_10000mfw.csv"
 
 dtm_infile_path= os.path.join(global_corpus_raw_dtm_directory(system), infile_name)
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
-textanalytic_metadata_filepath = os.path.join(global_corpus_representation_directory(system), "textanalytic_metadata.csv")
-semanticword_list_filepath = os.path.join(global_corpus_representation_directory(system), "semantic_word_list_corpus_vocab.txt")
-stopword_list_filepath = os.path.join(global_corpus_representation_directory(system), "stopwords_all.txt")
-verb_list_filepath = os.path.join(global_corpus_representation_directory(system), "verbs_list_corpus_vocab.txt")
-semanticword_list = load_stoplist(semanticword_list_filepath)
-stopword_list = load_stoplist(stopword_list_filepath)
-verb_list = load_stoplist(verb_list_filepath)
+
 
 dtm_outfile_path = os.path.join(global_corpus_raw_dtm_directory(system), "dtm_tfidf_genrelabel.csv")
 
