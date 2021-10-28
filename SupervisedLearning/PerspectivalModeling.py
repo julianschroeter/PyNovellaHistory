@@ -38,14 +38,15 @@ def sample_perspectival_sets(input_df, period_category="periods_100a", metadata_
             return equal_fit_df, transfer_df
 
 
+def split_features_labels(input_df):
+    array = input_df.to_numpy()
+    X = array[:, 0:(array.shape[1]-1)]
+    Y = array[:, array.shape[1]-1]
+    return X,Y
 
 def perspectival_sets_split(model_fit_df, model_transfer_df):
-    model_fit_array = model_fit_df.to_numpy()
-    model_transfer_array = model_transfer_df.to_numpy()
-    X_model_fit = model_fit_array[:,0:(model_fit_array.shape[1]-1)]
-    Y_model_fit = model_fit_array[:,(model_fit_array.shape[1]-1)]
-    X_model_transfer = model_transfer_array[:,0:(model_transfer_array.shape[1]-1)]
-    Y_model_transfer = model_transfer_array[:,(model_transfer_array.shape[1]-1)]
+    X_model_fit, Y_model_fit = split_features_labels(model_fit_df)
+    X_model_transfer, Y_model_transfer = split_features_labels(model_transfer_df)
     return X_model_fit, X_model_transfer, Y_model_fit, Y_model_transfer
 
 

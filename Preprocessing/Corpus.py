@@ -43,7 +43,6 @@ class DocFeatureMatrix():
 
 
         if self.metadata_csv_filepath is not None:
-            print("Metadatendatei ist da:", self.metadata_csv_filepath)
             self.metadata_df = pd.read_csv(self.metadata_csv_filepath, index_col=0)
 
         if self.data_matrix_filepath is not None:
@@ -61,27 +60,36 @@ class DocFeatureMatrix():
 
 
 
-    def reduce_to(self, reduction_list):
+    def reduce_to(self, reduction_list, return_eliminated_terms_list=False):
         """
-        Based on the vocabulary of matrix_df, a new FeatureDoc_matrix object is returned only with features which are listed in reduction_list
+        Based on the vocabulary of matrix_df, a new FeatureDoc_matrix object is returned only with features which are listed in reduction_list.
+        if flag return_eliminated_terms_list == True, also the list of eliminated terms is returned
+        if flag return_eliminated_terms_list == True, only a reduced DTM instance is returned.
         """
         object = deepcopy(self)
         columns_list = list(object.data_matrix_df.columns.values)
         terms_to_reduce = list(filter(lambda x: x in reduction_list, columns_list))
+        eliminated_terms_list = list(filter(lambda x: x not in reduction_list, columns_list))
         object.data_matrix_df = object.data_matrix_df.loc[:, terms_to_reduce]
-        return object
+        if return_eliminated_terms_list == False:
+            return object
+        else:
+           return object,  eliminated_terms_list
 
     def eliminate(self, elimination_list):
         """
-        Based on the vocabulary of matrix_df, a new FeatureDoc_matrix object is returned.A
-        ll features listed in elimination list are eliminated from the data_matrix_df.
+        Based on the vocabulary of matrix_df, a new FeatureDoc_matrix object is returned. All
+        features listed in elimination list are eliminated from the data_matrix_df.
         Typical use cases are stopword lists and name lists.
+
         """
         object = deepcopy(self)
         columns_list = list(object.data_matrix_df.columns.values)
         terms_to_drop = list(filter(lambda x: x in elimination_list, columns_list))
         object.data_matrix_df.drop(terms_to_drop, axis=1, inplace=True)
+
         return object
+
 
     def add_metadata(self, metadata_category):
         """
@@ -133,9 +141,10 @@ class DTM(DocFeatureMatrix):
     """
 
     def __init__(self, corpus_path=None, data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
+                 normalize_orthogr=False, normalization_table_path=None,
                  metadata_df=None, encoding="utf-8", normalization="tfidf", correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True,
                  inverse_translate_umlaute=False, eliminate_pos_items=True, list_of_pos_tags=None, lemmatize=True, remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
-                 remove_stopwords=False, stoplist_filepath=None, n_mfw=0, mallet=False, **kwargs):
+                 remove_stopwords=False, stoplist_filepath=None, n_mfw=0, mallet=False, language_model=None, **kwargs):
         DocFeatureMatrix.__init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df, mallet)
         self.corpus_path = corpus_path
         self.handle_special_characters = handle_special_characters
@@ -153,8 +162,9 @@ class DTM(DocFeatureMatrix):
         self.remove_hyphen = remove_hyphen
         self.remove_stopwords = remove_stopwords
         self.encoding = encoding
-
-
+        self.language_model = language_model
+        self.normalize_orthogr = normalize_orthogr
+        self.normalization_table_path = normalization_table_path
         self.stoplist_filepath = stoplist_filepath
         self.n_mfw = n_mfw
 
@@ -168,10 +178,11 @@ class DTM(DocFeatureMatrix):
         dic = {}
         for filepath in os.listdir(self.corpus_path):
             text_object = Text(filepath=os.path.join(self.corpus_path, filepath), remove_hyphen=self.remove_hyphen, correct_ocr=self.correct_ocr,
-                                             handle_special_characters=self.handle_special_characters,
-                                             inverse_translate_umlaute=self.inverse_translate_umlaute,
-                                             lemmatize=self.lemmatize, sz_to_ss=self.sz_to_ss,
-                                             translate_umlaute=self.translate_umlaute)
+                                normalize_orthogr=self.normalize_orthogr, normalization_table_path=self.normalization_table_path,
+                                handle_special_characters=self.handle_special_characters,
+                                inverse_translate_umlaute=self.inverse_translate_umlaute,
+                                lemmatize=self.lemmatize, sz_to_ss=self.sz_to_ss,
+                                translate_umlaute=self.translate_umlaute, language_model=self.language_model)
             text_object()
             dic[text_object.id] = text_object.text
         return dic
@@ -338,7 +349,7 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
                                remove_stopwords=remove_stopwords, stopword_list=stopword_list, language_model=language_model,
                             )
         text_obj.f_extract_id()
-        print(text_obj.id)
+
         if text_obj.id in list_of_file_ids:
             text_obj()
             if chunking == False:

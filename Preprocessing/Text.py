@@ -6,7 +6,7 @@ contains utility classes and functions
 import spacy
 import re
 import os
-import string
+from Preprocessing.Presetting import word_translate_table_to_dict
 
 
 
@@ -15,11 +15,11 @@ class Text():
     abstract class to read, prepare and manipulate texts for preprocessing.
     It is used then (a) for Corpus_TDM to generate term document matrices and (b) for chunking (generate chunks in separate txt files)
     """
-    def __init__(self, filepath=None, text=None, id = None, chunks=None, pos_triples=None, token_length=0, remove_hyphen=True,
+    def __init__(self, filepath=None, text=None, id = None, chunks=None, pos_triples=None, token_length=0, remove_hyphen=True, normalize_orthogr=False, normalization_table_path=None,
                  correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True, inverse_translate_umlaute=False,
                  eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
                  sz_to_ss=False, translate_umlaute=False, max_length=5000000,
-                 remove_stopwords="before_chunking", stopword_list=None, language_model=None):
+                 remove_stopwords=False, stopword_list=None, language_model=None):
         self.filepath = filepath
         self.text = text
         self.id = id
@@ -42,6 +42,8 @@ class Text():
         self.remove_stopwords = remove_stopwords
         self.language_model = language_model
         self.token_length = token_length
+        self.normalize_orthogr = normalize_orthogr
+        self.normalization_table_path = normalization_table_path
 
     def f_extract_id(self):
         basename = os.path.basename(self.filepath)
@@ -74,11 +76,29 @@ class Text():
         self.text = re.sub("\[\d{1,4}\]", "", self.text)
 
     def f_handle_special_characters(self):
-        special_character_table = {"^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "„" : '''"''',"’":"'"}
+        special_character_table = {"^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "[" : "", "]" : "", "„" : '''"''' , "’" : "'" , "`" : "'"}
         text = self.text.translate(str.maketrans(special_character_table))
         text = text.replace(",,", '''"''')
         text = text.replace("'s", "")
         self.text = text
+
+    def f_normalize_orthogr(self):
+        """
+        normalizes according to the normalization table stored in self.normalization_table_path, with pairs of old word, new word (i.e. separated by comma + space) in separate lines
+        """
+        self.token_length = len(self.text.split(" "))
+        nlp = spacy.load(self.language_model)
+        nlp.max_length = self.max_length
+        doc = nlp(self.text[:self.max_length], disable='ner')
+        tokens_list = [token.text for token in doc]
+
+        #use word_translate_table_to_dict function from Preprocessing.Presetting, set also_lower_case flag to True
+        normalization_dict, normalization_lower_dict = word_translate_table_to_dict(self.normalization_table_path, also_lower_case=True)
+
+        tokens_list = [normalization_dict.get(word, word) for word in tokens_list]
+        tokens_list = [normalization_lower_dict.get(word, word) for word in tokens_list]
+        new_text_string = " ".join(tokens_list)
+        self.text = new_text_string
 
     def f_inverse_translate_umlaute(self):
         """
@@ -118,7 +138,7 @@ class Text():
         Removes all pos_triples where token or lemma is in stopword_list. This operation is applied if
         item in stop_word list matches token OR lemma.
         """
-        self.pos_triples = [triple[0] for triple in self.pos_triples if triple[0].lower() or triple[1].lower() not in self.stopword_list]
+        self.pos_triples = [triple for triple in self.pos_triples if triple[0].lower() or triple[1].lower() not in self.stopword_list]
 
 
     def f_lemmatize(self, type="NOUN_VERB_ADJ"):
@@ -130,6 +150,7 @@ class Text():
         :return: lemmatized text as string.
         """
         if type == "NOUN_VERB_ADJ":
+
             text_list = [triple[1] if (triple[2] in ["ADJ", "VERB", "NOUN"]) else triple[0] for triple in self.pos_triples]
         elif type == "token_lemma_all":
             text_list = [triple[1] for triple in self.pos_triples]
@@ -257,10 +278,12 @@ class Text():
             self.f_handle_special_characters()
         if self.inverse_translate_umlaute == True:
             self.f_inverse_translate_umlaute()
+        if self.normalize_orthogr == True:
+            self.f_normalize_orthogr()
 
         self.f_generate_pos_triples()
 
-        if self.remove_stopwords == "before_chunking":
+        if self.remove_stopwords == True:
             self.f_remove_stopwords_from_triples()
         if self.lemmatize == True:
             self.f_lemmatize()

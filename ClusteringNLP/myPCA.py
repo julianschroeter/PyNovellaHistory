@@ -40,6 +40,7 @@ class PC_df():
 
         zipped_dict = dict(zip(list_targetlabels, colors_list[:len(list_targetlabels)]))
         list_target = list(self.pc_target_df["target"].values)
+        print(list_target)
 
         # wenn ein Label, z.B. "other" farblos (weiß) werden soll:
         # zipped_dict["other"] ="white"

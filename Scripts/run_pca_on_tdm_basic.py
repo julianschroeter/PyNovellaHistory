@@ -2,11 +2,11 @@ from ClusteringNLP.myPCA import PC_df
 from Preprocessing.Presetting import global_corpus_representation_directory, load_stoplist, global_corpus_raw_dtm_directory
 import os
 
-system = "my_mac" # "wcph104" #  "my_xps"
-dtm_filename =   "dep_genre_tdm.csv"
+system = "wcph113" # "my_mac" # "wcph104" #  "my_xps"
+dtm_filename = "dtm_50000mfw-tfidf_no-stopwords_genrelabel.csv"
 dtm_filepath = os.path.join(global_corpus_raw_dtm_directory(system), dtm_filename)
 colors_list = load_stoplist(os.path.join(global_corpus_representation_directory(system), "my_colors.txt"))
-
+print(colors_list)
 
 pc_df = PC_df()
 pc_df.load_df(dtm_filepath)
