@@ -183,8 +183,10 @@ class DTM(DocFeatureMatrix):
                                 inverse_translate_umlaute=self.inverse_translate_umlaute,
                                 lemmatize=self.lemmatize, sz_to_ss=self.sz_to_ss,
                                 translate_umlaute=self.translate_umlaute, language_model=self.language_model)
+            text_object.f_extract_id()
+            print("currently processes text with id: " + str(text_object.id))
             text_object()
-            print("currently processes text with id: "+str(text_object.id))
+
             dic[text_object.id] = text_object.text
         return dic
 

@@ -70,7 +70,7 @@ def global_corpus_representation_directory(system_name):
     if system_name == "wcph113":
         return os.path.join(set_system_data_directory(system_name), "novella_corpus_representation")
     else:
-        return os.path.join(set_system_data_directory(system_name),"DistReading", "data", "novella_corpus_representation")
+        return os.path.join(set_system_data_directory(system_name), "novella_corpus_representation")
 
 
 def global_corpus_raw_dtm_directory(system_name):
@@ -89,7 +89,7 @@ def vocab_lists_dicts_directory(system_name):
     if system_name == "wcph113":
         return os.path.join(set_system_data_directory(system_name), "vocab_lists_dicts")
     else:
-        return os.path.join(set_system_data_directory(system_name),"DistReading", "data", "vocab_lists_dicts")
+        return os.path.join(set_system_data_directory(system_name), "vocab_lists_dicts")
 
 
 def mallet_directory(system_name):

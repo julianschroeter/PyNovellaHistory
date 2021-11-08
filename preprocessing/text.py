@@ -50,7 +50,11 @@ class Text():
         self.id = re.search("\d{5}-\d{2}", basename).group() if re.search("\d{5}-\d{2}", basename) else basename
 
     def f_read_file(self):
-        self.text = open(self.filepath, 'r', encoding="utf8").read()
+        if self.filepath.endswith(".txt"):
+            self.text = open(self.filepath,"r", encoding="utf8").read()
+        else:
+            print("File ist no txt file and cannot be read! Text.text attribute is filled with empty string.")
+            self.text = ""
 
     def f_remove_hyphen(self):
         """remove hyphenation and remove linebreaks"""
@@ -72,11 +76,12 @@ class Text():
         """
         self.text = re.sub("\u000C", "", self.text)
 
+
     def f_eliminate_pagecounts(self):
         self.text = re.sub("\[\d{1,4}\]", "", self.text)
 
     def f_handle_special_characters(self):
-        special_character_table = {"^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "[" : "", "]" : "", "„" : '''"''' , "’" : "'" , "`" : "'"}
+        special_character_table = {"€":"", "^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "[" : "", "]" : "", "„" : '''"''' , "’" : "'" , "`" : "'"}
         text = self.text.translate(str.maketrans(special_character_table))
         text = text.replace(",,", '''"''')
         text = text.replace("'s", "")
