@@ -2,7 +2,7 @@
 import re
 import pandas as pd
 from collections import Counter
-from Preprocessing.Corpus import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 import spacy
 from copy import deepcopy
 

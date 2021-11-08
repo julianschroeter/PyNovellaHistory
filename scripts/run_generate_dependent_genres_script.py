@@ -1,9 +1,9 @@
 import os
 import pandas as pd
-from Preprocessing.MetadataTransformation import years_to_periods, generate_media_dependend_genres, standardize_meta_data_medium
-from Preprocessing.Presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
-from Preprocessing.Corpus import DTM
-from Preprocessing.Presetting import load_stoplist
+from preprocessing.metadata_transformation import years_to_periods, generate_media_dependend_genres, standardize_meta_data_medium
+from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
+from preprocessing.corpus import DTM
+from preprocessing.presetting import load_stoplist
 
 system = "my_mac"
 tdm_infile_path = os.path.join(global_corpus_raw_dtm_directory(system), "raw_dtm_lemmatized_tfidf_10000mfw.csv")

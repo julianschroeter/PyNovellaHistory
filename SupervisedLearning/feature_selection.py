@@ -2,7 +2,7 @@ from sklearn.feature_selection import RFECV
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from SupervisedLearning.PerspectivalModeling import sample_perspectival_sets, perspectival_sets_split
-from Preprocessing.Presetting import local_temp_directory, global_corpus_raw_dtm_directory
+from preprocessing.presetting import local_temp_directory, global_corpus_raw_dtm_directory
 import os
 import matplotlib.pyplot as plt
 import pandas as pd

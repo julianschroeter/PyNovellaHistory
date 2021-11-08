@@ -1,4 +1,10 @@
 import os
+from collections import Counter
+import numpy as np
+import spacy
+
+
+
 '''
 1. Functions to set global working directories depending on different personal computer systems.
 '''
@@ -106,7 +112,7 @@ def load_stoplist(filepath):
     """
     with open(filepath, "r", encoding="utf8") as infile:
         text = infile.read()
-    stopword_list = list(map(str.lower, list(text.split("\n"))))
+    stopword_list = list(map(str, list(text.split("\n"))))
     stopword_list = [x for x in stopword_list if x]
     return stopword_list
 
@@ -145,14 +151,38 @@ def word_translate_table_to_dict(infile_path, also_lower_case=True):
     normalization_dict = {}
     normalization_lower_dict = {}
     for line in normalization_table.splitlines():
-        print(line)
+
         old, new = line.split(", ")
         normalization_dict[old] = new
         old_lower = old.lower()
         new_lower = new.lower()
         normalization_lower_dict[old_lower] = new_lower
     if also_lower_case == True:
-        print(normalization_dict, normalization_lower_dict)
+
         return normalization_dict, normalization_lower_dict
     else:
         return normalization_dict
+
+
+def keywords_to_semantic_fields(list_of_keywords, n_most_relevant_words, vocabulary_path, spacy_model):
+    """
+    generates a list of words of a semantic field from a list of keywords, based on word embeddings in a spacy model (most similar word vectors)
+    """
+    nlp = spacy.load(spacy_model)
+    all_output_words = []
+
+    for word in list_of_keywords:
+        ms = nlp.vocab.vectors.most_similar(
+            np.asarray([nlp.vocab.vectors[nlp.vocab.strings[word]]]), n=50)
+        words = [nlp.vocab.strings[w] for w in ms[0][0]]
+        all_output_words.extend(words)
+
+    vocab_list = load_stoplist(vocabulary_path)
+    all_output_words_reduced = [word for word in all_output_words if word in vocab_list]
+    all_words_string = " ".join(all_output_words_reduced)
+    doc = nlp(all_words_string)
+    lemma_list = [token.lemma_ for token in doc]
+    word_counter = Counter(lemma_list)
+    words_list = [word for word, count in word_counter.most_common(n_most_relevant_words)]
+    print(words_list)
+    return words_list

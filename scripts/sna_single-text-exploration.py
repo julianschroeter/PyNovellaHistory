@@ -1,9 +1,9 @@
-from Preprocessing.SNA import CharacterNetwork
-from Preprocessing.Text import Text
-from Preprocessing.Presetting import global_corpus_directory
-from Preprocessing.Presetting import global_corpus_representation_directory
-from Preprocessing.Presetting import set_DistReading_directory
-from Preprocessing.Corpus import DocNetworkfeature_Matrix
+from preprocessing.SNA import CharacterNetwork
+from preprocessing.text import Text
+from preprocessing.presetting import global_corpus_directory
+from preprocessing.presetting import global_corpus_representation_directory
+from preprocessing.presetting import set_DistReading_directory
+from preprocessing.corpus import DocNetworkfeature_Matrix
 import os
 import networkx as nx
 import matplotlib.pyplot as plt

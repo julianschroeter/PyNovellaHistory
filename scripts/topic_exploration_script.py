@@ -1,7 +1,7 @@
 from TopicModeling.Postprocessing import DocTopicMatrix
-from Preprocessing.Presetting import global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
-from ClusteringNLP.myPCA import PC_df
-from Preprocessing.MetadataTransformation import years_to_periods
+from preprocessing.presetting import global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
+from clustering.my_pca import PC_df
+from preprocessing.metadata_transformation import years_to_periods
 import os
 import pandas as pd
 import numpy as np

@@ -1,4 +1,4 @@
-from Preprocessing.SamplingMethods import equal_sample
+from preprocessing.SamplingMethods import equal_sample
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression

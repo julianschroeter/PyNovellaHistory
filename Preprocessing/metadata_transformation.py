@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
-from Preprocessing.Presetting import global_corpus_representation_directory
+from preprocessing.presetting import global_corpus_representation_directory
 import re
 
 def years_to_periods(input_df, category_name,start_year, end_year, epoch_length, new_periods_column_name):
@@ -33,14 +33,14 @@ def years_to_periods(input_df, category_name,start_year, end_year, epoch_length,
 
 
 
-def full_genre_labels(df):
+def full_genre_labels(df, replace_dict= {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "Prosaerzählung ohne Label",
+                                    "R": "Roman", "M": "Märchen", "XE": "Prosaerzählung mit anderem Label"}}):
     """
     Hard coded function to replace genre abbreviation in meta data table with full genre labels
     :param df: metadata tabel with category/column "Gattungslabel_ED"
-    :return: data frame with full genre names for N, E, 0E, R, M
+    :return: data frame with full genre names for N, E, 0E, R, M, XE
     """
-    df.replace({"Gattungslabel_ED": {"N": "Novelle", "E": "Erzählung", "0E": "Sonstige Prosaerzählung",
-                                    "R": "Roman", "M": "Märchen"}}, inplace=True)
+    df.replace(replace_dict, inplace=True)
     return df
 
 
@@ -144,3 +144,9 @@ def generate_media_dependend_genres(df):
     frames = pd.concat([famblatt_df, rundschau_df, tb_df, anthol_df, journal_df, buch_df])
     print(frames)
     return frames
+
+def category_counts_per_periods(dep_var, values_list, input_df, periods_category):
+    """
+    returns a new data frame which counts the number of items of a variable, such as genre
+    """
+

@@ -5,8 +5,8 @@ import spacy
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import normalize
-from Preprocessing.Text import Text
-from Preprocessing.SNA import CharacterNetwork
+from preprocessing.text import Text
+from preprocessing.SNA import CharacterNetwork
 import networkx as nx
 from copy import deepcopy
 from collections import Counter
@@ -31,7 +31,7 @@ class DocFeatureMatrix():
     """
     abstract parent class for TDM (= term document matrix) and TopicDocMatrix as child classes. Feature vectors for each document are represented as row vectors.
     """
-    def __init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df, mallet):
+    def __init__(self, data_matrix_filepath, metadata_csv_filepath=None, data_matrix_df=None, metadata_df=None, mallet=False):
         self.data_matrix_df = data_matrix_df
         self.data_matrix_filepath = data_matrix_filepath
         self.metadata_csv_filepath = metadata_csv_filepath
@@ -184,6 +184,7 @@ class DTM(DocFeatureMatrix):
                                 lemmatize=self.lemmatize, sz_to_ss=self.sz_to_ss,
                                 translate_umlaute=self.translate_umlaute, language_model=self.language_model)
             text_object()
+            print("currently processes text with id: "+str(text_object.id))
             dic[text_object.id] = text_object.text
         return dic
 
@@ -299,13 +300,14 @@ class Junk_Corpus():
 
 
 def generate_text_files(chunking=False, pos_representation=False, corpus_path=None, outfile_path=None,
-                        list_of_file_ids=None, language_model=None,
+                        only_selected_files=False, list_of_file_ids=None, language_model=None,
                         correct_ocr=True, eliminate_pagecounts=True,
                  handle_special_characters=True, inverse_translate_umlaute=False, lemmatize=False,
                  remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
                  eliminate_pos_items=False, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"],
                  keep_pos_items=False, list_keep_pos_tags=None,
                  segmentation_type="fixed", fixed_chunk_length=600, num_chunks=5,
+                        normalize_orthogr=False, normalization_table_path=None,
                  stopword_list=None, remove_stopwords=None):
     """
     generate text files from corpus files, such as chunks, a selection of files based on metadata selection, or POS-/NER-Representation
@@ -346,12 +348,79 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
                                translate_umlaute=translate_umlaute,
                                eliminate_pos_items=eliminate_pos_items, list_eliminate_pos_tags=list_eliminate_pos_tags,
                                keep_pos_items=keep_pos_items, list_keep_pos_tags=list_keep_pos_tags,
-                               remove_stopwords=remove_stopwords, stopword_list=stopword_list, language_model=language_model,
-                            )
+                               remove_stopwords=remove_stopwords, stopword_list=stopword_list,
+                        normalize_orthogr=normalize_orthogr, normalization_table_path=normalization_table_path,
+                        language_model=language_model)
         text_obj.f_extract_id()
 
-        if text_obj.id in list_of_file_ids:
-            text_obj()
+        if only_selected_files == True:
+
+            if text_obj.id in list_of_file_ids:
+                print("currently processes file with id: "+ str(text_obj.id))
+                text_obj.f_read_file()
+                if remove_hyphen == True:
+                    text_obj.f_remove_hyphen()
+                if correct_ocr == True:
+                    text_obj.f_correct_ocr()
+                if eliminate_pagecounts == True:
+                    text_obj.f_eliminate_pagecounts()
+                if handle_special_characters == True:
+                    text_obj.f_handle_special_characters()
+                if inverse_translate_umlaute == True:
+                    text_obj.f_inverse_translate_umlaute()
+                if sz_to_ss == True:
+                    text_obj.f_sz_to_ss()
+                if translate_umlaute == True:
+                    text_obj.f_translate_umlaute()
+
+                if normalize_orthogr == True:
+                    text_obj.f_normalize_orthogr()
+                if lemmatize == True:
+                    text_obj.f_generate_pos_triples()
+                    text_obj.f_lemmatize()
+
+                if chunking == False:
+                    if pos_representation == False:
+                        text_obj.f_save_text(outfile_path)
+                    elif pos_representation == True:
+                        text_obj.f_check_save_pos_ner_parsing(outfile_path)
+                elif chunking == True:
+                    if pos_representation == True:
+                        print("Warning: POS-Representation is not implemented for operation on junks. Use chunking == False!")
+                        pass
+                    elif pos_representation == False:
+                        text_obj.f_chunking(segmentation_type=segmentation_type,
+                                       fixed_chunk_length=fixed_chunk_length, num_chunks=num_chunks)
+                        text_obj.f_save_chunks(outfile_path)
+
+            else:
+                pass
+
+        elif only_selected_files == False:
+            print("currently processes file with id: " + str(text_obj.id))
+
+            text_obj.f_read_file()
+            if remove_hyphen == True:
+                text_obj.f_remove_hyphen()
+            if correct_ocr == True:
+                text_obj.f_correct_ocr()
+            if eliminate_pagecounts == True:
+                text_obj.f_eliminate_pagecounts()
+            if handle_special_characters == True:
+                text_obj.f_handle_special_characters()
+            if inverse_translate_umlaute == True:
+                text_obj.f_inverse_translate_umlaute()
+            if sz_to_ss == True:
+                text_obj.f_sz_to_ss()
+            if translate_umlaute == True:
+                text_obj.f_translate_umlaute()
+
+            if normalize_orthogr == True:
+                text_obj.f_normalize_orthogr()
+            if lemmatize == True:
+                text_obj.f_generate_pos_triples()
+                text_obj.f_lemmatize()
+
             if chunking == False:
                 if pos_representation == False:
                     text_obj.f_save_text(outfile_path)
@@ -359,15 +428,31 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
                     text_obj.f_check_save_pos_ner_parsing(outfile_path)
             elif chunking == True:
                 if pos_representation == True:
-                    print("Warning: POS-Representation is not implemented for operation on junks. Use chunking == False!")
+                    print(
+                        "Warning: POS-Representation is not implemented for operation on junks. Use chunking == False!")
                     pass
                 elif pos_representation == False:
                     text_obj.f_chunking(segmentation_type=segmentation_type,
-                                       fixed_chunk_length=fixed_chunk_length, num_chunks=num_chunks)
+                                        fixed_chunk_length=fixed_chunk_length, num_chunks=num_chunks)
                     text_obj.f_save_chunks(outfile_path)
 
-        else:
-            pass
+            if chunking == False:
+                if pos_representation == False:
+                    text_obj.f_save_text(outfile_path)
+                elif pos_representation == True:
+                    text_obj.f_check_save_pos_ner_parsing(outfile_path)
+            elif chunking == True:
+                if pos_representation == True:
+                    print(
+                        "Warning: POS-Representation is not implemented for operation on junks. Use chunking == False!")
+                    pass
+                elif pos_representation == False:
+                    text_obj.f_chunking(segmentation_type=segmentation_type,
+                                        fixed_chunk_length=fixed_chunk_length, num_chunks=num_chunks)
+                    text_obj.f_save_chunks(outfile_path)
+
+            else:
+                pass
 
 def check_save_pos_ner_parsing_corpus(corpus_path, outfile_path, list_of_file_ids, language_model, correct_ocr=True, eliminate_pagecounts=True,
                  handle_special_characters=True, inverse_translate_umlaute=False, lemmatize=True,
@@ -430,7 +515,7 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
         call Text class to preprocess text over all texts in corpus path and to store the processed text
          as value with the document id as key in a dictionary.
         This method is to be called by generate_from_textcorpus method as the basis for vectorization.
-        retunrs: dictionary with doc ids as keys and processed text for each document as values.
+        returns dictionary with doc ids as keys and processed text for each document as values.
         """
         if self.corpus_as_dict is None:
             dic = {}

@@ -1,6 +1,6 @@
 
-from Preprocessing.Presetting import global_corpus_directory, global_corpus_representation_directory, language_model_path, set_DistReading_directory
-from Preprocessing.Corpus import DocNetworkfeature_Matrix
+from preprocessing.presetting import global_corpus_directory, global_corpus_representation_directory, language_model_path, set_DistReading_directory
+from preprocessing.corpus import DocNetworkfeature_Matrix
 
 import os
 import matplotlib.pyplot as plt

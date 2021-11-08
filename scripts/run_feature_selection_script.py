@@ -3,8 +3,8 @@ from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from SupervisedLearning.PerspectivalModeling import split_features_labels
-from Preprocessing.Presetting import local_temp_directory, global_corpus_raw_dtm_directory, global_corpus_representation_directory
-from Preprocessing.Corpus import DTM
+from preprocessing.presetting import local_temp_directory, global_corpus_raw_dtm_directory, global_corpus_representation_directory
+from preprocessing.corpus import DTM
 import os
 import matplotlib.pyplot as plt
 import pandas as pd

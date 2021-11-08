@@ -6,7 +6,7 @@ contains utility classes and functions
 import spacy
 import re
 import os
-from Preprocessing.Presetting import word_translate_table_to_dict
+from preprocessing.presetting import word_translate_table_to_dict
 
 
 
@@ -61,7 +61,7 @@ class Text():
         # Entfernen der einfachen Zeilenumbrüche wie im Original, die keinen neuen Absatz markieren
         self.text = re.sub("\n(?!\n)", " ", self.text)
         # Ersetzung der doppelten Zeilenumbrüche, die in der Regel einen neuen Absatz markieren,
-        # durch einen einfachen Umbruch (z.B. für kallimachos Preprocessing Tool
+        # durch einen einfachen Umbruch (z.B. für kallimachos preprocessing Tool
         self.text = re.sub("\n{2}", "\n", self.text)
 
     def f_correct_ocr(self):
@@ -92,13 +92,26 @@ class Text():
         doc = nlp(self.text[:self.max_length], disable='ner')
         tokens_list = [token.text for token in doc]
 
-        #use word_translate_table_to_dict function from Preprocessing.Presetting, set also_lower_case flag to True
+        #use word_translate_table_to_dict function from preprocessing.Presetting, set also_lower_case flag to True
         normalization_dict, normalization_lower_dict = word_translate_table_to_dict(self.normalization_table_path, also_lower_case=True)
 
         tokens_list = [normalization_dict.get(word, word) for word in tokens_list]
         tokens_list = [normalization_lower_dict.get(word, word) for word in tokens_list]
         new_text_string = " ".join(tokens_list)
         self.text = new_text_string
+
+    def f_sz_to_ss(self):
+        """
+        :return: text as string where all german "ß" characters are replaced by ss, which is mandatory as input for mallet for example.
+        """
+        self.text = self.text.translate(str.maketrans({"ß":"ss"}))
+
+    def f_translate_umlaute(self):
+        """
+        :return: text as string where all german Umlaute "Ä, Ö, Ü" are replaced by "Ae", "Oe", "Ue" (case sensitive).
+        """
+        umlaut_transl_table = {"Ä":"Ae", "Ö":"Oe", "Ü":"Ue", "ä":"ae", "ö":"oe", "ü":"ue"}
+        self.text = self.text.translate(str.maketrans(umlaut_transl_table))
 
     def f_inverse_translate_umlaute(self):
         """
@@ -159,18 +172,7 @@ class Text():
 
         self.text = ' '.join(map(str, text_list))  # convert list to string
 
-    def f_sz_to_ss(self):
-        """
-        :return: text as string where all german "ß" characters are replaced by ss, which is mandatory as input for mallet for example.
-        """
-        self.text = self.text.translate(str.maketrans({"ß":"ss"}))
 
-    def f_translate_umlaute(self):
-        """
-        :return: text as string where all german Umlaute "Ä, Ö, Ü" are replaced by "Ae", "Oe", "Ue" (case sensitive).
-        """
-        umlaut_transl_table = {"Ä":"Ae", "Ö":"Oe", "Ü":"Ue", "ä":"ae", "ö":"oe", "ü":"ue"}
-        self.text = self.text.translate(str.maketrans(umlaut_transl_table))
 
 
     def f_chunking(self, segmentation_type="fixed",  fixed_chunk_length=600, num_chunks=5, min_paragraph_length=250):
@@ -280,6 +282,10 @@ class Text():
             self.f_inverse_translate_umlaute()
         if self.normalize_orthogr == True:
             self.f_normalize_orthogr()
+        if self.sz_to_ss == True:
+            self.f_sz_to_ss()
+        if self.translate_umlaute == True:
+            self.f_translate_umlaute()
 
         self.f_generate_pos_triples()
 
@@ -287,10 +293,7 @@ class Text():
             self.f_remove_stopwords_from_triples()
         if self.lemmatize == True:
             self.f_lemmatize()
-        if self.sz_to_ss == True:
-            self.f_sz_to_ss()
-        if self.translate_umlaute == True:
-            self.f_translate_umlaute()
+
         else:
             pass
 

@@ -1,12 +1,11 @@
 import networkx as nx
-import os
+import re
 import spacy
 from collections import Counter
 from itertools import combinations
-import matplotlib.pyplot as plt
-from Preprocessing.Text import Text
-import re
-from Preprocessing.Presetting import set_DistReading_directory
+
+from preprocessing.text import Text
+
 
 
 class CharacterNetwork(Text):
@@ -103,23 +102,15 @@ class CharacterNetwork(Text):
                     for composed_name in raw_composed_names:
                         if name in composed_name:
                             paragr_characters_corr.append(composed_name)
-                elif name not in " ".join(paragr_composed_names):
+                elif name not in " ".join(raw_composed_names):
                         paragr_characters_corr.append(name)
 
 
-
-
-
-
-
-
-
-
-        counter_all_occurences = Counter(all_character_occurences)
+        counter_all_occurences = Counter(corr_raw_all_character_occurences)
         less_frq_name_to_most_frq_name_dict = {}
 
         if reduce_to_one_name == True:
-            for character in all_character_occurences:
+            for character in corr_raw_all_character_occurences:
                 name_parts = character.split(" ")
                 if len(name_parts) > 1:
                     new_counter_dict = {}
@@ -133,7 +124,7 @@ class CharacterNetwork(Text):
             print("less to most frequent name dictionary:", less_frq_name_to_most_frq_name_dict)
 
             # standardize names which consist of more than one word to the most frequent name part
-            for paragraph in nested_character_occurence:
+            for paragraph in raw_nested_character_occurence:
                 standard_all_character_occurences = []
                 for character in paragraph:
                     name_parts = character.split(" ")
@@ -153,7 +144,7 @@ class CharacterNetwork(Text):
             final_characters_list += characters_in_paragraph_set
 
         elif reduce_to_one_name == False:
-            characters_in_paragraph_set = list(set(all_character_occurences))
+            characters_in_paragraph_set = list(set(corr_raw_all_character_occurences))
             final_characters_list += characters_in_paragraph_set
 
         characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))

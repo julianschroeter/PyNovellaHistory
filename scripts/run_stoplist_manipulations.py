@@ -1,5 +1,5 @@
 import os
-from Preprocessing.Presetting import load_stoplist, global_corpus_representation_directory, merge_several_stopfiles_to_list
+from preprocessing.presetting import load_stoplist, global_corpus_representation_directory, merge_several_stopfiles_to_list
 import spacy
 
 system_name = "wcph104"

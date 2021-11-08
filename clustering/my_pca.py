@@ -1,8 +1,6 @@
 from sklearn.decomposition import PCA
 import numpy as np
 import pandas as pd
-import os
-from Preprocessing.Presetting import global_corpus_representation_directory, load_stoplist
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 

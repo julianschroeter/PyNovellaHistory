@@ -1,7 +1,7 @@
 import os
 import re
-from Preprocessing.Text import Text
-from Preprocessing.Presetting import global_corpus_directory, language_model_path, local_temp_directory
+from preprocessing.text import Text
+from preprocessing.presetting import global_corpus_directory, language_model_path, local_temp_directory
 system = "wcph113"
 
 corpus_path = global_corpus_directory(system)

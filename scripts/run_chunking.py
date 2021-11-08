@@ -1,5 +1,5 @@
-from Preprocessing.Corpus import Junk_Corpus
-from Preprocessing.Presetting import global_corpus_directory, global_corpus_representation_directory , load_stoplist, local_temp_directory
+from preprocessing.corpus import Junk_Corpus
+from preprocessing.presetting import global_corpus_directory, global_corpus_representation_directory , load_stoplist, local_temp_directory
 import os
 
 system = "my_mac" # "wcph104"

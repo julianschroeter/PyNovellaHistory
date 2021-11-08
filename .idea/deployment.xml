@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="schroeter@wcph113.germanistik.uni-wuerzburg.de:22 (2)" deleteMissingItems="true" createEmptyFolders="true">
+  <component name="PublishConfigData" autoUpload="Always" deleteMissingItems="true" createEmptyFolders="true">
     <serverData>
-      <paths name="schroeter@wcph113.germanistik.uni-wuerzburg.de:22 (2)">
+      <paths name="schroeter@wcph113.germanistik.uni-wuerzburg.de:22">
         <serverdata>
           <mappings>
             <mapping deploy="/mnt/data/users/schroeter/PyNovellaHistory" local="$PROJECT_DIR$" web="wcph113.germanistik.uni-wuerzburg.de" />
+            <mapping local="" />
+            <mapping />
+            <mapping />
+            <mapping />
           </mappings>
         </serverdata>
       </paths>

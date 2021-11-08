@@ -1,7 +1,7 @@
 from SupervisedLearning.PerspectivalModeling import sample_perspectival_sets, perspectival_sets_split, LR_perspectival_resample
-from Preprocessing.MetadataTransformation import years_to_periods, generate_media_dependend_genres, standardize_meta_data_medium
-from Preprocessing.Presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
-from Preprocessing.Presetting import load_stoplist
+from preprocessing.metadata_transformation import years_to_periods, generate_media_dependend_genres, standardize_meta_data_medium
+from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
+from preprocessing.presetting import load_stoplist
 import os
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches

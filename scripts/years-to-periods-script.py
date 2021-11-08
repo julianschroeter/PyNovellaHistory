@@ -1,7 +1,7 @@
-from Preprocessing.Corpus import DTM
-from Preprocessing.MetadataTransformation import years_to_periods
-from Preprocessing.Presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
-from Preprocessing.Presetting import load_stoplist
+from preprocessing.corpus import DTM
+from preprocessing.metadata_transformation import years_to_periods
+from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
+from preprocessing.presetting import load_stoplist
 import os
 import pandas as pd
 
