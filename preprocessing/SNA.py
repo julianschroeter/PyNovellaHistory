@@ -9,20 +9,18 @@ from preprocessing.text import Text
 
 
 class CharacterNetwork(Text):
-    def __init__(self, minimal_reference=2, filepath=None, text=None, id=None, chunks=None, token_length=0, pos_triples=None,
-                 remove_hyphen=True, correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True,
-                 inverse_translate_umlaute=False,
-                 eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None,
-                 list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
-                 sz_to_ss=False, translate_umlaute=False, max_length=5000000,
-                 remove_stopwords="before_chunking", stopword_list=None, language_model=None,
-                 characters_list=None, characters_counter=None, character_pairs_counter=None, character_pairs_rel_freq=None,
-                 graph=None):
-        Text.__init__(self, filepath, text, id, chunks, pos_triples, token_length, remove_hyphen,
+    def __init__(self,filepath, text, id, chunks, pos_triples, token_length, remove_hyphen, normalize_orthogr, normalization_table_path,
                  correct_ocr, eliminate_pagecounts, handle_special_characters, inverse_translate_umlaute,
                  eliminate_pos_items, keep_pos_items, list_keep_pos_tags, list_eliminate_pos_tags, lemmatize,
                  sz_to_ss, translate_umlaute, max_length,
-                 remove_stopwords,  stopword_list, language_model)
+                 remove_stopwords, stopword_list, language_model,
+                 characters_list=None, characters_counter=None, character_pairs_counter=None, character_pairs_rel_freq=None,
+                 graph=None, minimal_reference=2):
+        Text.__init__(self, filepath, text, id, chunks, pos_triples, token_length, remove_hyphen, normalize_orthogr, normalization_table_path,
+                 correct_ocr, eliminate_pagecounts, handle_special_characters, inverse_translate_umlaute,
+                 eliminate_pos_items, keep_pos_items, list_keep_pos_tags, list_eliminate_pos_tags, lemmatize,
+                 sz_to_ss, translate_umlaute, max_length,
+                 remove_stopwords, stopword_list, language_model)
         self.minimal_reference = minimal_reference
         self.characters_list = characters_list
         self.characters_counter = characters_counter
@@ -40,7 +38,7 @@ class CharacterNetwork(Text):
         return per_names_list
 
 
-    def generate_characters_graph(self, standardize=False, reduce_to_one_name=False):
+    def generate_characters_graph(self, reduce_to_one_name):
         nlp = spacy.load(self.language_model)
         character_pairs_global =[]
         raw_all_character_occurences = []
@@ -59,7 +57,7 @@ class CharacterNetwork(Text):
             raw_one_word_names = []
             raw_composed_names = []
 
-            corr_composed_names = []
+
 
 
 
@@ -67,11 +65,28 @@ class CharacterNetwork(Text):
             # first step: remove genitive-s at the end of the name: eliminate last s of each name and check whether the name without s (stored as red_name) exists in the the list of all character occurences. If that reduced form exists, the reduced form is used
             corr_s_raw_all_character_occurences = []
             for name in raw_all_character_occurences:
-                if re.search("s$", name):
-                    red_name = name[:-1]
+
+                if re.search("'s$", name):
+                    red_name = name[:-2]
+                    print(red_name)
+                    print(name)
                     if red_name in raw_all_character_occurences:
+                        print(name)
+                        print(red_name)
                         name = red_name
+
+
+                elif re.search("s$", name):
+                    red_name = name[:-1]
+                    print(name)
+                    print(red_name)
+                    if red_name in raw_all_character_occurences:
+                        print(name)
+                        print(red_name)
+                        name = red_name
+
                 corr_s_raw_all_character_occurences.append(name)
+
 
             # second step: remove ancient dativ or accusativ "n" (for example: "Ottilien" <- "Ottilie")
             # at the end of the name: eliminate last n of each name and check whether the name without n (stored as red_name) exists in the the list of all character occurences. If that reduced form exists, the reduced form is used
@@ -82,6 +97,7 @@ class CharacterNetwork(Text):
                     if red_name in raw_all_character_occurences:
                         name = red_name
                 corr_raw_all_character_occurences.append(name)
+
 
             # ersetze Namen, die aus einem Wort bestehen, durch den vollständigen mehrteiligen Namen
 
@@ -107,6 +123,7 @@ class CharacterNetwork(Text):
 
 
         counter_all_occurences = Counter(corr_raw_all_character_occurences)
+
         less_frq_name_to_most_frq_name_dict = {}
 
         if reduce_to_one_name == True:
@@ -118,8 +135,13 @@ class CharacterNetwork(Text):
                         new_counter_dict[part] = counter_all_occurences[part]
 
                     more_frequent_name = max(new_counter_dict, key=new_counter_dict.get)
-                    less_frequent_name = character.replace(more_frequent_name, "")
-                    less_frequent_name = less_frequent_name.replace(" ", "")
+                    if more_frequent_name in ["Herr", "Herrn", "Don", "Graf", "Gräfin", "Frau"]:
+                        false_more_freq_name = more_frequent_name
+                        more_frequent_name = character.replace(false_more_freq_name, "")
+                        less_frequent_name = false_more_freq_name
+                    else:
+                        less_frequent_name = character.replace(more_frequent_name, "")
+                        less_frequent_name = less_frequent_name.replace(" ", "")
                     less_frq_name_to_most_frq_name_dict[less_frequent_name] = more_frequent_name
             print("less to most frequent name dictionary:", less_frq_name_to_most_frq_name_dict)
 
@@ -140,17 +162,25 @@ class CharacterNetwork(Text):
                         else:
                             standard_all_character_occurences.append(character)
 
-            characters_in_paragraph_set = list(set(standard_all_character_occurences))
-            final_characters_list += characters_in_paragraph_set
+                characters_in_paragraph_set = list(set(standard_all_character_occurences))
+                print(characters_in_paragraph_set)
+                final_characters_list += characters_in_paragraph_set
+                characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))
+                characters_pairs_in_paragraph = [tuple(sorted(pair)) for pair in characters_pairs_in_paragraph]
+                if characters_pairs_in_paragraph:
+                    character_pairs_global += characters_pairs_in_paragraph
 
         elif reduce_to_one_name == False:
             characters_in_paragraph_set = list(set(corr_raw_all_character_occurences))
             final_characters_list += characters_in_paragraph_set
 
-        characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))
-        characters_pairs_in_paragraph = [tuple(sorted(pair)) for pair in characters_pairs_in_paragraph]
-        if characters_pairs_in_paragraph:
-            character_pairs_global += characters_pairs_in_paragraph
+            characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))
+            characters_pairs_in_paragraph = [tuple(sorted(pair)) for pair in characters_pairs_in_paragraph]
+            if characters_pairs_in_paragraph:
+                character_pairs_global += characters_pairs_in_paragraph
+
+        print(character_pairs_global)
+
 
         self.characters_counter = Counter(final_characters_list)
         self.characters_list = [character for character, count in self.characters_counter.items() if count >= self.minimal_reference]

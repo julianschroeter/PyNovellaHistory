@@ -1,5 +1,5 @@
 
-system = "wcph113"
+system = "my_mac" #"wcph113"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -9,13 +9,13 @@ import os
 import matplotlib.pyplot as plt
 
 from preprocessing.corpus import DocFeatureMatrix
-from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist
+from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 
 
 infile_name = os.path.join(global_corpus_representation_directory(system), "DocThemesMatrix.csv")
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
-colors_list = load_stoplist(os.path.join(global_corpus_representation_directory(system), "my_colors.txt"))
+colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "my_colors.txt"))
 
 dtm_obj = DocFeatureMatrix(data_matrix_filepath=infile_name, metadata_csv_filepath= metadata_filepath)
 dtm_obj = dtm_obj.add_metadata(["Gattungslabel_ED_normalisiert", "Nachname", "Titel", "Medium_ED", "Jahr_ED"])
