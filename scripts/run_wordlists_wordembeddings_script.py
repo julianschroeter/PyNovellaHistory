@@ -7,6 +7,16 @@ system = "wcph113"
 my_language_model_de = language_model_path(system)
 
 
+input_words = ["Dorf", "Hof", "Knecht", "Feld", "Wald", "Förster", "Pflug", "Bauernhof", "Stall", "Pferd", "Kuh", "Landwirtschaft", "Bauer",
+               "melken", "Acker", "Dorfkirche", "Dorfplatz", "bäuerlich", "Landwirt"]
+semantic_words_list = keywords_to_semantic_fields(list_of_keywords=input_words, n_most_relevant_words=30,
+                                                  spacy_model=my_language_model_de, vocabulary_path=os.path.join(vocab_lists_dicts_directory(system), "wordlist_german.txt" ))
+print(semantic_words_list)
+filename = str(str(semantic_words_list[0])+"_wordlist.txt")
+print(filename)
+wordlist_filepath = os.path.join(vocab_lists_dicts_directory(system), filename)
+save_stoplist(semantic_words_list, wordlist_filepath)
+
 input_words = ["Italien", "Frankreich", "Spanien", "italienisch", "französisch", "spanisch",
                "Nordfrankreich", "Südfrankreich", "Provence", "Paris", "Lyon", "Marseille", "Bordeaux",
                 "Neapel", "Sizilien", "Toscana", "Florenz", "Venedig", "Rom", "Genua", "Madrid", "Salamanca"]
@@ -157,3 +167,4 @@ filename = str(str(semantic_words_list[0])+"_wordlist.txt")
 print(filename)
 wordlist_filepath = os.path.join(vocab_lists_dicts_directory(system), filename)
 save_stoplist(semantic_words_list, wordlist_filepath)
+

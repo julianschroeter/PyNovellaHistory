@@ -6,6 +6,7 @@ from preprocessing.corpus import DocFeatureMatrix
 import spacy
 from copy import deepcopy
 
+
 # Achtung! Diese Klasse ist im Moment korrupt, hier ist eine frühere Version irrtümlich wieder eingespielt. Sie passt nicht zu FeatureDocMatrix
 # Diese Klasse sollte wieder angepasst werden.
 class DocTopicMatrix(DocFeatureMatrix):
@@ -17,7 +18,7 @@ class DocTopicMatrix(DocFeatureMatrix):
     def __init__(self, data_matrix_filepath,data_matrix_df, metadata_csv_filepath, metadata_df, mallet):
         print("data_csv_filepath ist", data_matrix_filepath)
         print("metadata_csv_filepath ist", metadata_csv_filepath)
-        super().__init__(data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df, mallet)
+        super().__init__(data_matrix_filepath,data_matrix_df, metadata_csv_filepath, metadata_df, mallet)
 
 
     def adjust_doc_chunk_multiindex(self):

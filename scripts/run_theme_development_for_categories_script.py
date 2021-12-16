@@ -1,5 +1,5 @@
 
-system = "my_mac" #"wcph113"
+system = "wcph113" #"my_mac"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -25,6 +25,10 @@ dtm_obj = dtm_obj.reduce_to_categories("Gattungslabel_ED_normalisiert", cat_labe
 
 
 df = dtm_obj.data_matrix_df
+
+print(df)
+
+
 
 df = years_to_periods(input_df=df, category_name="Jahr_ED",start_year=1770, end_year=2000, epoch_length=20,
                       new_periods_column_name="periods20a")
