@@ -6,7 +6,7 @@ contains utility classes and functions
 import spacy
 import re
 import os
-from preprocessing.presetting import word_translate_table_to_dict
+from preprocessing.presetting import word_translate_table_to_dict, load_stoplist
 
 
 
@@ -18,7 +18,9 @@ class Text():
     def __init__(self, filepath=None, text=None, id = None, chunks=None, pos_triples=None, token_length=0, remove_hyphen=True, normalize_orthogr=False, normalization_table_path=None,
                  correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True, inverse_translate_umlaute=False,
                  eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
-                 sz_to_ss=False, translate_umlaute=False, max_length=5000000,
+                 sz_to_ss=False, translate_umlaute=False,
+                 reduce_to_words_from_list=False, reduction_word_list=None,
+                 max_length=5000000,
                  remove_stopwords=False, stopword_list=None, language_model=None):
         self.filepath = filepath
         self.text = text
@@ -40,6 +42,8 @@ class Text():
         self.max_length = max_length
         self.stopword_list = stopword_list
         self.remove_stopwords = remove_stopwords
+        self. reduce_to_words_from_list = reduce_to_words_from_list
+        self.reduction_word_list = reduction_word_list
         self.language_model = language_model
         self.token_length = token_length
         self.normalize_orthogr = normalize_orthogr
@@ -81,7 +85,7 @@ class Text():
         self.text = re.sub("\[\d{1,4}\]", "", self.text)
 
     def f_handle_special_characters(self):
-        special_character_table = {"€":"", "^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "[" : "", "]" : "", "„" : '''"''' , "’" : "'" , "`" : "'"}
+        special_character_table = { "ſ":"s", "€":"", "^":"","_":"", "%":"", "&":"", "#":"", "§":"", "<":"", ">":"",  "♦" : "", "•" : "", "■" : "", "[" : "", "]" : "", "„" : '''"''' , "’" : "'" , "`" : "'"}
         text = self.text.translate(str.maketrans(special_character_table))
         text = text.replace(",,", '''"''')
         text = text.replace("'s", "")
@@ -178,6 +182,12 @@ class Text():
         self.text = ' '.join(map(str, text_list))  # convert list to string
 
 
+    def f_reduce_to_words_from_list(self, type="lemmatized_NOUN_VERB_ADJ"):
+
+        if type == "lemmatized_NOUN_VERB_ADJ":
+            text_list = [triple[1] if (triple[2] in ["ADJ", "VERB", "NOUN"]) else triple[0] for triple in self.pos_triples]
+            reduced_text_list = [token for token in text_list if token in self.reduction_word_list]
+        self.text = ' '.join(map(str, reduced_text_list))  # convert list to string
 
 
     def f_chunking(self, segmentation_type="fixed",  fixed_chunk_length=600, num_chunks=5, min_paragraph_length=250):
@@ -298,6 +308,8 @@ class Text():
             self.f_remove_stopwords_from_triples()
         if self.lemmatize == True:
             self.f_lemmatize()
+        if self.reduce_to_words_from_list == True:
+            self.f_reduce_to_words_from_list()
 
         else:
             pass

@@ -17,7 +17,7 @@ from collections import Counter
 """
 
 ''' 3. Generating, editing, manipulating, and transforming a Corpus Representation as term document matrix:  
-The following scripts organize the preprocessing steps of:
+The following scripts_novellas organize the preprocessing steps of:
 1. a) Correcting common and domain specific OCR errors, based on practical experience with reading OCR; and b) Normalization if necessary (transforming Ä,Ö,Ü,ß to ae, oe, ue, ss for example for topic modeling with mallet
 2. Lemmatization (with spacy)
 3. POS-Tagging, (with spacy)
@@ -258,6 +258,7 @@ class DTM(DocFeatureMatrix):
 class Junk_Corpus():
     def __init__(self, corpus_path=None, outfile_directory=None, correct_ocr=True, eliminate_pagecounts=True,
                  handle_special_characters=True, inverse_translate_umlaute=False, lemmatize=True,
+                 normalize_orthogr = False, normalization_table_path=None,
                  remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
                  eliminate_pos_items=True, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"],
                  keep_pos_items=False, list_keep_pos_tags=None,
@@ -270,6 +271,8 @@ class Junk_Corpus():
         self.handle_special_characters = handle_special_characters
         self.inverse_translate_umlaute = inverse_translate_umlaute
         self.lemmatize = lemmatize
+        self.normalize_orthogr = normalize_orthogr
+        self.normalization_table = normalization_table_path
         self.remove_hyphen =remove_hyphen
         self.sz_to_ss = sz_to_ss
         self.translate_umlaute = translate_umlaute
@@ -291,6 +294,7 @@ class Junk_Corpus():
                                handle_special_characters=self.handle_special_characters,
                                inverse_translate_umlaute=self.inverse_translate_umlaute,
                                lemmatize=self.lemmatize, remove_hyphen=self.remove_hyphen, sz_to_ss=self.sz_to_ss,
+                               normalize_orthogr=self.normalize_orthogr, normalization_table_path=self.normalization_table_path,
                                translate_umlaute=self.translate_umlaute,
                                eliminate_pos_items=self.eliminate_pos_items, list_eliminate_pos_tags=self.list_eliminate_pos_tags,
                                keep_pos_items=self.keep_pos_items, list_keep_pos_tags=self.list_keep_pos_tags,
@@ -310,6 +314,7 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
                  keep_pos_items=False, list_keep_pos_tags=None,
                  segmentation_type="fixed", fixed_chunk_length=600, num_chunks=5,
                         normalize_orthogr=False, normalization_table_path=None,
+                        reduce_to_words_from_list=False, reduction_word_list=None,
                  stopword_list=None, remove_stopwords=None):
     """
     generate text files from corpus files, such as chunks, a selection of files based on metadata selection, or POS-/NER-Representation
@@ -343,22 +348,24 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
         os.makedirs(outfile_path)
     for filename in os.listdir(corpus_path):
         text_obj = Text(filepath=os.path.join(corpus_path, filename), correct_ocr=correct_ocr,
-                               eliminate_pagecounts=eliminate_pagecounts,
-                               handle_special_characters=handle_special_characters,
-                               inverse_translate_umlaute=inverse_translate_umlaute,
-                               lemmatize=lemmatize, remove_hyphen=remove_hyphen, sz_to_ss=sz_to_ss,
-                               translate_umlaute=translate_umlaute,
-                               eliminate_pos_items=eliminate_pos_items, list_eliminate_pos_tags=list_eliminate_pos_tags,
-                               keep_pos_items=keep_pos_items, list_keep_pos_tags=list_keep_pos_tags,
-                               remove_stopwords=remove_stopwords, stopword_list=stopword_list,
+                        eliminate_pagecounts=eliminate_pagecounts,
+                        handle_special_characters=handle_special_characters,
+                        inverse_translate_umlaute=inverse_translate_umlaute,
                         normalize_orthogr=normalize_orthogr, normalization_table_path=normalization_table_path,
-                        language_model=language_model)
+                        lemmatize=lemmatize, reduce_to_words_from_list=reduce_to_words_from_list, reduction_word_list=reduction_word_list,
+                        remove_hyphen=remove_hyphen, sz_to_ss=sz_to_ss,
+                        translate_umlaute=translate_umlaute,
+                        eliminate_pos_items=eliminate_pos_items, list_eliminate_pos_tags=list_eliminate_pos_tags,
+                        keep_pos_items=keep_pos_items, list_keep_pos_tags=list_keep_pos_tags,
+                        remove_stopwords=remove_stopwords, stopword_list=stopword_list,
+                        language_model=language_model,
+                        )
         text_obj.f_extract_id()
 
         if only_selected_files == True:
 
             if text_obj.id in list_of_file_ids:
-                print("currently processes file with id: "+ str(text_obj.id))
+                print("currently processes file with id / filename: "+ str(text_obj.id) + " / " + filename)
                 text_obj.f_read_file()
                 if remove_hyphen == True:
                     text_obj.f_remove_hyphen()
@@ -399,7 +406,8 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
                 pass
 
         elif only_selected_files == False:
-            print("currently processes file with id: " + str(text_obj.id))
+            print("All files in corpus_path will be processed")
+            print("currently processes file with id / filename: "+ str(text_obj.id) + " / " + filename)
 
             text_obj.f_read_file()
             if remove_hyphen == True:
@@ -422,6 +430,9 @@ def generate_text_files(chunking=False, pos_representation=False, corpus_path=No
             if lemmatize == True:
                 text_obj.f_generate_pos_triples()
                 text_obj.f_lemmatize()
+            if reduce_to_words_from_list == True:
+                text_obj.f_generate_pos_triples()
+                text_obj.f_reduce_to_words_from_list()
 
             if chunking == False:
                 if pos_representation == False:
