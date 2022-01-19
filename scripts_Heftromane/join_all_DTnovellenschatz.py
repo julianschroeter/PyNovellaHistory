@@ -8,9 +8,9 @@ import os
 from preprocessing.prepare_corpus import join_all_documents
 from preprocessing.presetting import local_temp_directory, vocab_lists_dicts_directory, language_model_path, load_stoplist
 
-corpus_path = os.path.join(local_temp_directory(system), "pantheon_roh")
+corpus_path = os.path.join(local_temp_directory(system), "novsch")
 outfile_directory = local_temp_directory(system)
-outfile_name = "pantheon_joined_for_topic_modeling.txt"
+outfile_name = "novsch_joined_for_topic_modeling.txt"
 normalization_table_path = os.path.join(vocab_lists_dicts_directory(system), "normalization_table.txt")
 my_language_model_path = language_model_path(system)
 list_keep_pos_tags = ["ADJ", "VERB", "NOUN", "ADV"]

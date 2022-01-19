@@ -255,7 +255,7 @@ class DTM(DocFeatureMatrix):
 
 
 
-class Junk_Corpus():
+class ChunkCorpus():
     def __init__(self, corpus_path=None, outfile_directory=None, correct_ocr=True, eliminate_pagecounts=True,
                  handle_special_characters=True, inverse_translate_umlaute=False, lemmatize=True,
                  normalize_orthogr = False, normalization_table_path=None,
@@ -272,7 +272,7 @@ class Junk_Corpus():
         self.inverse_translate_umlaute = inverse_translate_umlaute
         self.lemmatize = lemmatize
         self.normalize_orthogr = normalize_orthogr
-        self.normalization_table = normalization_table_path
+        self.normalization_table_path = normalization_table_path
         self.remove_hyphen =remove_hyphen
         self.sz_to_ss = sz_to_ss
         self.translate_umlaute = translate_umlaute
@@ -288,6 +288,8 @@ class Junk_Corpus():
         self.language_model = language_model
 
     def __call__(self):
+        if not os.path.exists(self.outfile_directory):
+            os.makedirs(self.outfile_directory)
         for filename in os.listdir(self.corpus_path):
             text_object = Text(filepath=os.path.join(self.corpus_path, filename), correct_ocr=self.correct_ocr,
                                eliminate_pagecounts=self.eliminate_pagecounts,

@@ -15,10 +15,10 @@ class DocTopicMatrix(DocFeatureMatrix):
     The matrix in the .data_matrix_attribute has a multi index: On the first level, there are the ids of the document (form: 00000-00),
     on the second level, there are the chunks (0000) of each document.
     """
-    def __init__(self, data_matrix_filepath,data_matrix_df, metadata_csv_filepath, metadata_df, mallet):
+    def __init__(self, data_matrix_filepath, metadata_csv_filepath, data_matrix_df,  metadata_df, mallet):
         print("data_csv_filepath ist", data_matrix_filepath)
         print("metadata_csv_filepath ist", metadata_csv_filepath)
-        super().__init__(data_matrix_filepath,data_matrix_df, metadata_csv_filepath, metadata_df, mallet)
+        super().__init__(data_matrix_filepath, metadata_csv_filepath, data_matrix_df,  metadata_df, mallet)
 
 
     def adjust_doc_chunk_multiindex(self):
