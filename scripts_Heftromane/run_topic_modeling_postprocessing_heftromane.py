@@ -18,14 +18,20 @@ print(df_meta)
 
 
 topic_doc_matrix = topic_doc_matrix.adjust_doc_chunk_multiindex()
-topic_doc_matrix.data_matrix_df.to_csv(os.path.join(global_corpus_representation_directory(system_name), "heftromane_test-doc-topics.csv"))
-df_all_segments = topic_doc_matrix.data_matrix_df
-matrix = topic_doc_matrix.mean_doclevel()
-doc_topic_df = matrix.data_matrix_df
 
-matrix = matrix.reduce_to([22]) # = bestimmtes topic
-df = matrix.data_matrix_df
-print(df)
+print(topic_doc_matrix.data_matrix_df)
+
+
+
+topic_doc_matrix.data_matrix_df = topic_doc_matrix.data_matrix_df.droplevel("chunk_count")
+
+matrix = topic_doc_matrix
+print(matrix.data_matrix_df)
+# matrix = topic_doc_matrix.mean_doclevel()
+
+
+# matrix = matrix.reduce_to([1]) # = bestimmtes topic
+
 
 matrix = matrix.add_metadata("title")
 
@@ -33,3 +39,24 @@ matrix = matrix.add_metadata("title")
 df_title = matrix.data_matrix_df
 
 print(df_title)
+
+from clustering.my_pca import PC_df
+from preprocessing.presetting import global_corpus_representation_directory, load_stoplist, global_corpus_raw_dtm_directory
+import os
+
+
+colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system_name), "my_colors.txt"))
+print(colors_list)
+
+pc_df = PC_df(input_df= df_title)
+
+pc_df.generate_pc_df(n_components=2)
+
+
+print(pc_df.pc_target_df.sort_values(by=["PC_2"], axis=0, ascending=False))
+print(pc_df.component_loading_df.loc["PC_1"].sort_values(ascending=False)[:20])
+print(pc_df.component_loading_df.loc["PC_2"].sort_values(ascending=False)[:20])
+print(pc_df.component_loading_df.loc["PC_1"].sort_values(ascending=True)[:20])
+print(pc_df.component_loading_df.loc["PC_2"].sort_values(ascending=True)[:20])
+print(pc_df.pca.explained_variance_)
+pc_df.scatter(colors_list)

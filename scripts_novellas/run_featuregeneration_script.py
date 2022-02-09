@@ -1,4 +1,4 @@
-system = "my_mac" # "wcph113"
+system = "wcph113" # "my_mac"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -20,7 +20,7 @@ normalization_dict, dict_lower = word_translate_table_to_dict(normalization_tabl
 print(normalization_dict)
 print(dict_lower)
 
-normalization_list = ["tfidf"]
+normalization_list = ["tfidf", "l2"]
 
 for normalization in normalization_list:
     # for lemmatization == True
@@ -29,9 +29,7 @@ for normalization in normalization_list:
                             sz_to_ss=False,
                             normalize_orthogr=True, normalization_table_path=normalization_table_path,
                             correct_ocr=True, eliminiate_pagecounts=True, n_mfw=n_mfw,
-                            eliminate_pos_items=True,
-
-                           normalize=normalization, language_model=my_model_de_path)
+                            eliminate_pos_items=True, normalize=normalization, language_model=my_model_de_path)
     outfile_basename = "raw_dtm_lemmatized_"+str(normalization)+"_"+str(n_mfw)+"mfw.csv"
     raw_dtm_outfile_path = os.path.join(outfile_dtm_path, outfile_basename)
     raw_corpus_object.generate_from_textcorpus()

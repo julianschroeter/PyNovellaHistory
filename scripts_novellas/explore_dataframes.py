@@ -1,6 +1,6 @@
 import pandas as pd
 import os
-from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist
+from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist, vocab_lists_dicts_directory
 from preprocessing.metadata_transformation import full_genre_labels
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
@@ -11,7 +11,7 @@ from collections import Counter
 system = "wcph113"
 infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "DocThemesMatrix_genres.csv")
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
-colors_list = load_stoplist(os.path.join(global_corpus_representation_directory(system), "my_colors.txt"))
+colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "my_colors.txt"))
 
 df_obj = DocFeatureMatrix(data_matrix_filepath=infile_name, metadata_csv_filepath= metadata_filepath)
 df = df_obj.data_matrix_df
