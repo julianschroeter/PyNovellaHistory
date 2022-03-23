@@ -13,11 +13,15 @@ from preprocessing.presetting import global_corpus_representation_directory, voc
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 
 
-infile_name = os.path.join(global_corpus_representation_directory(system), "DocThemesMatrix.csv")
+# infile_name = os.path.join(global_corpus_representation_directory(system), "DocThemesMatrix.csv")
+infile_name = os.path.join(global_corpus_representation_directory(system), "toponym_share_Matrix.csv")
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "my_colors.txt"))
 
 dtm_obj = DocFeatureMatrix(data_matrix_filepath=infile_name, metadata_csv_filepath= metadata_filepath)
+
+
+
 dtm_obj = dtm_obj.add_metadata(["Gattungslabel_ED_normalisiert", "Nachname", "Titel", "Medium_ED", "Jahr_ED"])
 
 cat_labels = ["N", "E", "0E", "XE", "M"]
@@ -59,34 +63,3 @@ for column_name in df_grouped.columns.values.tolist():
     df_grouped[column_name].unstack().plot(kind='line', stacked=False, title=str("Entwicklung des Bezugs zu "+str(column_name)),
                                        ylabel=str("Anteil von Wörtern, die indizieren:"+str(column_name)))
     plt.show()
-
-
-
-
-df_N = df[df["Gattungslabel_ED_normalisiert"] == "N"]
-df_N_periods_grouped = df_N.groupby(["periods20a"]).mean()
-df_N_periods_grouped["Marseille"].plot(kind="bar", title="Anteil frz/span/ital Novellen")
-plt.show()
-
-df_E = df[df["Gattungslabel_ED_normalisiert"] == "E"]
-df_E_periods_grouped = df_E.groupby(["periods20a"]).mean()
-df_E_periods_grouped["Marseille"].plot(kind="bar", title="Anteil frz/span/ital Erzählungen")
-plt.show()
-
-df_0E = df[df["Gattungslabel_ED_normalisiert"] == "0E"]
-df_0E_periods_grouped = df_0E.groupby(["periods20a"]).mean()
-df_0E_periods_grouped["Marseille"].plot(kind="bar",  title="Anteil frz/span/ital sonstige Erzählprosa")
-plt.show()
-
-df_R = df[df["Gattungslabel_ED_normalisiert"] == "R"]
-df_R_periods_grouped = df_R.groupby(["periods20a"]).mean()
-df_R_periods_grouped["Marseille"].plot(kind="bar",
-                                        title="hist. Entwicklung: frz/span/ital Wörter in Romanen")
-plt.show()
-
-df_M = df[df["Gattungslabel_ED_normalisiert"] == "M"]
-df_M_periods_grouped = df_M.groupby(["periods20a"]).mean()
-
-df_M_periods_grouped["Marseille"].plot(kind="bar",
-                                        title="hist. Entwicklung: frz/span/ital Wörter in Märchen")
-plt.show()

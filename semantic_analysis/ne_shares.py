@@ -30,6 +30,7 @@ def calculate_share(text_as_list, ne_list, normalize='l1', standardize=False, ca
 
 import pandas as pd
 import os
+from sklearn.preprocessing import StandardScaler
 from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist
 
 system = "wcph113"
@@ -44,9 +45,6 @@ list_path = os.path.join(vocab_lists_dicts_directory(system), "toponym_lists", "
 spanish_list = load_stoplist(list_path)
 
 
-
-# italian_list = ["Eckbert"]
-
 df_infilepath = os.path.join(global_corpus_representation_directory(system), "NEs_document_Matrix_test.csv")
 df = pd.read_csv(df_infilepath, index_col=0)
 
@@ -59,5 +57,10 @@ df["fr_top"] = df["Orte"].apply(lambda x: calculate_share(str(x).split(". "), ne
 df["sp_top"] = df["Orte"].apply(lambda x: calculate_share(str(x).split(". "), ne_list=spanish_list))
 
 df = (df[["it_top", "fr_top", "sp_top"]])
+
+scaler = StandardScaler()
+df = pd.DataFrame(scaler.fit_transform(df.to_numpy()), columns=df.columns, index=df.index)
+
+print(df)
 
 df.to_csv(path_or_buf=df_outfilepath)

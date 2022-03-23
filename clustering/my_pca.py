@@ -49,8 +49,8 @@ class PC_df():
         plt.figure(figsize=(6, 6))
         plt.title("PCA")
         plt.scatter(self.pc_target_df.iloc[:,0], self.pc_target_df.iloc[:,1], c=list_targetcolors, cmap='rainbow', alpha=0.8)
-        plt.xlabel(str('Erste Komponente, Erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
-        plt.ylabel(str('Zweite Komponente, Erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+        plt.xlabel(str('First Component, expl. Var.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
+        plt.ylabel(str('Second Component, expl. Var.: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
         #plt.xscale(value="log")
         #plt.yscale(value="log")
         #plt.xlim(-50000,500000)
@@ -60,4 +60,5 @@ class PC_df():
             mpatches_list.append(patch)
         plt.legend(handles=mpatches_list)
         plt.show()
+
 

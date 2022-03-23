@@ -8,18 +8,23 @@ from preprocessing.text import Text
 
 
 
-class CharacterNetwork(Text):
+class NEnetwork(Text):
     def __init__(self,filepath, text, id, chunks, pos_triples, token_length, remove_hyphen, normalize_orthogr, normalization_table_path,
                  correct_ocr, eliminate_pagecounts, handle_special_characters, inverse_translate_umlaute,
                  eliminate_pos_items, keep_pos_items, list_keep_pos_tags, list_eliminate_pos_tags, lemmatize,
-                 sz_to_ss, translate_umlaute, max_length,
+                 sz_to_ss,
+                 reduce_to_words_from_list, reduction_word_list,
+                 translate_umlaute, max_length,
                  remove_stopwords, stopword_list, language_model,
                  characters_list=None, characters_counter=None, character_pairs_counter=None, character_pairs_rel_freq=None,
                  graph=None, minimal_reference=2):
-        Text.__init__(self, filepath, text, id, chunks, pos_triples, token_length, remove_hyphen, normalize_orthogr, normalization_table_path,
+        Text.__init__(self, filepath, text, id, chunks, pos_triples, token_length, remove_hyphen, normalize_orthogr,
+                      normalization_table_path,
                  correct_ocr, eliminate_pagecounts, handle_special_characters, inverse_translate_umlaute,
                  eliminate_pos_items, keep_pos_items, list_keep_pos_tags, list_eliminate_pos_tags, lemmatize,
-                 sz_to_ss, translate_umlaute, max_length,
+                 sz_to_ss, translate_umlaute,
+                 reduce_to_words_from_list, reduction_word_list,
+                 max_length,
                  remove_stopwords, stopword_list, language_model)
         self.minimal_reference = minimal_reference
         self.characters_list = characters_list
@@ -32,10 +37,20 @@ class CharacterNetwork(Text):
         nlp = spacy.load(self.language_model)
         all_character_occurences = []
         final_characters_list = []
-        doc = nlp(self.text)
+        doc = nlp(self.text[:self.max_length])
         per_names_list = [ent.text for ent in doc.ents if ent.label_ == "PER"]
         per_names_list = list(set(per_names_list))
         return per_names_list
+
+    def generate_loc_names_list(self):
+        nlp = spacy.load(self.language_model)
+        all_character_occurences = []
+        final_characters_list = []
+        doc = nlp(self.text[:self.max_length])
+        names_list = [ent.text for ent in doc.ents if ent.label_ == "LOC"]
+        names_list = list(set(names_list))
+        return names_list
+
 
 
     def generate_characters_graph(self, reduce_to_one_name):

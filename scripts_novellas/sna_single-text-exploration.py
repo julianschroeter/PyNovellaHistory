@@ -1,4 +1,4 @@
-from preprocessing.SNA import CharacterNetwork
+from preprocessing.SNA import NEnetwork
 from preprocessing.text import Text
 from preprocessing.presetting import global_corpus_directory
 from preprocessing.presetting import global_corpus_representation_directory, language_model_path, vocab_lists_dicts_directory
@@ -14,12 +14,12 @@ normalization_table_path = os.path.join(vocab_lists_dicts_directory(system), "no
 
 filepath = os.path.join(global_corpus_directory(system_name=system), "00117-00_N_Dorothea_Liebe und Welt_2_Aglaja1832.txt")
 
-char_netw = CharacterNetwork(filepath=filepath, language_model= my_model_de, minimal_reference=3, text=None, id = None, chunks=None,
-                             pos_triples=None, remove_hyphen=True,
-                 correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True, inverse_translate_umlaute=False,
-                 eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
-                 sz_to_ss=False, translate_umlaute=False, max_length=5000000,
-                 remove_stopwords=False, stopword_list=None, token_length=0, normalize_orthogr=True, normalization_table_path=normalization_table_path)
+char_netw = NEnetwork(filepath=filepath, language_model= my_model_de, minimal_reference=3, text=None, id = None, chunks=None,
+                      pos_triples=None, remove_hyphen=True,
+                      correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True, inverse_translate_umlaute=False,
+                      eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
+                      sz_to_ss=False, translate_umlaute=False, max_length=5000000,
+                      remove_stopwords=False, stopword_list=None, token_length=0, normalize_orthogr=True, normalization_table_path=normalization_table_path)
 
 print(char_netw.list_eliminate_pos_tags)
 char_netw()

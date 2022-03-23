@@ -20,7 +20,7 @@ class Text():
                  eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
                  sz_to_ss=False, translate_umlaute=False,
                  reduce_to_words_from_list=False, reduction_word_list=None,
-                 max_length=5000000,
+                 max_length=1000000,
                  remove_stopwords=False, stopword_list=None, language_model=None):
         self.filepath = filepath
         self.text = text

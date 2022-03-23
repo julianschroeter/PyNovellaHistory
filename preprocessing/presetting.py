@@ -96,7 +96,7 @@ def mallet_directory(system_name):
     return os.path.join(set_DistReading_directory(system_name), "mallet")
 
 def language_model_path(system_name):
-    path = os.path.join(local_temp_directory(system_name), "language_models", "my_model_de")
+    path = os.path.join(local_temp_directory(system_name), "language_models")
     return path
 
 

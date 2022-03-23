@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import normalize
 from preprocessing.text import Text
-from preprocessing.SNA import CharacterNetwork
+from preprocessing.SNA import NEnetwork
 import networkx as nx
 from copy import deepcopy
 from collections import Counter
@@ -496,10 +496,97 @@ def check_save_pos_ner_parsing_corpus(corpus_path, outfile_path, list_of_file_id
 
 class DocNetworkfeature_Matrix(DocFeatureMatrix):
     def __init__(self, corpus_path=None, data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
+                 metadata_df=None, encoding="utf-8", normalization="tfidf", correct_ocr=True, eliminate_pagecounts=True,
+                 handle_special_characters=True,
+                 normalize_orthogr=True, normalization_table_path=None, keep_pos_items=False,
+                 inverse_translate_umlaute=False, eliminate_pos_items=False, list_of_pos_tags=None, lemmatize=True,
+                 remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
+                 remove_stopwords=False, stoplist_filepath=None, n_mfw=0, segmentation_type="paragraph",
+                 fixed_chunk_length=1000, num_chunks=5, language_model=None, mallet=False,
+                 corpus_as_dict=None, corpus_characters_list=None, corpus_locs_list=None, **kwargs):
+        DocFeatureMatrix.__init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df,
+                                  mallet)
+        self.corpus_path = corpus_path
+        self.handle_special_characters = handle_special_characters
+        self.encoding = encoding
+        self.normalization = normalization
+        self.correct_ocr = correct_ocr
+        self.handle_special_characters = handle_special_characters
+        self.inverse_translate_umlaute = inverse_translate_umlaute
+        self.eliminate_pagecounts = eliminate_pagecounts
+        self.eliminate_pos_items = eliminate_pos_items
+        self.list_of_pos_tags = list_of_pos_tags
+        self.lemmatize = lemmatize
+        self.sz_to_ss = sz_to_ss
+        self.translate_umlaute = translate_umlaute
+        self.remove_hyphen = remove_hyphen
+        self.remove_stopwords = remove_stopwords
+        self.encoding = encoding
+        self.segmentation_type = segmentation_type
+        self.fixed_chunk_length = fixed_chunk_length
+        self.num_chunks = num_chunks
+        self.language_model = language_model
+        self.stoplist_filepath = stoplist_filepath
+        self.n_mfw = n_mfw
+        self.corpus_as_dict = corpus_as_dict
+        self.corpus_characters_list = corpus_characters_list
+        self.corpus_locs_list = corpus_locs_list
+        self.normalize_orthogr = normalize_orthogr
+        self.normalization_table_path = normalization_table_path
+        self.keep_pos_items = keep_pos_items
+
+        """
+        call Text class to preprocess text over all texts in corpus path and to store the processed text
+         as value with the document id as key in a dictionary.
+        This method is to be called by generate_from_textcorpus method as the basis for vectorization.
+        returns dictionary with doc ids as keys and processed text for each document as values.
+        """
+        if self.corpus_as_dict is None:
+            dic = {}
+            corpus_characters_list = []
+            for filepath in os.listdir(self.corpus_path):
+                char_netw = NEnetwork(filepath=os.path.join(self.corpus_path, filepath), minimal_reference=2, text=None, id=None, chunks=None,
+                                      pos_triples=None, remove_hyphen=True,
+                                      correct_ocr=self.correct_ocr, eliminate_pagecounts=self.eliminate_pagecounts, handle_special_characters=self.handle_special_characters,
+                                      inverse_translate_umlaute=self.inverse_translate_umlaute,
+                                      eliminate_pos_items=self.eliminate_pos_items, list_keep_pos_tags=self.list_of_pos_tags,
+                                      list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=False,
+                                      sz_to_ss=False, translate_umlaute=False, max_length=5000000,
+                                      remove_stopwords="before_chunking", stopword_list=None,
+                                      language_model=self.language_model, token_length=0, normalize_orthogr=self.normalize_orthogr,
+                                      normalization_table_path=normalization_table_path, keep_pos_items=self.keep_pos_items)
+                char_netw()
+                char_netw.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
+                char_netw.generate_characters_graph()
+
+                dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1), char_netw.token_length]
+                corpus_characters_list += char_netw.characters_list
+            self.corpus_as_dict = dic
+            self.corpus_characters_list = corpus_characters_list
+
+    def generate_df(self):
+        df = pd.DataFrame(self.corpus_as_dict).T
+        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte", "Anteil Figuren mit degree centrality == 1", "Länge in Token"]
+        self.data_matrix_df = df
+
+    def corpus_characters_list_to_file(self, outfilepath):
+        names_string = ", ".join(map(str, set(self.corpus_characters_list)))
+        with open(outfilepath, "w") as infile:
+            infile.write(names_string.replace(", ", "\n"))
+        pass
+
+
+    def corpus_character_counter(self):
+        return Counter(self.corpus_characters_list)
+
+
+class DocNEs_Matrix(DocFeatureMatrix):
+    def __init__(self, corpus_path=None, data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
                  metadata_df=None, encoding="utf-8", normalization="tfidf", correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True,
+                 normalize_orthogr=True, normalization_table_path=None, keep_pos_items=False,
                  inverse_translate_umlaute=False, eliminate_pos_items=False, list_of_pos_tags=None, lemmatize=True, remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
                  remove_stopwords=False, stoplist_filepath=None, n_mfw=0, segmentation_type="paragraph", fixed_chunk_length=1000, num_chunks=5, language_model=None, mallet=False,
-                 corpus_as_dict=None, corpus_characters_list=None, **kwargs):
+                 corpus_as_dict=None, corpus_characters_list=None, corpus_locs_list=None, max_length=1000000, **kwargs):
         DocFeatureMatrix.__init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df, mallet)
         self.corpus_path = corpus_path
         self.handle_special_characters = handle_special_characters
@@ -525,6 +612,11 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
         self.n_mfw = n_mfw
         self.corpus_as_dict = corpus_as_dict
         self.corpus_characters_list = corpus_characters_list
+        self.corpus_locs_list = corpus_locs_list
+        self.normalize_orthogr = normalize_orthogr
+        self.normalization_table_path = normalization_table_path
+        self.keep_pos_items = keep_pos_items
+        self.max_length = max_length
 
         """
         call Text class to preprocess text over all texts in corpus path and to store the processed text
@@ -534,29 +626,35 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
         """
         if self.corpus_as_dict is None:
             dic = {}
-            corpus_characters_list = []
+            corpus_characters_list, corpus_locs_list = [], []
             for filepath in os.listdir(self.corpus_path):
-                char_netw = CharacterNetwork(filepath=os.path.join(self.corpus_path, filepath), minimal_reference=2, text=None, id=None, chunks=None,
-                                         pos_triples=None, remove_hyphen=True,
-                                         correct_ocr=self.correct_ocr, eliminate_pagecounts=self.eliminate_pagecounts, handle_special_characters=self.handle_special_characters,
-                                         inverse_translate_umlaute=self.inverse_translate_umlaute,
-                                         eliminate_pos_items=self.eliminate_pos_items, list_keep_pos_tags=self.list_of_pos_tags,
-                                         list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=False,
-                                         sz_to_ss=False, translate_umlaute=False, max_length=5000000,
-                                         remove_stopwords="before_chunking", stopword_list=None,
-                                         language_model=self.language_model)
+                char_netw = NEnetwork(filepath=os.path.join(self.corpus_path, filepath), minimal_reference=2, text=None, id=None, chunks=None,
+                                      pos_triples=None, remove_hyphen=True,
+                                      correct_ocr=self.correct_ocr, eliminate_pagecounts=self.eliminate_pagecounts, handle_special_characters=self.handle_special_characters,
+                                      inverse_translate_umlaute=self.inverse_translate_umlaute,
+                                      eliminate_pos_items=self.eliminate_pos_items, list_keep_pos_tags=self.list_of_pos_tags,
+                                      list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=False,
+                                      sz_to_ss=False, translate_umlaute=False, max_length=self.max_length,
+                                      remove_stopwords="before_chunking", stopword_list=None,
+                                      language_model=self.language_model, token_length=0, normalize_orthogr=self.normalize_orthogr,
+                                      normalization_table_path=normalization_table_path, keep_pos_items=self.keep_pos_items,
+                                      reduce_to_words_from_list=False, reduction_word_list=None)
                 char_netw()
+                print("currently processes text with id: " + str(char_netw.id))
                 char_netw.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
-                char_netw.generate_characters_graph()
+                per_names_list = char_netw.generate_per_names_list()
+                loc_names_list = char_netw.generate_loc_names_list()
 
-                dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1), char_netw.token_length]
-                corpus_characters_list += char_netw.characters_list
+                dic[char_netw.id] = [". ".join(per_names_list), ". ".join(loc_names_list)]
+                corpus_characters_list += per_names_list
+                corpus_locs_list += loc_names_list
             self.corpus_as_dict = dic
             self.corpus_characters_list = corpus_characters_list
+            self.corpus_locs_list = corpus_locs_list
 
     def generate_df(self):
         df = pd.DataFrame(self.corpus_as_dict).T
-        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte", "Anteil Figuren mit degree centrality == 1", "Länge in Token"]
+        df.columns = ["Figuren", "Orte"]
         self.data_matrix_df = df
 
     def corpus_characters_list_to_file(self, outfilepath):
@@ -568,6 +666,8 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
 
     def corpus_character_counter(self):
         return Counter(self.corpus_characters_list)
+
+
 
 class POS_Vocab():
     """
