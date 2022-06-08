@@ -1,4 +1,4 @@
-from preprocessing.SamplingMethods import equal_sample
+from preprocessing.sampling import equal_sample
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
@@ -17,9 +17,9 @@ def sample_perspectival_sets(input_df, period_category="periods_100a", metadata_
     genre_labels is a list of two genre labels, for example ["N", "E"]
     """
     fit_df = input_df[input_df.isin({period_category: metadata_cat_fit_list}).any(1)]
-    fit_df.drop([period_category], axis=1, inplace=True)
+    fit_df = fit_df.drop([period_category], axis=1)
     transfer_df = input_df[input_df.isin({period_category: metadata_cat_transfer_list}).any(1)]
-    transfer_df.drop([period_category], axis=1, inplace=True)
+    transfer_df = transfer_df.drop([period_category], axis=1)
     df_genre0_fit_df = fit_df[fit_df[genre_category] == genre_labels[0]]
     df_genre1_fit_df = fit_df[fit_df[genre_category] == genre_labels[1]]
     df_genre0_transfer_df = transfer_df[transfer_df[genre_category] == genre_labels[0]]
@@ -70,7 +70,7 @@ def LR_perspectival_resample(n, fit_val_size, input_df, period_category, metadat
         X_model_fit, X_model_transfer, Y_model_fit, Y_model_transfer = perspectival_sets_split(fit_df, transfer_df)
         X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X_model_fit, Y_model_fit, test_size=fit_val_size,
                                                                                         random_state=42)
-        lr_model = LogisticRegression(solver='lbfgs', multi_class='ovr')
+        lr_model = LogisticRegression(solver='liblinear', multi_class='auto')
         lr_model.fit(X_train, Y_train)
         fit_predictions = lr_model.predict(X_validation)
         transfer_predictions = lr_model.predict(X_model_transfer)
@@ -80,21 +80,5 @@ def LR_perspectival_resample(n, fit_val_size, input_df, period_category, metadat
         transfer_f1scores_list.append(f1_score(Y_model_transfer, transfer_predictions, pos_label=genre_labels[0]))
     return fit_accuracy_scores_list, fit_f1scores_list, transfer_accuracy_scores_list, transfer_f1scores_list
 
-def resample_boostrapped_LR(n, df, genre_category="Gattungslabel_ED_normalisiert",genre_labels=["N", "E"], train_size=0.8):
-    accuracy_scores_list, f1_scores_list = [], []
 
-    df_1 = df[df[genre_category] == genre_labels[0]]
-    df_2 = df[df[genre_category] == genre_labels[1]]
 
-    for i in range(n):
-        sample = equal_sample(df_1, df_2, minor_frac=1.0)
-        X, Y = split_features_labels(sample)
-        X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y,
-                                                                                        train_size=train_size,
-                                                                                        random_state=42)
-        lr_model = LogisticRegressionCV(cv=10, solver='lbfgs', multi_class='ovr')
-        lr_model.fit(X_train, Y_train)
-        fit_predictions = lr_model.predict(X_validation)
-        accuracy_scores_list.append(accuracy_score(Y_validation, fit_predictions))
-        f1_scores_list.append(f1_score(Y_validation, fit_predictions, pos_label=genre_labels[0]))
-    return accuracy_scores_list, f1_scores_list

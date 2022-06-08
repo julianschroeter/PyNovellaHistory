@@ -145,8 +145,3 @@ def generate_media_dependend_genres(df):
     print(frames)
     return frames
 
-def category_counts_per_periods(dep_var, values_list, input_df, periods_category):
-    """
-    returns a new data frame which counts the number of items of a variable, such as genre
-    """
-

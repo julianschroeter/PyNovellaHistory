@@ -1,3 +1,5 @@
+from copy import copy
+
 import pandas as pd
 
 def equal_sample(df_group1, df_group2, minor_frac=1.0):
@@ -19,3 +21,16 @@ def equal_sample(df_group1, df_group2, minor_frac=1.0):
     return sample
 
 
+def sample_n_from_cat(df, cat_name="Nachname", n=1):
+    df_copy = copy(df)
+    df_copy = df_copy.groupby(cat_name).sample(n)
+    df_copy = df_copy.drop(columns=[cat_name])
+    return df_copy
+
+def split_to2samples(input_df, metadata_category, label_list):
+    df = input_df
+    df_1 = df[df[metadata_category] == label_list[0]]
+    df_1 = df_1.drop([metadata_category], axis=1)
+    df_2 = df[df[metadata_category] == label_list[1]]
+    df_2 = df_2.drop([metadata_category], axis=1)
+    return df_1, df_2

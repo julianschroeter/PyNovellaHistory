@@ -21,16 +21,17 @@ class PC_df():
 
 
 
-    def generate_pc_df(self, n_components=2, whiten=False):
+    def generate_pc_df(self, n_components=0.95, whiten=False):
         self.pca = PCA(n_components=n_components, whiten=whiten)
         pcs = self.pca.fit_transform(np.array(self.input_df.iloc[:, :-1]))
+        print("estimated number of comoponents: ", self.pca.n_components_)
         pc_df = pd.DataFrame(data=pcs)
+        pc_df = pc_df.iloc[:, 0:2]
         pc_target_df = pd.concat([pc_df, self.input_df.iloc[:, -1:].reset_index()], axis=1).set_index("index")
         pc_target_df.columns = ["PC_1", "PC_2", "target"]
         pc_target_df.dropna(subset=["target"], axis=0, inplace=True)
         self.pc_target_df = pc_target_df
-        self.component_loading_df = pd.DataFrame(self.pca.components_, columns=self.input_df.iloc[:, :-1].columns,
-                                                 index=["PC_1", "PC_2"])
+        self.component_loading_df = pd.DataFrame(self.pca.components_, columns=self.input_df.iloc[:, :-1].columns)
 
 
     def scatter(self, colors_list):
@@ -47,10 +48,10 @@ class PC_df():
         colors_str = colors_str.translate(zipped_dict)
         list_targetcolors = [zipped_dict[label] for label in list_target]
         plt.figure(figsize=(6, 6))
-        plt.title("PCA")
+        plt.title("Hauptkomponentenanalyse (PCA)")
         plt.scatter(self.pc_target_df.iloc[:,0], self.pc_target_df.iloc[:,1], c=list_targetcolors, cmap='rainbow', alpha=0.8)
-        plt.xlabel(str('First Component, expl. Var.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
-        plt.ylabel(str('Second Component, expl. Var.: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+        plt.xlabel(str('Erste Komponente, erkl. Var.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
+        plt.ylabel(str('Zweite Komponente, erkl. Var.: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
         #plt.xscale(value="log")
         #plt.yscale(value="log")
         #plt.xlim(-50000,500000)

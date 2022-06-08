@@ -7,7 +7,7 @@ from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from preprocessing.presetting import global_corpus_representation_directory
-from SupervisedLearning.PerspectivalModeling import resample_boostrapped_LR
+from classification.custom_classification import resample_boostrapped_LR
 
 metadata_filepath = metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 df = pd.read_csv(metadata_filepath, index_col=0)

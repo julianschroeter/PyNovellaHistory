@@ -104,7 +104,7 @@ second_value = "nein" # "None" #"non_rom"
 final_df.boxplot(by=category)
 plt.show()
 
-from preprocessing.SamplingMethods import equal_sample
+from preprocessing.sampling import equal_sample
 
 sample_df = final_df[final_df[category] == first_value]
 counter_sample_df = final_df[final_df[category] == second_value]

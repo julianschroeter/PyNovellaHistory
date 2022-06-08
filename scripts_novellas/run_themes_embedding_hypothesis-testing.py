@@ -1,9 +1,6 @@
-from TopicModeling.Postprocessing import DocTopicMatrix
 from preprocessing.presetting import language_model_path, vocab_lists_dicts_directory, global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
-from clustering.my_pca import PC_df
-from preprocessing.metadata_transformation import years_to_periods
 from preprocessing.corpus import DocFeatureMatrix
-from preprocessing.SamplingMethods import equal_sample
+from preprocessing.sampling import equal_sample
 import os
 import pandas as pd
 import numpy as np
@@ -16,7 +13,7 @@ from sklearn import model_selection
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn import tree
 
-system_name = "wcph113" # "my_mac" # "wcph104"
+system_name = "wcph113" # "my_mac" # "wcph104"  "my_xps"
 
 data_matrix_filepath = os.path.join(global_corpus_representation_directory(system_name), "DocThemesMatrix.csv")
 language_model = language_model_path(system_name)
@@ -33,23 +30,22 @@ matrix = DocFeatureMatrix(data_matrix_filepath= data_matrix_filepath, data_matri
                                   metadata_csv_filepath = textanalytic_metadata_filepath, mallet=False)
 
 
-matrix = matrix.reduce_to(["lieben", "lieben.1", "lieben.2", "lieben.3", "lieben.4", "streicheln", "einzigartig", "einzigartig.1", "perfekt", "perfekt.2"])
+#matrix = matrix.reduce_to(["lieben", "lieben.1", "lieben.2", "lieben.3", "lieben.4", "streicheln", "einzigartig", "einzigartig.1", "perfekt", "perfekt.2"])
+#matrix.data_matrix_df['love_mean'] = matrix.data_matrix_df.mean(axis=1)
+#matrix = matrix.reduce_to(["love_mean"]) # = bestimmtes Thema
 
-matrix.data_matrix_df['love_mean'] = matrix.data_matrix_df.mean(axis=1)
+matrix = matrix.reduce_to(["Marseille"])
 
-
-
-matrix = matrix.reduce_to(["love_mean"]) # = bestimmtes Thema
 print(matrix.data_matrix_df)
 
 
-matrix = matrix.add_metadata("ende")
+#matrix = matrix.add_metadata("ende")
 matrix = matrix.add_metadata("region")
-matrix = matrix.add_metadata("liebesspannung")
-matrix = matrix.add_metadata("titel")
-matrix = matrix.add_metadata("stadt_land")
+#matrix = matrix.add_metadata("liebesspannung")
+#matrix = matrix.add_metadata("titel")
+#matrix = matrix.add_metadata("stadt_land")
 
-matrix.data_matrix_df["liebesspannung"] = matrix.data_matrix_df["liebesspannung"].fillna("other", inplace=False)
+#matrix.data_matrix_df["liebesspannung"] = matrix.data_matrix_df["liebesspannung"].fillna("other", inplace=False)
 
 matrix.data_matrix_df.replace({"region": {"Italien": "rom",
                                                         "Spanien": "rom",
@@ -63,19 +59,19 @@ matrix.data_matrix_df.replace({"region": {"Italien": "rom",
 
                                           }}, inplace=True)
 
-matrix.data_matrix_df.replace({"stadt_land": {"Bergdorf": "land",
-                                                        "land": "land",
-                                                        "Alpenregion": "land",
-                                              "stadt" :"None", "stadt+land": "None"
-                                          }}, inplace=True)
+#matrix.data_matrix_df.replace({"stadt_land": {"Bergdorf": "land",
+#                                                        "land": "land",
+ #                                                       "Alpenregion": "land",
+  #                                            "stadt" :"None", "stadt+land": "None"
+   #                                       }}, inplace=True)
 
-matrix.data_matrix_df.replace({"liebesspannung": {"gering": "nein",
-                                                        "mittel": "nein",
-                                                        "stark": "ja", "kaum": "nein"
-                                          }}, inplace=True)
+#matrix.data_matrix_df.replace({"liebesspannung": {"gering": "nein",
+    #                                                    "mittel": "nein",
+     #                                                   "stark": "ja", "kaum": "nein"
+      #                                    }}, inplace=True)
+#
 
-
-matrix.data_matrix_df["ende"] = matrix.data_matrix_df["ende"].fillna("other", inplace=False)
+#matrix.data_matrix_df["ende"] = matrix.data_matrix_df["ende"].fillna("other", inplace=False)
 matrix.data_matrix_df["region"] = matrix.data_matrix_df["region"].fillna("other", inplace=False)
 
 

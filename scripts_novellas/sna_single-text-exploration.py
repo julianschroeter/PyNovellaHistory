@@ -1,4 +1,4 @@
-from preprocessing.SNA import NEnetwork
+from preprocessing.sna import NEnetwork
 from preprocessing.text import Text
 from preprocessing.presetting import global_corpus_directory
 from preprocessing.presetting import global_corpus_representation_directory, language_model_path, vocab_lists_dicts_directory

@@ -1,5 +1,5 @@
 
-system = "wcph113" #"my_mac"
+system = "wcph113" #"my_mac" "my_xps"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -34,7 +34,7 @@ print(df)
 
 
 
-df = years_to_periods(input_df=df, category_name="Jahr_ED",start_year=1770, end_year=2000, epoch_length=20,
+df = years_to_periods(input_df=df, category_name="Jahr_ED",start_year=1790, end_year=2000, epoch_length=20,
                       new_periods_column_name="periods20a")
 
 
@@ -46,20 +46,27 @@ df = full_genre_labels(df, replace_dict=replace_dict)
 
 corpus_statistics = df.groupby(["periods20a", "Gattungslabel_ED_normalisiert"]).size()
 df_corpus_statistics = pd.DataFrame(corpus_statistics)
-df_corpus_statistics.unstack().plot(kind='bar', stacked=False, title= "Größe des Korpus")
+df_corpus_statistics.unstack().plot(kind='bar', stacked=False, title= "Corpus Size (for periods)")
 plt.show()
 
-grouped = df.groupby(["periods20a", "Gattungslabel_ED_normalisiert"]).mean()
+grouped = df.groupby(["periods20a", "Gattungslabel_ED_normalisiert"]).median()
 df_grouped = pd.DataFrame(grouped)
 print(df_grouped)
 df_grouped = df_grouped.drop(columns=["Jahr_ED"])
 
-for column_name in df_grouped.columns.values.tolist():
 
-    df_grouped[column_name].unstack().plot(kind='bar', stacked=False,
-                                       title=str("Entwicklung des Bezugs zu "+str(column_name)),
-                                       xlabel="Zeitverlauf von 1770 bis 1950", ylabel=str("Anteil von Wörtern, die indizieren:"+str(column_name)))
+x_ticks = ["1790-1810", "1810-1830", "1830-1850", "1850-1870", "1870-1890",
+ "1890-1910", "1910-1930", "1930-1850"]
+
+print(range(len(x_ticks)))
+
+for column_name in df_grouped.columns.values.tolist():
+    fig, ax = plt.subplots()
+    ax = df_grouped[column_name].unstack().plot(kind='line', stacked=False, title=str("Entwicklung der Dominanz romanischen Settings"),
+                                       ylabel=str("NamedEntShare "+str(column_name)), xlabel="Zeitverlauf von 1770 bis 1930",
+                                           )
+    #ax.set_xticks(x_ticks)
+    ax.set_xticks(range(len(x_ticks)))
+    ax.set_xticklabels(["1790", "1810","1830","1850","1870","1890", "1910", "1930"])
     plt.show()
-    df_grouped[column_name].unstack().plot(kind='line', stacked=False, title=str("Entwicklung des Bezugs zu "+str(column_name)),
-                                       ylabel=str("Anteil von Wörtern, die indizieren:"+str(column_name)))
-    plt.show()
+

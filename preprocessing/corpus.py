@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.preprocessing import normalize
 from preprocessing.text import Text
-from preprocessing.SNA import NEnetwork
+from preprocessing.sna import NEnetwork
 import networkx as nx
 from copy import deepcopy
 from collections import Counter
@@ -142,14 +142,14 @@ class DTM(DocFeatureMatrix):
 
     def __init__(self, corpus_path=None, data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
                  normalize_orthogr=False, normalization_table_path=None,
-                 metadata_df=None, encoding="utf-8", normalization="tfidf", correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True,
+                 metadata_df=None, encoding="utf-8", norm=None, correct_ocr=True, eliminate_pagecounts=True, handle_special_characters=True,
                  inverse_translate_umlaute=False, eliminate_pos_items=True, list_of_pos_tags=None, lemmatize=True, remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
-                 remove_stopwords=False, stoplist_filepath=None, n_mfw=0, mallet=False, language_model=None, **kwargs):
-        DocFeatureMatrix.__init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df, mallet)
+                 remove_stopwords=False, stoplist_filepath=None, n_mfw=0, mallet=False, language_model=None, use_idf=False, corpus_dict=None, **kwargs):
+        DocFeatureMatrix.__init__(self, data_matrix_filepath, metadata_csv_filepath, data_matrix_df, metadata_df, mallet)
         self.corpus_path = corpus_path
         self.handle_special_characters = handle_special_characters
         self.encoding = encoding
-        self.normalization = normalization
+        self.norm = norm
         self.correct_ocr = correct_ocr
         self.handle_special_characters = handle_special_characters
         self.inverse_translate_umlaute = inverse_translate_umlaute
@@ -167,8 +167,12 @@ class DTM(DocFeatureMatrix):
         self.normalization_table_path = normalization_table_path
         self.stoplist_filepath = stoplist_filepath
         self.n_mfw = n_mfw
+        self.use_idf = use_idf
+        self.corpus_dict = corpus_dict
 
-    def _corpus_as_dict(self):
+
+
+    def generate_corpus_as_dict(self):
         """
         private method which calls Text class to preprocess text over all texts in corpus path and to store the processed text
          as value with the document id as key in a dictionary.
@@ -188,65 +192,41 @@ class DTM(DocFeatureMatrix):
             text_object()
 
             dic[text_object.id] = text_object.text
-        return dic
+        self.corpus_dict = dic
 
 
 
 
-    def generate_from_textcorpus(self):
+    def generate_dtm_from_dict(self):
         """
         This function generates or loads the metadata table and the term document matrix with the parameters specified in the CORPUS_DTM instance
         :return: attributes self.metadata_df with metadata table and self.corpus_df with term document matrix as DataFrame.
         The dictionary hast the form:  {'00000-00': 'This is the text of doc0', '00001-00' : 'This is text of doc1.'}
         """
 
-        if self.metadata_df == None and self.metadata_csv_filepath is not None:
-            self.load_metadata_file()
-        else:
-           pass
 
-        if self.corpus_path is None and self.data_matrix_filepath is not None:
-            self.load_data_matrix_file()
-        elif self.corpus_path is None and self.data_matrix_filepath is None:
-            if self.data_matrix_df is not None:
-                self.data_matrix_df = self.data_matrix_df
-        elif self.corpus_path is not None and self.data_matrix_df == None and self.data_matrix_filepath == None:
-            # create a term document matrix as pandas DataFrame with private _corpus_as_dict() method:
-            corpus_dict = self._corpus_as_dict()
-            list_texts = corpus_dict.values()
-            list_docids = corpus_dict.keys()
-            vectorizer = CountVectorizer()
-            fit_all = vectorizer.fit(list_texts)
-            matrix_all = vectorizer.fit_transform(list_texts)
+        corpus_dict = self.corpus_dict
+        list_texts = corpus_dict.values()
+        list_docids = corpus_dict.keys()
+        vectorizer = TfidfVectorizer(norm=self.norm, use_idf=self.use_idf)
+        fit_all = vectorizer.fit(list_texts)
+        matrix_all = vectorizer.fit_transform(list_texts)
 
-            if (self.normalization == "l1" or self.normalization == "l2"):
-                freq_matrix = normalize(matrix_all, norm=self.normalization)
 
-            elif self.normalization == "tfidf":
-                vectorizer = TfidfVectorizer()
-                freq_matrix = vectorizer.fit_transform(list_texts)
-
-            elif self.normalization == "abs":
-                freq_matrix = matrix_all.copy()
-
-            else:
-                # use the matrix with absolute token counts as fall back level:
-                freq_matrix = matrix_all.copy()
-
-            if self.n_mfw == 0:
-                freq_array = freq_matrix.toarray()
-                self.data_matrix_df = pd.DataFrame(freq_array, index=list_docids,
+        if self.n_mfw == 0:
+            freq_array = matrix_all.toarray()
+            self.data_matrix_df = pd.DataFrame(freq_array, index=list_docids,
                               columns=vectorizer.get_feature_names())
-            elif self.n_mfw != 0:
-                sum_words_vector_all = matrix_all.sum(axis=0)
-                list_words_freq = sorted([(word, ID, sum_words_vector_all[0, ID]) for word, ID
+        elif self.n_mfw != 0:
+            sum_words_vector_all = matrix_all.sum(axis=0)
+            list_words_freq = sorted([(word, ID, sum_words_vector_all[0, ID]) for word, ID
                                       in fit_all.vocabulary_.items()],
                                      key=lambda x: x[2], reverse=True)
-                list_mfw_ids = [item[1] for item in list_words_freq[:self.n_mfw]]
-                list_mfw = [item[0] for item in list_words_freq[:self.n_mfw]]
-                freq_array = freq_matrix.toarray()[:,list_mfw_ids]
+            list_mfw_ids = [item[1] for item in list_words_freq[:self.n_mfw]]
+            list_mfw = [item[0] for item in list_words_freq[:self.n_mfw]]
+            freq_array = matrix_all.toarray()[:,list_mfw_ids]
 
-                self.data_matrix_df = pd.DataFrame(freq_array, index=list_docids,
+            self.data_matrix_df = pd.DataFrame(freq_array, index=list_docids,
                           columns=list_mfw)
 
 
@@ -554,10 +534,11 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
                                       sz_to_ss=False, translate_umlaute=False, max_length=5000000,
                                       remove_stopwords="before_chunking", stopword_list=None,
                                       language_model=self.language_model, token_length=0, normalize_orthogr=self.normalize_orthogr,
-                                      normalization_table_path=normalization_table_path, keep_pos_items=self.keep_pos_items)
+                                      normalization_table_path=normalization_table_path, keep_pos_items=self.keep_pos_items,
+                                      reduce_to_words_from_list=False, reduction_word_list=None)
                 char_netw()
                 char_netw.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
-                char_netw.generate_characters_graph()
+                char_netw.generate_characters_graph(reduce_to_one_name=True)
 
                 dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1), char_netw.token_length]
                 corpus_characters_list += char_netw.characters_list
