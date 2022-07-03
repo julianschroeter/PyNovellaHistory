@@ -1,4 +1,4 @@
-from TopicModeling.Postprocessing import DocTopicMatrix
+from topicmodeling.Postprocessing import DocTopicMatrix
 from preprocessing.presetting import language_model_path, vocab_lists_dicts_directory, local_temp_directory, global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
 import os
 import pandas as pd

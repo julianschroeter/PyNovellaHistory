@@ -35,7 +35,7 @@ list_of_file_ids_Theresa = ["00098-00",
 "00155-00",
 
 "00177-00"]
-my_model_de = "/Users/karolineschroter/Documents/CLS/Sprachmodelle"
+my_model_de = "/Users/karolineschroter/Documents/CLS/languagemodels"
 
 corpus_path = global_corpus_directory(system_name=system)
 outfile_path = chunks5parts_directory = os.path.join(local_temp_directory(system), "ner_test")

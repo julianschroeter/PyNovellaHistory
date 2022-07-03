@@ -1,4 +1,4 @@
-from TopicModeling.Postprocessing import DocTopicMatrix
+from topicmodeling.Postprocessing import DocTopicMatrix
 from preprocessing.presetting import global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
 from clustering.my_pca import PC_df
 from preprocessing.metadata_transformation import years_to_periods
