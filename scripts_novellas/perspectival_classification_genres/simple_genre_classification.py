@@ -7,7 +7,7 @@ import os
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_raw_dtm_directory
 from preprocessing.corpus import DTM
-from classification.PerspectivalModeling import split_features_labels
+from classification.perspectivalmodeling import split_features_labels
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, classification_report

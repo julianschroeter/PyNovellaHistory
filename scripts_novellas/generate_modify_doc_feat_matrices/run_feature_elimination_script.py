@@ -8,7 +8,7 @@ from sklearn.metrics import classification_report
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from classification.PerspectivalModeling import split_features_labels
+from classification.perspectivalmodeling import split_features_labels
 from preprocessing.presetting import local_temp_directory, global_corpus_raw_dtm_directory, global_corpus_representation_directory
 from preprocessing.corpus import DTM
 import os

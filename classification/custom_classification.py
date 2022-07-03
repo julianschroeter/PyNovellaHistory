@@ -6,7 +6,7 @@ from sklearn.model_selection import cross_val_score, cross_val_predict
 import pandas as pd
 from numpy import mean, std
 
-from classification.PerspectivalModeling import split_features_labels
+from classification.perspectivalmodeling import split_features_labels
 from preprocessing.sampling import equal_sample
 
 

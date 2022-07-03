@@ -7,7 +7,7 @@ import pandas as pd
 
 from preprocessing.corpus import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory
-from classification.PerspectivalModeling import split_features_labels
+from classification.perspectivalmodeling import split_features_labels
 
 label_list = ["R", "M", "E", "N", "0E", "XE"]
 
