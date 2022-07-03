@@ -64,7 +64,7 @@ print("Average distance: ", distances.mean())
 print("Std: ", distances.std())
 
 
-print("distances between Novellen and Erzählungen:")
+print("metrics between Novellen and Erzählungen:")
 distances = cdist(df_N, df_E, metric="cosine")
 print("Average distance: ", distances.mean())
 print("Std: ", distances.std())

@@ -2,6 +2,8 @@ The PyNovellaHistory repository contains all python code for the text analysis w
 
 The python (version 3) code is organized as modules. The basic structure of the modules starts with objects as text representations (Text class in Preprocessing.Text). Based on text representations, corpus representations objects are generated as document features matrices (or child classes such as document term matrices). The parent class is FeatureDocMatrix in the Preprocessing.Corpus module.
 
+The scripts to reproduce the analyses of the project can be found in the scripts_novellas folder.
+
 The corpus representation object allows integrating meta data from metadata csv files.
 
 POS-Tagging and NE-Recognition is based on the spacy library, and it uses a custom trained large german language model.

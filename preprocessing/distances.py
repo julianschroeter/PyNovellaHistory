@@ -13,7 +13,7 @@ genre_cat = "Gattungslabel_ED_normalisiert"
 
 class GroupDistances():
     """
-    calculates the ingroup distances and stores them in a distance_matrix and a list of distances as attributes.
+    calculates the ingroup metrics and stores them in a distance_matrix and a list of metrics as attributes.
     """
     def __init__(self, input_df, metric, select_one_author, select_one_per_period, sample_size_df):
         frac_sample = None
@@ -116,9 +116,9 @@ class InterGroupDistances(GroupDistances):
 
 
     #def group_mean(self):
-     #   return self.distances.mean()
+     #   return self.metrics.mean()
     #def group_std(self):
-     #   return self.distances.std()
+     #   return self.metrics.std()
 
 
 class IterateDistanceCalc:
@@ -301,7 +301,7 @@ class DistResults():
 
 def pairwise_self_counter_av_distances(input_df_1, input_df_2, metric, select_one_author, select_one_per_period, smaller_sample_size):
     """
-    returns or each document in rows a DataFrame with the average distances to all groups members for every text in the first column, and the average
+    returns or each document in rows a DataFrame with the average metrics to all groups members for every text in the first column, and the average
     distance to all members of the comparison group (e.g. another genre) in the second column. The row indexes are the document ids
     """
 
@@ -314,7 +314,7 @@ def pairwise_self_counter_av_distances(input_df_1, input_df_2, metric, select_on
 
 def rel_ttest_in_out_groups(input_df_1, input_df_2, metric, select_one_author=True, select_one_per_period=False, smaller_sample_size=False, alternative= "less", compare_to_first=True):
     """
-    directly returns F and p value for calculating relative ttest on pairwise calculating in- and out-group distances for each document
+    directly returns F and p value for calculating relative ttest on pairwise calculating in- and out-group metrics for each document
     """
 
     pairs_df = pairwise_self_counter_av_distances(input_df_1, input_df_2, metric, select_one_author, select_one_per_period, smaller_sample_size, compare_to_first)

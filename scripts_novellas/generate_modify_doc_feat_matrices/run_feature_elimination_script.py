@@ -14,7 +14,7 @@ from preprocessing.corpus import DTM
 import os
 import matplotlib.pyplot as plt
 
-infile_name = "scaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
+infile_name = "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
 dtm_infile_path = os.path.join(global_corpus_raw_dtm_directory(system), infile_name )
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 

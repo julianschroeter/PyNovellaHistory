@@ -39,3 +39,30 @@ def scatter(df, colors_list):
         mpatches_list.append(patch)
     plt.legend(handles=mpatches_list)
     plt.show()
+
+
+def rd_vectors_around_center(probabs):
+    rd_angles = np.random.uniform(-np.pi,(np.pi),len(probabs))
+    x_results = np.multiply(np.cos(rd_angles),probabs)
+    y_results = np.multiply(np.sin(rd_angles),probabs)
+    return x_results, y_results
+
+def plot_prototype_concepts(probabs, labels, threshold):
+
+    x_results, y_results = rd_vectors_around_center(probabs)
+    lower_threshold_level = 0.5 - (threshold / 2)
+    upper_threshold_level = 0.5 + (threshold / 2)
+    fig, ax = plt.subplots()
+    # fig = plt.figure(figsize=(5,5))
+    ax.scatter(x_results, y_results, c=labels)
+
+    ax.add_patch(plt.Circle((0, 0), 1, fill=False))
+    ax.add_patch(plt.Circle((0, 0), lower_threshold_level, fill=False))
+    ax.add_patch(plt.Circle((0, 0), upper_threshold_level, fill=False))
+    plt.title("Prototypenkonzept: Novellen versus Erzählungen")
+    plt.xlabel(str("Unentscheidbarkeitsbereich zwischen "+str(lower_threshold_level)+ " und "+ str(upper_threshold_level)))
+    plt.ylabel("relative Nähe der Texte zum Zentrum (inv. Vorhersage-Konfidenz")
+    plt.xlim(-1, 1)
+    plt.ylim(-1, 1)
+
+    plt.show()

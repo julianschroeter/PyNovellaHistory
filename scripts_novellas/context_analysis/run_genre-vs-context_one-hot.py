@@ -5,6 +5,7 @@ import numpy as np
 import os
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from preprocessing.presetting import global_corpus_representation_directory
 from classification.custom_classification import resample_boostrapped_LR
@@ -64,3 +65,18 @@ print("f1 score results (all results, mean, std):")
 print(f1)
 print(np.mean(f1))
 print(np.std(f1))
+
+model = RandomForestClassifier()
+model.fit(X_train, Y_train)
+
+predictions = model.predict(X_validation)
+print(accuracy_score(Y_validation, predictions))
+print(confusion_matrix(Y_validation, predictions))
+print(classification_report(Y_validation, predictions))
+
+
+print("same process based on bootstrapped resampling with equal sample size:")
+
+df_dummies = pd.concat([df_dummies, labels], axis=1)
+
+print(df_dummies)

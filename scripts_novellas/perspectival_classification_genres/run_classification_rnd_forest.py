@@ -11,7 +11,7 @@ from preprocessing.corpus import DTM
 from classification.PerspectivalModeling import split_features_labels
 from clustering.my_plots import plot_prototype_concepts
 from sklearn import model_selection
-from sklearn.linear_model import LogisticRegressionCV
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -42,35 +42,29 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
         subs_dict = {"N": 1, "E": 0}
         Y = list(map(subs_dict.get, Y_orig, Y_orig))
 
-        X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.5, random_state=35)
-        lr_model = LogisticRegressionCV(cv=10, solver='liblinear', multi_class="auto")
-        lr_model.fit(X_train, Y_train)
-        test_predictions = lr_model.predict(X_test)
+        X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.5, random_state=42)
+        rnd_model = RandomForestClassifier()
+        rnd_model.fit(X_train, Y_train)
+        test_predictions = rnd_model.predict(X_test)
 
-        coef = lr_model.coef_.tolist()
-        coef = [item for sublist in coef for item in sublist]
+        feat_importance = rnd_model.feature_importances_.tolist()
 
 
-        coef_features = list(zip(coef, features))
-        print("coef with features: ", sorted(coef_features, key=lambda x: x[0]))
+        importance_features = list(zip(feat_importance, features))
+        print("importances with feature names: ", sorted(importance_features, key=lambda x: x[0]))
 
         print("classification report with regular train/test sets for " + str(filename) + ": ")
-        print(lr_model.score(X, Y))
+        print(rnd_model.score(X, Y))
         print(accuracy_score(Y_test, test_predictions))
         print(classification_report(Y_test, test_predictions))
-        predict_probs_inv = [x for sublist in lr_model.predict_proba(X_test)[:,0:1] for x in  sublist]
-        predict_probs = [x for sublist in lr_model.predict_proba(X_test)[:, 1:2] for x in sublist]
+        predict_probs_inv = [x for sublist in rnd_model.predict_proba(X_test)[:, 0:1] for x in sublist]
+        predict_probs = [x for sublist in rnd_model.predict_proba(X)[:, 1:2] for x in sublist]
         fig, ax = plt.subplots()
-
-
         subs_dict = {1: "red", 0: "green"}
-        genre_c_labels = list(map(subs_dict.get, Y_test, Y_test))
-
-
-        #ax.scatter(year_labels, predict_probs, c=genre_c_labels)
-        #plt.show()
-
-
+        genre_c_labels = list(map(subs_dict.get, Y, Y))
+        genre_c_labels_test = list(map(subs_dict.get, Y_test, Y_test))
+        ax.scatter(year_labels, predict_probs, c=genre_c_labels)
+        plt.show()
 
         threshold_ranges = np.arange(0.01, 1, 0.01)
         thresholds_scores = []
@@ -87,9 +81,9 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
         plt.axhline(y=optimum[1])
         plt.show()
 
-        plot_prototype_concepts(predict_probs_inv, genre_c_labels, threshold=optimum[0])
+        plot_prototype_concepts(predict_probs_inv, genre_c_labels_test, threshold=optimum[0])
 
-        predict_probs = [x for sublist in lr_model.predict_proba(X)[:, 1:2] for x in sublist]
+        predict_probs = [x for sublist in rnd_model.predict_proba(X)[:, 1:2] for x in sublist]
         proba_df = pd.DataFrame(predict_probs, index=indexes, columns=["predict_probab"])
         #proba_df["genre_colors"] = genre_c_labels
         print(proba_df)

@@ -61,7 +61,7 @@ genre_cat = "Gattungslabel_ED_normalisiert"
 matrix = matrix.reduce_to_categories(genre_cat, label_list)
 
 df = matrix.data_matrix_df
-df = df.rename(columns={"Marseille":"SujetShare", "rom_top":"NamedEntShare"})
+df = df.rename(columns={"Marseille":"SettingShare", "rom_top":"NamedEntShare"})
 
 
 scaler = StandardScaler()
@@ -74,6 +74,10 @@ print(df_rom.groupby(["Gattungslabel_ED_normalisiert"]).count())
 
 
 df_non_rom = df[df["region"] == "2_nicht-Rom"]
+
+print("romanische Texte, sortiert nach NemdEntSchare:")
+print(df_rom.sort_values(by="NamedEntShare").drop(columns=["SettingShare"]))
+
 print("statistics for non-roman setting and genre: ", len(df_non_rom))
 print(df_non_rom.groupby(["Gattungslabel_ED_normalisiert"]).count())
 
@@ -91,7 +95,7 @@ df_boxpl.boxplot(by="region")
 plt.show()
 
 
-df_class = df.drop(columns=["region", "SujetShare"])
+df_class = df.drop(columns=["region", "SettingShare"])
 
 sample_df = df_class[df_class[category] == first_value]
 counter_sample_df = df_class[df_class[category] == second_value]
@@ -142,9 +146,9 @@ df = matrix.data_matrix_df
 after_1850_df = df[df["periods"] == "1850-1950"]
 print(after_1850_df)
 df = after_1850_df
-df = df.rename(columns={"Marseille":"SujetShare", "rom_top":"NamedEntShare"})
+df = df.rename(columns={"Marseille":"SettingShare", "rom_top":"NamedEntShare"})
 
-df = df.drop(columns=["periods", year_cat, "SujetShare"])
+df = df.drop(columns=["periods", year_cat, "SettingShare"])
 
 print(df)
 

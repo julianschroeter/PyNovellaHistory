@@ -77,7 +77,7 @@ df = pd.read_csv(os.path.join(local_temp_directory(system), "pairs_rel_t-test_R-
 print(df)
 
 df.boxplot(column=["in_group_mean", "out_group_mean"])
-plt.title("pairwise/dependent R vs M in and out group distances")
+plt.title("pairwise/dependent R vs M in and out group metrics")
 plt.show()
 
 N_E_inter_dist_obj = InterGroupDistances(df_N, df_E, metric, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period, smaller_sample_size=False)
@@ -101,5 +101,5 @@ df = pd.read_csv(os.path.join(local_temp_directory(system), "pairs_rel_t-test_N-
 print(df)
 
 df.boxplot(column=["in_group_mean", "out_group_mean"])
-plt.title("pairwise/dependent N vs E in and out group distances")
+plt.title("pairwise/dependent N vs E in and out group metrics")
 plt.show()
