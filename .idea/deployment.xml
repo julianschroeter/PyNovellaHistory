@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="schroeter@wp1v120.phil1.uni-wuerzburg.de:22 password" deleteMissingItems="true" createEmptyFolders="true" confirmBeforeUploading="false">
+    <option name="confirmBeforeUploading" value="false" />
+    <serverData>
+      <paths name="schroeter@wp1v120.phil1.uni-wuerzburg.de:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/mnt/data/users/schroeter/PyNovellaHistory" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
