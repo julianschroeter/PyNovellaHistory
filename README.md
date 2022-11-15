@@ -1,4 +1,8 @@
-The PyNovellaHistory repository contains all python code for the text analysis within the novella history project (Habilitationsprojekt)
+The PyNovellaHistory repository contains all python code for the text analysis within the novella history project (Habilitationsprojekt). 
+
+A (German) project description can be found here: https://www.germanistik.uni-wuerzburg.de/lehrstuehle/computerphilologie/mitarbeiter/schroeter/forschung-publikationen/habilitationsprojekt/
+
+Parts of the project are conducted within a Walter-Benjamin Fellowship, funded by the German Research Foundation (DFG): https://gepris.dfg.de/gepris/projekt/449668519?language=en
 
 The python (version 3) code is organized as modules. The basic structure of the modules starts with objects as text representations (Text class in Preprocessing.Text). Based on text representations, corpus representations objects are generated as document features matrices (or child classes such as document term matrices). The parent class is FeatureDocMatrix in the Preprocessing.Corpus module.
 

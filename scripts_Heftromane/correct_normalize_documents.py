@@ -5,7 +5,7 @@ if system == "wcph113":
 
 import os
 
-from preprocessing.corpus_alt import generate_text_files
+from preprocessing.corpus import generate_text_files
 from preprocessing.presetting import local_temp_directory, vocab_lists_dicts_directory, language_model_path, load_stoplist
 
 corpus_path = os.path.join(local_temp_directory(system), "hochlit_gegen_heftrom")
