@@ -5,8 +5,8 @@ if system == "wcph113":
 
 
 
-from preprocessing.distances import DistResults
-from preprocessing.corpus import DTM
+from metrics.distances import DistResults
+from preprocessing.corpus_alt import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory
 from preprocessing.metadata_transformation import years_to_periods
 

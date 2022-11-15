@@ -96,8 +96,19 @@ def mallet_directory(system_name):
     return os.path.join(set_DistReading_directory(system_name), "mallet")
 
 def language_model_path(system_name):
-    path = os.path.join(local_temp_directory(system_name), "language_models")
+    path = os.path.join(local_temp_directory(system_name), "language_models", "my_model_de")
     return path
+
+
+def conll_base_directory(system_name):
+    """
+    :param system_name: "my_mac", "my_xps", or "my_WindowsPC. Here, the respective Computer system with its respective directory structure has to be selected"
+    :return: the path for the directory to store all vocab lists, dictionaries such as translation tables, stopword-lists etc
+    """
+    if system_name == "wcph113":
+        return "/mnt/data/users/schroeter/llpro_testing/files/out"
+    else:
+        return "/mnt/data/users/schroeter/llpro_testing/files/out"
 
 
 """
@@ -151,8 +162,8 @@ def word_translate_table_to_dict(infile_path, also_lower_case=True):
     normalization_dict = {}
     normalization_lower_dict = {}
     for line in normalization_table.splitlines():
-
-        old, new = line.split(", ")
+        print(line)
+        old, new = line.split(",")
         normalization_dict[old] = new
         old_lower = old.lower()
         new_lower = new.lower()

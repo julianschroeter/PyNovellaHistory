@@ -4,16 +4,17 @@ import os
 from preprocessing.presetting import global_corpus_representation_directory
 import re
 
-def years_to_periods(input_df, category_name,start_year, end_year, epoch_length, new_periods_column_name):
+def years_to_periods(input_df, category_name, start_year, end_year, epoch_length, new_periods_column_name):
     """
 
-    :param input_df:
+    :param df:
     :param category_name: Column name for year of publication, for example "Jahr_ED"
     :param list_of_epochal_thresholds: for example [1700, 1730, 1760, 1790, 1820, 1850, 1880, 1910, 1940, 1970, 2000]
     :param new_periods_column_name: the name of the column with new periods category
     :return: a new dataframe with a new column new_periods_column_name
     """
-    input_df[new_periods_column_name] = np.nan
+    df = input_df.copy()
+    df[new_periods_column_name] = np.nan
     list_of_year_tuples_as_periods = []
     x = start_year
 
@@ -25,21 +26,22 @@ def years_to_periods(input_df, category_name,start_year, end_year, epoch_length,
     for tuple in list_of_year_tuples_as_periods:
         start, end = tuple
 
-        input_df[str(tuple)] = input_df[category_name].apply(lambda x: str(str(start)+"-"+str(end)) if start <= x < end else np.nan)
-        input_df[new_periods_column_name] = input_df[new_periods_column_name].combine_first(input_df[str(tuple)])
-        input_df.drop(columns=[str(tuple)], inplace=True)
-    input_df[new_periods_column_name] = input_df[new_periods_column_name].replace(np.nan, 0)
-    return input_df
+        df[str(tuple)] = df[category_name].apply(lambda x: str(str(start) + "-" + str(end)) if start <= x < end else np.nan)
+        df[new_periods_column_name] = df[new_periods_column_name].combine_first(df[str(tuple)])
+        df.drop(columns=[str(tuple)], inplace=True)
+    df[new_periods_column_name] = df[new_periods_column_name].replace(np.nan, 0)
+    return df
 
 
 
-def full_genre_labels(df, replace_dict= {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "Prosaerzählung ohne Label",
+def full_genre_labels(input_df, replace_dict= {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "Prosaerzählung ohne Label",
                                     "R": "Roman", "M": "Märchen", "XE": "Prosaerzählung mit anderem Label"}}):
     """
     Hard coded function to replace genre abbreviation in meta data table with full genre labels
-    :param df: metadata tabel with category/column "Gattungslabel_ED"
+    :param input_df: metadata tabel with category/column "Gattungslabel_ED"
     :return: data frame with full genre names for N, E, 0E, R, M, XE
     """
+    df = input_df.copy()
     df.replace(replace_dict, inplace=True)
     return df
 
@@ -111,37 +113,40 @@ def extract_ids_categorical(df=None, metadata_category="Gattungslabel_ED", varia
     return df.index.tolist()
 
 
-def generate_media_dependend_genres(df):
+def generate_media_dependend_genres(df, genre_cat= "Gattungslabel_ED_normalisiert", media_cat="Medientyp_ED", famblatt="Familienblatt", rundsch="Rundschau", tb="Taschenbuch"):
     """
 
     :param df:
     :param media:
     :return:
     """
-    famblatt_df = df[df["medium_type"] == "famblatt"]
+    famblatt_df = df[df[media_cat] == famblatt]
 
-    famblatt_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x: "Familienblatt_Novelle" if x == "N" else ("Familienblatt_Erzählung" if x == "E" else
-                                                                                                                      ("Famlienblatt_sonst_Erzählung" if x == "0E" else "familienblatt_other")))
+    famblatt_df["dependent_genre"] = df[genre_cat].apply(lambda x: "Familienblatt_Novelle" if x == "N" else ("Familienblatt_Erzählung" if x == "E" else
+                                                                                                                      ("Familienblatt_sonst_Erzählung" if x == "0E" else
+                                                                                                                       ("Familienblatt_sonst_Erzählung" if x == "XE" else "familienblatt_other"))))
 
-    rundschau_df = df[df["medium_type"] == "rundschau"]
+    rundschau_df = df[df[media_cat] == rundsch]
 
-    rundschau_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x: "Rundschau_Novelle" if x == "N" else ("Rundschau_Erzählung" if x == "E" else
-            ("Rundschau_sonst_Erzählung" if x == "0E" else "other")))
-    tb_df = df[df["medium_type"] == "tb"]
-    tb_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda  x: "tb_Novelle" if x == "N" else
-    ("tb_Erzählung" if x == "E" else ("tb_sonst_Erzählung" if x == "0E" else "tb_other")))
+    rundschau_df["dependent_genre"] = df[genre_cat].apply(lambda x: "Rundschau_Novelle" if x == "N" else ("Rundschau_Erzählung" if x == "E" else
+            ("Rundschau_sonst_Erzählung" if x == "0E" else
+             ("Rundschau_sonst_Erzählung" if x == "XE" else "other"))))
+    tb_df = df[df[media_cat] == tb]
+    tb_df["dependent_genre"] = df[genre_cat].apply(lambda  x: "TB_Novelle" if x == "N" else
+    ("TB_Erzählung" if x == "E" else ("TB_sonst_Erzählung" if x == "0E" else
+                                      ("TB_sonst_Erzählung" if x == "XE" else "TB_other"))))
 
-    anthol_df = df[df["medium_type"] == "anthologie"]
-    anthol_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x:"anthologie_Novelle" if x == "N" else
-    ("anthologie_Erzählung" if x == "E" else ("anthologie_sonst_Erzählung" if x == "0E" else "anthologie_other")))
+    #anthol_df = df[df["medium_type"] == "anthologie"]
+    #anthol_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x:"anthologie_Novelle" if x == "N" else
+    #("anthologie_Erzählung" if x == "E" else ("anthologie_sonst_Erzählung" if x == "0E" else "anthologie_other")))
 
-    journal_df = df[df["medium_type"] == "journal"]
-    journal_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x:"journal_Novelle" if x == "N" else
-    ("journal_Erzählung" if x == "E" else ("journal_sonst_Erzählung" if x == "0E" else "journal_other")))
-    buch_df = df[df["medium_type"] == "buch"]
-    buch_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x: "buch_Novelle" if x == "N" else
-    ("buch_Erzählung" if x == "E" else ("buch_sonst_Erzählung" if x == "0E" else "buch_other" )))
-    frames = pd.concat([famblatt_df, rundschau_df, tb_df, anthol_df, journal_df, buch_df])
-    print(frames)
-    return frames
+    #journal_df = df[df["medium_type"] == "journal"]
+    #journal_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x:"journal_Novelle" if x == "N" else
+    #("journal_Erzählung" if x == "E" else ("journal_sonst_Erzählung" if x == "0E" else "journal_other")))
+    #buch_df = df[df["medium_type"] == "buch"]
+    #buch_df["dependent_genre"] = df["Gattungslabel_ED"].apply(lambda x: "buch_Novelle" if x == "N" else
+    #("buch_Erzählung" if x == "E" else ("buch_sonst_Erzählung" if x == "0E" else "buch_other" )))
+    result_df = pd.concat([famblatt_df, rundschau_df, tb_df])
+
+    return result_df
 

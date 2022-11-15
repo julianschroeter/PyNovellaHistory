@@ -61,9 +61,9 @@ matrix = matrix.add_metadata("Jahr_ED")
 
 
 
-matrix.data_matrix_df = years_to_periods(input_df=matrix.data_matrix_df, category_name="Jahr_ED",
-                                          start_year=1750, end_year=1950, epoch_length=50,
-                                          new_periods_column_name="periods")
+matrix.data_matrix_df = years_to_periods(df=matrix.data_matrix_df, category_name="Jahr_ED",
+                                         start_year=1750, end_year=1950, epoch_length=50,
+                                         new_periods_column_name="periods")
 
 
 matrix = matrix.reduce_to_categories("Gattungslabel_ED", ["E", "0E", "R", "M", "N", "Dorfgeschichte"])

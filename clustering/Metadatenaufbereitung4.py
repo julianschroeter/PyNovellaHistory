@@ -1,4 +1,4 @@
-from preprocessing.corpus import DTM, DocFeatureMatrix
+from preprocessing.corpus_alt import DTM, DocFeatureMatrix
 from preprocessing.metadata_transformation import years_to_periods
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
 from preprocessing.presetting import load_stoplist
@@ -25,12 +25,12 @@ stopword_list = load_stoplist(stopword_list_filepath)
 new_metadata_df_outfile_path = os.path.join(global_corpus_raw_dtm_directory(system), "metatdata_table_periods30a.csv")
 dtm_outfile_path = os.path.join(global_corpus_raw_dtm_directory(system), "character_network_table_genrelabel.csv")
 
-metadata_df_periods30a = years_to_periods(input_df=pd.read_csv(filepath_or_buffer=metadata_filepath, index_col=0), category_name="Jahr_ED",
+metadata_df_periods30a = years_to_periods(df=pd.read_csv(filepath_or_buffer=metadata_filepath, index_col=0), category_name="Jahr_ED",
                                           start_year=1760, end_year=1950, epoch_length=30,
                                           new_periods_column_name="periods30a")
 
 
-metadata_df_periods50a = years_to_periods(input_df=metadata_df_periods30a, category_name="Jahr_ED",
+metadata_df_periods50a = years_to_periods(df=metadata_df_periods30a, category_name="Jahr_ED",
                                           start_year=1750, end_year=1950, epoch_length=50,
                                           new_periods_column_name="periods100a")
 

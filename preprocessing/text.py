@@ -51,14 +51,15 @@ class Text():
 
     def f_extract_id(self):
         basename = os.path.basename(self.filepath)
-        self.id = re.search("\d{5}-\d{2}", basename).group() if re.search("\d{5}-\d{2}", basename) else basename
+        self.id = re.search("\d{5}-\d{2}_\d{4}", basename).group() if re.search("\d{5}-\d{2}_\d{4}", basename) else \
+            ( re.search("\d{5}-\d{2}", basename).group() if re.search("\d{5}-\d{2}", basename) else basename)
 
     def f_read_file(self):
         if self.filepath.endswith(".txt"):
             self.text = open(self.filepath,"r", encoding="utf8").read()
         else:
-            print("File ist no txt file and cannot be read! Text.text attribute is filled with empty string.")
-            self.text = ""
+            print("File has not .txt extension.")
+            self.text = open(self.filepath,"r", encoding="utf8").read()
 
     def f_remove_hyphen(self):
         """remove hyphenation and remove linebreaks"""

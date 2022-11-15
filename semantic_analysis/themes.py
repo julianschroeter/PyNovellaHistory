@@ -5,23 +5,59 @@ from preprocessing.text import Text
 from preprocessing.corpus import DocFeatureMatrix
 
 class SettingShare(Text):
-    def __init__(self, filepath, text, id, chunks, token_length, pos_triples,
-                 remove_hyphen, normalize_orthogr, normalization_table_path,
-                 correct_ocr, eliminate_pagecounts, handle_special_characters,
+    def __init__(self, filepath,
+                 text,
+                 id,
+                 chunks,
+                 token_length,
+                 pos_triples,
+                 remove_hyphen,
+                 normalize_orthogr,
+                 normalization_table_path,
+                 correct_ocr,
+                 eliminate_pagecounts,
+                 handle_special_characters,
                  inverse_translate_umlaute,
-                 eliminate_pos_items, keep_pos_items, list_keep_pos_tags,
-                 list_eliminate_pos_tags, lemmatize,
-                 sz_to_ss, translate_umlaute, max_length,
-                 remove_stopwords, stopword_list, language_model):
+                 eliminate_pos_items=False,
+                 keep_pos_items=False,
+                 list_keep_pos_tags =None,
+                 list_eliminate_pos_tags =None,
+                 lemmatize = False,
+                 sz_to_ss = False,
+                 translate_umlaute = False,
+                 reduce_to_words_from_list = False,
+                 reduction_word_list = None,
+                 max_length = 1000000,
+                 remove_stopwords = False,
+                 stopword_list = None,
+                 language_model = None):
 
-        Text.__init__(self, filepath, text, id, chunks,token_length,  pos_triples,
-                         remove_hyphen, normalize_orthogr, normalization_table_path,
-                 correct_ocr, eliminate_pagecounts, handle_special_characters,
-                         inverse_translate_umlaute,
-                 eliminate_pos_items, keep_pos_items, list_keep_pos_tags,
-                         list_eliminate_pos_tags, lemmatize,
-                 sz_to_ss, translate_umlaute, max_length,
-                 remove_stopwords,  stopword_list, language_model)
+        Text.__init__(self, filepath,
+                 text,
+                 id,
+                 chunks,
+                 pos_triples,
+                 token_length,
+                 remove_hyphen,
+                 normalize_orthogr,
+                 normalization_table_path,
+                 correct_ocr,
+                 eliminate_pagecounts,
+                 handle_special_characters,
+                 inverse_translate_umlaute,
+                 eliminate_pos_items,
+                 keep_pos_items,
+                 list_keep_pos_tags,
+                 list_eliminate_pos_tags,
+                 lemmatize,
+                 sz_to_ss,
+                 translate_umlaute,
+                 reduce_to_words_from_list,
+                 reduction_word_list,
+                 max_length,
+                 remove_stopwords,
+                 stopword_list,
+                 language_model)
 
     def calculate_share(self, list_of_wordlists, normalize='l1', standardize=True, case_sensitive=False):
         """
@@ -54,15 +90,24 @@ class SettingShare(Text):
 
 
 class DocThemesMatrix(DocFeatureMatrix):
-    def __init__(self, list_of_wordlists, corpus_path,
-                 remove_hyphen, normalize_orthogr, normalization_table_path,
-                 correct_ocr, eliminate_pagecounts, handle_special_characters,
+    def __init__(self, list_of_wordlists,
+                 corpus_path,
+                 remove_hyphen,
+                 normalize_orthogr,
+                 normalization_table_path,
+                 correct_ocr,
+                 eliminate_pagecounts,
+                 handle_special_characters,
                  inverse_translate_umlaute,
                  keep_pos_items,
-                 eliminate_pos_items, list_of_pos_tags,
-                 list_eliminate_pos_tags, lemmatize,
-                 sz_to_ss, translate_umlaute,
-                 remove_stopwords, language_model,
+                 eliminate_pos_items,
+                 list_of_pos_tags,
+                 list_eliminate_pos_tags,
+                 lemmatize,
+                 sz_to_ss,
+                 translate_umlaute,
+                 remove_stopwords,
+                 language_model,
                  data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
                  metadata_df=None, mallet=False,
                  corpus_as_dict=None):
@@ -88,6 +133,8 @@ class DocThemesMatrix(DocFeatureMatrix):
         self.remove_stopwords = remove_stopwords
         self.language_model = language_model
         self.corpus_as_dict = corpus_as_dict
+
+        print("language model is: ", self.language_model)
 
         if self.corpus_as_dict is None:
             dic = {}

@@ -1,7 +1,7 @@
 import statistics
 
 from preprocessing.presetting import language_model_path, vocab_lists_dicts_directory, global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 from preprocessing.sampling import equal_sample
 import os
 import matplotlib.pyplot as plt

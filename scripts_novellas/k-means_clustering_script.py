@@ -3,7 +3,7 @@ system = "wcph113"
 from sklearn.cluster import KMeans
 import os
 
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory
 from classification.perspectivalmodeling import split_features_labels
 

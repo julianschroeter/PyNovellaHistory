@@ -1,4 +1,4 @@
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from preprocessing.metadata_transformation import years_to_periods
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
 from preprocessing.presetting import load_stoplist
@@ -20,9 +20,9 @@ semanticword_list = load_stoplist(semanticword_list_filepath)
 metadata_df = pd.read_csv(filepath_or_buffer=metadata_filepath, index_col=0)
 print(metadata_df["Jahr_ED"])
 
-metadata_df_periods = years_to_periods(input_df=metadata_df, category_name="Jahr_ED",
-                                          start_year=1750, end_year=1951, epoch_length=100,
-                                          new_periods_column_name="periods100a")
+metadata_df_periods = years_to_periods(df=metadata_df, category_name="Jahr_ED",
+                                       start_year=1750, end_year=1951, epoch_length=100,
+                                       new_periods_column_name="periods100a")
 
 
 

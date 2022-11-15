@@ -6,7 +6,7 @@ if system == "wcph113":
 import os
 
 from preprocessing.presetting import global_corpus_directory, vocab_lists_dicts_directory, load_stoplist, language_model_path, global_corpus_representation_directory
-from semantic_analysis.themes import DocThemesMatrix
+from semantic_analysis.themes_alt import DocThemesMatrix
 
 my_model_de = language_model_path(system)
 

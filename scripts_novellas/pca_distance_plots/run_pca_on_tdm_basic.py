@@ -1,7 +1,7 @@
 from clustering.my_pca import PC_df
 from preprocessing.presetting import vocab_lists_dicts_directory, local_temp_directory ,global_corpus_representation_directory, load_stoplist, global_corpus_raw_dtm_directory
 from preprocessing.metadata_transformation import full_genre_labels
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from preprocessing.sampling import sample_n_from_cat
 import os
 import random
@@ -11,10 +11,10 @@ system = "wcph113" # "my_mac" # "wcph104" #  "my_xps"
 
 colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "my_colors.txt"))
 colors_list = random.sample(colors_list, len(colors_list))
-colors_list = ["blue", "green", "red", "orange", "cyan"]
-colors_list = random.sample(colors_list, len(colors_list))
+colors_list = ["red", "green", "blue", "orange", "cyan"]
+#colors_list = random.sample(colors_list, len(colors_list))
 
-dtm_infile_path = os.path.join(global_corpus_raw_dtm_directory(system), "RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv")
+dtm_infile_path = os.path.join(global_corpus_raw_dtm_directory(system), "raw_dtm_l1_lemmatized_use_idf_False2500mfw.csv")
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
 dtm_object = DTM(data_matrix_filepath =dtm_infile_path, metadata_csv_filepath=metadata_filepath)
@@ -22,12 +22,12 @@ dtm_object = dtm_object.add_metadata(["Gattungslabel_ED_normalisiert", "Nachname
 
 
 
-labels_list = ["N", "R"]
+
 
 labels_list = ["R", "M", "E", "N", "0E", "XE"]
 labels_list = ["E", "N"]
 labels_list = ["R", "M"]
-
+labels_list = ["N", "E"]
 dtm_object = dtm_object.reduce_to_categories(metadata_category="Gattungslabel_ED_normalisiert", label_list=labels_list)
 
 input_df = dtm_object.data_matrix_df

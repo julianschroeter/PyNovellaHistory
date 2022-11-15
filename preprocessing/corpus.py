@@ -43,7 +43,7 @@ class DocFeatureMatrix():
 
 
         if self.metadata_csv_filepath is not None:
-            self.metadata_df = pd.read_csv(self.metadata_csv_filepath, index_col=0)
+            self.metadata_df = pd.read_csv(self.metadata_csv_filepath, sep="\t").set_index("id")
 
         if self.data_matrix_filepath is not None:
 
@@ -538,16 +538,21 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
                                       reduce_to_words_from_list=False, reduction_word_list=None)
                 char_netw()
                 char_netw.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
-                char_netw.generate_characters_graph(reduce_to_one_name=True)
+                char_netw.generate_characters_graph(reduce_to_one_name=False)
+                print(char_netw.characters_counter)
+                print(char_netw.characters_list)
+                print(nx.degree_centrality(char_netw.graph))
+                print(nx.degree(char_netw.graph, weight="weight"))
 
-                dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1), char_netw.token_length]
+                dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1),
+                                     nx.degree_centrality(char_netw.graph) , nx.degree(char_netw.graph, weight="weight")]
                 corpus_characters_list += char_netw.characters_list
             self.corpus_as_dict = dic
             self.corpus_characters_list = corpus_characters_list
 
     def generate_df(self):
         df = pd.DataFrame(self.corpus_as_dict).T
-        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte", "Anteil Figuren mit degree centrality == 1", "Länge in Token"]
+        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte", "Anteil Figuren mit degree centrality == 1","deg_centr",  "weighted_deg_centr"]
         self.data_matrix_df = df
 
     def corpus_characters_list_to_file(self, outfilepath):
@@ -695,29 +700,29 @@ class POS_Vocab():
             doc = nlp(self.text[:self.max_length], disable='ner')
             for token in doc:
                 if token.pos_ == "NOUN":
-                    token_noun_list.append(token.text.lower())
+                    token_noun_list.append(token.names_text.lower())
                     lemma_noun_list.append(token.lemma_.lower())
                 elif token.pos_ == "VERB":
-                    token_verb_list.append(token.text.lower())
+                    token_verb_list.append(token.names_text.lower())
                     lemma_verb_list.append(token.lemma_.lower())
                 elif token.pos_ == "ADJ":
-                    token_adj_list.append(token.text.lower())
+                    token_adj_list.append(token.names_text.lower())
                     lemma_adj_list.append(token.lemma_.lower())
                 elif token.pos_ == "ADV":
-                    token_adv_list.append(token.text.lower())
+                    token_adv_list.append(token.names_text.lower())
                     lemma_adv_list.append(token.lemma_.lower())
                 elif token.pos == "INTJ":
-                    token_intj_list.append(token.text.lower())
+                    token_intj_list.append(token.names_text.lower())
                     lemma_intj_list.append(token.lemma_lower())
                 elif token.pos_ == "PROPN":
-                    token_propn_list.append(token.text.lower())
+                    token_propn_list.append(token.names_text.lower())
                     lemma_propn_list.append(token.lemma_.lower())
                 elif token.pos_ in ["AUX", "CONJ", "ADP", "CCONJ", "DET", "PART", "PRON", "SCONJ"]:
-                    function_word_list.append(token.text)
+                    function_word_list.append(token.names_text)
                 elif token.pos in ["X", "SYM", "PUNCT", "SPACE", "NUM"]:
-                    other_list.append(token.text.lower())
+                    other_list.append(token.names_text.lower())
                 else:
-                    other_list.append(token.text.lower())
+                    other_list.append(token.names_text.lower())
 
         token_pos_dict["nouns"] = ", ".join(map(str, set(token_noun_list)))
         token_pos_dict["verbs"] = ", ".join(map(str, set(token_verb_list)))

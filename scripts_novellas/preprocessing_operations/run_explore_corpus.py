@@ -1,14 +1,14 @@
 import os
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist, vocab_lists_dicts_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 import pandas as pd
 
-system = "my_xps" #"wcph113"
+system = "wcph113"
 
 
 
-infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "DTM_lemmatized_l2_5000mfw.csv") # hier die Eingangsdatei der Featurerepräsentation wählen
+infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv") # hier die Eingangsdatei der Featurerepräsentation wählen
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 colors_list = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "my_colors.txt"))
 
@@ -21,9 +21,9 @@ new_df_obj = df_obj.reduce_to(rel_metadata, return_eliminated_terms_list=False)
 
 df = new_df_obj.data_matrix_df
 
-df = years_to_periods(input_df=df, category_name="Jahr_ED",
-                                          start_year=1790, end_year=1951, epoch_length=30,
-                                          new_periods_column_name="periods30a")
+df = years_to_periods(df=df, category_name="Jahr_ED",
+                      start_year=1790, end_year=1951, epoch_length=30,
+                      new_periods_column_name="periods30a")
 print(df)
 
 replace_dict = {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "sonstige Prosaerzählung", "0R" : "sonstige Journalinhalte", "0PE" : "sonstige Prosaerzählung", "0X_Essay" : "sonstige Journalinhalte", "0PB" : "sonstige Journalinhalte", "Lyrik" : "sonstige Journalinhalte", "Drama" : "sonstige Journalinhalte",

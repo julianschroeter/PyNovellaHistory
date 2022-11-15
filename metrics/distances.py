@@ -15,22 +15,22 @@ class GroupDistances():
     """
     calculates the ingroup metrics and stores them in a distance_matrix and a list of metrics as attributes.
     """
-    def __init__(self, input_df, metric, select_one_author, select_one_per_period, sample_size_df):
+    def __init__(self, input_df, metric, select_one_per_author, select_one_per_period, sample_size_df):
         frac_sample = None
         if sample_size_df is None:
             frac_sample = 1
         df = input_df.drop(columns=genre_cat)
         if select_one_per_period == True:
             df = sample_n_from_cat(df, cat_name="periods")
-            if select_one_author == True:
+            if select_one_per_author == True:
                 df = sample_n_from_cat(df)
-            elif select_one_author == False:
+            elif select_one_per_author == False:
                 df = df.drop(columns = name_cat)
         elif select_one_per_period == False:
             df = df.drop(columns=periods_cat)
-            if select_one_author == True:
+            if select_one_per_author == True:
                 df = sample_n_from_cat(df)
-            elif select_one_author == False:
+            elif select_one_per_author == False:
                 df = df.drop(columns= name_cat)
 
         df = df.sample(sample_size_df, frac=frac_sample)
@@ -53,7 +53,7 @@ class InterGroupDistances(GroupDistances):
     """
 
     """
-    def __init__(self, input_df_1, input_df_2, metric, select_one_author, select_one_per_period,
+    def __init__(self, input_df_1, input_df_2, metric, select_one_per_author, select_one_per_period,
                  smaller_sample_size, sample_size_df_1, sample_size_df_2):
 
         frac_sample_1, frac_sample_2 = None, None
@@ -65,20 +65,20 @@ class InterGroupDistances(GroupDistances):
         if select_one_per_period == True:
             df_1 = sample_n_from_cat(input_df_1, cat_name=periods_cat)
             df_2 = sample_n_from_cat(input_df_2, cat_name=periods_cat)
-            if select_one_author == True:
+            if select_one_per_author == True:
                 both_dfs = pd.concat([df_1, df_2]).sample(frac=1.0)
                 red_both_df = sample_n_from_cat(both_dfs)
                 grouped = red_both_df.groupby(genre_cat)
                 dfs_list = [grouped.get_group(df) for df in grouped.groups]
                 df_1 = dfs_list[0].drop(columns=genre_cat)
                 df_2 = dfs_list[1].drop(columns=genre_cat)
-            elif select_one_author == False:
+            elif select_one_per_author == False:
                 df_1 = df_1.drop(columns=[genre_cat, name_cat])
                 df_2 = df_2.drop(columns=[genre_cat, name_cat])
         elif select_one_per_period == False:
             df_1 = input_df_1.drop(columns=periods_cat)
             df_2 = input_df_2.drop(columns=periods_cat)
-            if select_one_author == True:
+            if select_one_per_author == True:
                 both_dfs = pd.concat([df_1, df_2]).sample(frac=1.0)
                 red_both_df = sample_n_from_cat(both_dfs)
                 grouped = red_both_df.groupby(genre_cat)
@@ -86,7 +86,7 @@ class InterGroupDistances(GroupDistances):
                 df_1 = dfs_list[0].drop(columns=genre_cat)
                 df_2 = dfs_list[1].drop(columns=genre_cat)
 
-            elif select_one_author == False:
+            elif select_one_per_author == False:
                 df_1 = df_1.drop(columns=[name_cat, genre_cat])
                 df_2 = df_2.drop(columns=[name_cat, genre_cat])
 
@@ -133,12 +133,12 @@ class IterateDistanceCalc:
         mins_dict, max_dict = {}, {}
         for i in range(n):
             if input_df_2 is None:
-                dist_obj = GroupDistances(input_df=input_df_1, metric=metric, select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                dist_obj = GroupDistances(input_df=input_df_1, metric=metric, select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                           sample_size_df=sample_size_df_1)
                 list_sample_size_1.append(dist_obj.sample_length)
             elif input_df_2 is not None:
                 dist_obj = InterGroupDistances(input_df_1=input_df_1, input_df_2=input_df_2, metric= metric,
-                                               select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                                               select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                                smaller_sample_size=smaller_sample_size, sample_size_df_1=sample_size_df_1, sample_size_df_2=sample_size_df_2)
                 list_sample_size_1.append(dist_obj.sample1_length)
                 list_sample_size_2.append(dist_obj.sample2_length)
@@ -357,14 +357,14 @@ def iterate_inter_tests(n, input_df_1, input_df_2, metric, select_one_author=Tru
             final_sample_size = None
             final_sample_frac=1.0
         df_1_dists = GroupDistances(input_df=input_df_1.sample(n=final_sample_size, frac=final_sample_frac),
-                                    metric=metric, select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                                    metric=metric, select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                     sample_size_df=sample_size_df_1).distances
         df_2_dists = GroupDistances(input_df=input_df_2.sample(n=final_sample_size, frac=final_sample_frac),
-                                    metric=metric, select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                                    metric=metric, select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                     sample_size_df=sample_size_df_2).distances
         df_1_2_dists = InterGroupDistances(input_df_1.sample(n=final_sample_size, frac=final_sample_frac),
                                            input_df_2.sample(n=final_sample_size, frac=final_sample_frac),
-                                           metric=metric, select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                                           metric=metric, select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                            smaller_sample_size=smaller_sample_size,
                                            sample_size_df_1=sample_size_df_1, sample_size_df_2=sample_size_df_2).distances
         F,p = test_function(df_1_2_dists, df_1_dists, alternative=alternative)
@@ -389,11 +389,11 @@ def iterate_intra_tests(n, input_df_1, input_df_2, metric, select_one_author=Tru
             final_sample_size = None
             final_sample_frac = 1.0
         df_1_dists = GroupDistances(input_df=input_df_1.sample(n=final_sample_size, frac=final_sample_frac),
-                                    metric=metric, select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                                    metric=metric, select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                                     sample_size_df=sample_size_df_1).distances
         df_2_dists = GroupDistances(
                     input_df=input_df_2.sample(n=final_sample_size, frac=final_sample_frac),
-                    select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                    select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                     metric=metric, sample_size_df=sample_size_df_2).distances
 
 
@@ -413,12 +413,12 @@ def rd_iterate_intra_tests(n, input_df, metric, select_one_author=True, select_o
         df_1, df_2 = train_test_split(input_df, train_size=0.5)
 
         df_1_dists = GroupDistances(input_df=df_1,
-                                    metric=metric, select_one_author=select_one_author,
+                                    metric=metric, select_one_per_author=select_one_author,
                                     select_one_per_period=select_one_per_period,
                                     sample_size_df=sample_size_df).distances
         df_2_dists = GroupDistances(
                     input_df=df_2,
-                    select_one_author=select_one_author, select_one_per_period=select_one_per_period,
+                    select_one_per_author=select_one_author, select_one_per_period=select_one_per_period,
                     metric=metric, sample_size_df=sample_size_df).distances
 
 

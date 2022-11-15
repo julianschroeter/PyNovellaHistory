@@ -8,7 +8,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 
@@ -34,7 +34,7 @@ print(df)
 
 
 
-df = years_to_periods(input_df=df, category_name="Jahr_ED",start_year=1790, end_year=2000, epoch_length=20,
+df = years_to_periods(df=df, category_name="Jahr_ED", start_year=1790, end_year=2000, epoch_length=20,
                       new_periods_column_name="periods20a")
 
 

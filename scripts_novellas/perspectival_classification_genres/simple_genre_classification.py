@@ -6,7 +6,7 @@ if system == "wcph113":
 import os
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_raw_dtm_directory
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from classification.perspectivalmodeling import split_features_labels
 from sklearn import model_selection
 from sklearn.linear_model import LogisticRegressionCV
@@ -16,7 +16,7 @@ from preprocessing.sampling import equal_sample
 
 metadata_path = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
-label_list = ["N", "E"]
+label_list = ["R", "N"]
 
 for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
     if filename == "red-to-2500mfw_scaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv":

@@ -1,4 +1,4 @@
-from preprocessing.corpus import DTM, DocFeatureMatrix
+from preprocessing.corpus_alt import DTM, DocFeatureMatrix
 from preprocessing.metadata_transformation import years_to_periods
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist
 from clustering.my_plots import scatter

@@ -6,12 +6,9 @@ if system == "wcph113":
 import pandas as pd
 import os
 
-
 from preprocessing.metadata_transformation import extract_file_ids_period, extract_ids_categorical
 from preprocessing.presetting import language_model_path, global_corpus_representation_directory,vocab_lists_dicts_directory, global_corpus_directory, local_temp_directory
-from preprocessing.corpus import generate_text_files
-
-
+from preprocessing.corpus_alt import generate_text_files
 
 my_model = language_model_path(system)
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")

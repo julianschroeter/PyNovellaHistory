@@ -5,8 +5,8 @@ if system == "wcph113":
 
 
 
-from preprocessing.distances import IterateDistanceCalc, pairwise_self_counter_av_distances, GroupDistances, InterGroupDistances, random_iterate_rel_ttest, iterate_rel_ttest
-from preprocessing.corpus import DTM
+from metrics.distances import IterateDistanceCalc, pairwise_self_counter_av_distances, GroupDistances, InterGroupDistances, random_iterate_rel_ttest, iterate_rel_ttest
+from preprocessing.corpus_alt import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory, local_temp_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 from preprocessing.sampling import split_to2samples, sample_n_from_cat

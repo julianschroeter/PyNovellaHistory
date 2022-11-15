@@ -16,7 +16,7 @@ df = pd.read_csv(metadata_filepath, index_col=0)
 df = df[["Gattungslabel_ED_normalisiert", "Nachname", "Gender", "Medientyp_ED", "Kanon_Status", "Jahr_ED"]]
 
 
-values_dict = {"Gattungslabel_ED_normalisiert": ["N", "E", "0E", "R", "M"]}
+values_dict = {"Gattungslabel_ED_normalisiert": ["N", "E"]}
 df = df[df.isin(values_dict).any(1)]
 df = df.dropna()
 
@@ -80,3 +80,40 @@ print("same process based on bootstrapped resampling with equal sample size:")
 df_dummies = pd.concat([df_dummies, labels], axis=1)
 
 print(df_dummies)
+
+from sklearn.model_selection import RandomizedSearchCV  # Number of trees in random forest
+
+n_estimators = [int(x) for x in np.linspace(start=10, stop=1000, num=100)]
+# Number of features to consider at every split
+max_features = ['auto', 'sqrt']
+# Maximum number of levels in tree
+max_depth = [int(x) for x in np.linspace(10, 110, num=11)]
+max_depth.append(None)
+# Minimum number of samples required to split a node
+min_samples_split = [2, 5, 10]
+# Minimum number of samples required at each leaf node
+min_samples_leaf = [1, 2, 4]
+# Method of selecting samples for training each tree
+bootstrap = [True, False]  # Create the random grid
+random_grid = {'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'min_samples_split': min_samples_split,
+               'min_samples_leaf': min_samples_leaf,
+               'bootstrap': bootstrap}
+
+
+print(random_grid)
+
+# Use the random grid to search for best hyperparameters
+# First create the base model to tune
+
+# Random search of parameters, using 3 fold cross validation,
+# search across 100 different combinations, and use all available cores
+rf_random = RandomizedSearchCV(estimator=model, param_distributions=random_grid, n_iter=100, cv=3, verbose=2,
+                               random_state=42, n_jobs=-1)  # Fit the random search model
+rf_random.fit(X_train, Y_train)
+test_predictions = rf_random.best_estimator_.predict(X_validation)
+
+print(rf_random.best_params_)
+print(accuracy_score(Y_validation, test_predictions))

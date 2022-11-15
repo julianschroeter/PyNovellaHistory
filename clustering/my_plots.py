@@ -47,7 +47,7 @@ def rd_vectors_around_center(probabs):
     y_results = np.multiply(np.sin(rd_angles),probabs)
     return x_results, y_results
 
-def plot_prototype_concepts(probabs, labels, threshold):
+def plot_prototype_concepts(probabs, labels, threshold, annotation=None):
 
     x_results, y_results = rd_vectors_around_center(probabs)
     lower_threshold_level = 0.5 - (threshold / 2)
@@ -59,9 +59,16 @@ def plot_prototype_concepts(probabs, labels, threshold):
     ax.add_patch(plt.Circle((0, 0), 1, fill=False))
     ax.add_patch(plt.Circle((0, 0), lower_threshold_level, fill=False))
     ax.add_patch(plt.Circle((0, 0), upper_threshold_level, fill=False))
-    plt.title("Prototypenkonzept: Novellen versus Erzählungen")
-    plt.xlabel(str("Unentscheidbarkeitsbereich zwischen "+str(lower_threshold_level)+ " und "+ str(upper_threshold_level)))
-    plt.ylabel("relative Nähe der Texte zum Zentrum (inv. Vorhersage-Konfidenz")
+
+    rd_angle = np.random.uniform(-np.pi, np.pi, 1)
+    if annotation:
+        x_results = np.multiply(np.cos(rd_angle), annotation[1])
+        y_results = np.multiply(np.sin(rd_angle), annotation[1])
+        plt.annotate(annotation[0], (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+
+    plt.title("Prototype Concept for Genre Pairs")
+    plt.xlabel(str("Boundary of undecidabilty: "+str(lower_threshold_level)+ " – "+ str(upper_threshold_level)))
+    plt.ylabel("closeness to center (inv. pred. prob.)")
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
 

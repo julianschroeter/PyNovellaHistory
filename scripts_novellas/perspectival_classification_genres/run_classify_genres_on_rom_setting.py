@@ -1,5 +1,5 @@
 from preprocessing.presetting import language_model_path, vocab_lists_dicts_directory, global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 from preprocessing.sampling import equal_sample
 from preprocessing.metadata_transformation import years_to_periods
 from classification.custom_classification import resample_boostrapped_LR

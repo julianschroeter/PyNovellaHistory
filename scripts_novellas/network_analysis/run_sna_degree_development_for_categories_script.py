@@ -5,7 +5,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, load_stoplist, vocab_lists_dicts_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 
@@ -27,7 +27,7 @@ dtm_obj = dtm_obj.eliminate(["Figuren"])
 
 df = dtm_obj.data_matrix_df
 
-df = years_to_periods(input_df=df, category_name="Jahr_ED",start_year=1790, end_year=1900, epoch_length=20,
+df = years_to_periods(df=df, category_name="Jahr_ED", start_year=1790, end_year=1900, epoch_length=20,
                       new_periods_column_name="periods20a")
 
 df = df[df["periods20a"] != 0]

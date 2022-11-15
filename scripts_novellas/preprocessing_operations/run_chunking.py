@@ -4,7 +4,7 @@ if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
 
-from preprocessing.corpus import ChunkCorpus
+from preprocessing.corpus_alt import ChunkCorpus
 from preprocessing.presetting import global_corpus_directory, global_corpus_representation_directory , load_stoplist, local_temp_directory, language_model_path, vocab_lists_dicts_directory
 import os
 

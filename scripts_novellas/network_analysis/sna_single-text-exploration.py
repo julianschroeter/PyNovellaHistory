@@ -3,7 +3,7 @@ from preprocessing.text import Text
 from preprocessing.presetting import global_corpus_directory
 from preprocessing.presetting import global_corpus_representation_directory, language_model_path, vocab_lists_dicts_directory
 from preprocessing.presetting import set_DistReading_directory
-from preprocessing.corpus import DocNetworkfeature_Matrix
+from preprocessing.corpus_alt import DocNetworkfeature_Matrix
 import os
 import networkx as nx
 import matplotlib.pyplot as plt

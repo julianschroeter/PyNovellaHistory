@@ -48,10 +48,10 @@ class PC_df():
         colors_str = colors_str.translate(zipped_dict)
         list_targetcolors = [zipped_dict[label] for label in list_target]
         plt.figure(figsize=(6, 6))
-        plt.title("Hauptkomponentenanalyse (PCA)")
+        plt.title("Principal Component Analyses (PCA)")
         plt.scatter(self.pc_target_df.iloc[:,0], self.pc_target_df.iloc[:,1], c=list_targetcolors, cmap='rainbow', alpha=0.8)
-        plt.xlabel(str('Erste Komponente, erkl. Var.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
-        plt.ylabel(str('Zweite Komponente, erkl. Var.: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+        plt.xlabel(str('First Component, var expl.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
+        plt.ylabel(str('Second Component, var. expl: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
         #plt.xscale(value="log")
         #plt.yscale(value="log")
         #plt.xlim(-50000,500000)

@@ -7,7 +7,7 @@ import os
 import numpy as np
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_raw_dtm_directory, local_temp_directory
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from classification.perspectivalmodeling import split_features_labels
 from clustering.my_plots import plot_prototype_concepts
 from sklearn import model_selection
@@ -23,7 +23,7 @@ metadata_path = os.path.join(global_corpus_representation_directory(system), "Bi
 label_list = ["N", "E"]
 
 for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
-    if "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" in filename:
+    if filename == "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv":
         filepath = os.path.join(global_corpus_raw_dtm_directory(system), filename)
         dtm_obj = DTM(data_matrix_filepath=filepath, metadata_csv_filepath=metadata_path)
 
@@ -99,3 +99,44 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
         proba_df_N = df[df["Gattungslabel_ED_normalisiert"] == "N"]
         print(proba_df_N.sort_values(by="predict_probab"))
         proba_df_N.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "Pred_Probab_N.csv"))
+
+        from pprint import pprint  # Look at parameters used by our current forest
+
+        print('Parameters currently in use:\n')
+        pprint(rnd_model.get_params())
+
+        from sklearn.model_selection import RandomizedSearchCV  # Number of trees in random forest
+
+        n_estimators = [int(x) for x in np.linspace(start=10, stop=1000, num=100)]
+        # Number of features to consider at every split
+        max_features = ['auto', 'sqrt']
+        # Maximum number of levels in tree
+        max_depth = [int(x) for x in np.linspace(10, 110, num=11)]
+        max_depth.append(None)
+        # Minimum number of samples required to split a node
+        min_samples_split = [2, 5, 10]
+        # Minimum number of samples required at each leaf node
+        min_samples_leaf = [1, 2, 4]
+        # Method of selecting samples for training each tree
+        bootstrap = [True, False]  # Create the random grid
+        random_grid = {'n_estimators': n_estimators,
+                       'max_features': max_features,
+                       'max_depth': max_depth,
+                       'min_samples_split': min_samples_split,
+                       'min_samples_leaf': min_samples_leaf,
+                       'bootstrap': bootstrap}
+
+        pprint(random_grid)
+
+        # Use the random grid to search for best hyperparameters
+        # First create the base model to tune
+
+        # Random search of parameters, using 3 fold cross validation,
+        # search across 100 different combinations, and use all available cores
+        rf_random = RandomizedSearchCV(estimator=rnd_model, param_distributions=random_grid, n_iter=100, cv=3, verbose=2,
+                                       random_state=42, n_jobs=-1)  # Fit the random search model
+        rf_random.fit(X_train, Y_train)
+        test_predictions = rf_random.best_estimator_.predict(X_test)
+
+        print(rf_random.best_params_)
+        print(accuracy_score(Y_test, test_predictions))

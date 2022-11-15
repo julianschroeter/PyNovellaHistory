@@ -1,7 +1,6 @@
 from preprocessing.sampling import equal_sample
 
-import pandas as pd
-from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
+from sklearn.linear_model import LogisticRegression
 from sklearn import model_selection
 from sklearn.metrics import accuracy_score, f1_score
 

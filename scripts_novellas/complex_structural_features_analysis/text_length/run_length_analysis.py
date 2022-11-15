@@ -8,7 +8,7 @@ if system == "wcph113":
 
 
 from preprocessing.presetting import global_corpus_representation_directory, language_model_path
-from preprocessing.corpus import DocFeatureMatrix
+from preprocessing.corpus_alt import DocFeatureMatrix
 from preprocessing.metadata_transformation import years_to_periods, full_genre_labels
 
 import matplotlib.pyplot as plt
@@ -25,7 +25,7 @@ matrix_obj = DocFeatureMatrix(data_matrix_filepath=infile_df_path, metadata_csv_
 matrix_obj = matrix_obj.reduce_to(["Länge in Token"])
 matrix_obj = matrix_obj.add_metadata(["Gattungslabel_ED_normalisiert", "Jahr_ED", "Medientyp_ED"])
 
-matrix_obj.data_matrix_df = years_to_periods(input_df=matrix_obj.data_matrix_df , category_name="Jahr_ED", start_year=1790, end_year=1950, epoch_length=20, new_periods_column_name="periods5a")
+matrix_obj.data_matrix_df = years_to_periods(df=matrix_obj.data_matrix_df, category_name="Jahr_ED", start_year=1790, end_year=1950, epoch_length=20, new_periods_column_name="periods5a")
 
 
 cat_labels = ["N", "E", "0E", "XE"]

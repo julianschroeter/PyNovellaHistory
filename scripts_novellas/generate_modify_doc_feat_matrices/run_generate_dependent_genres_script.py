@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from preprocessing.metadata_transformation import years_to_periods, generate_media_dependend_genres, standardize_meta_data_medium
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory
-from preprocessing.corpus import DTM
+from preprocessing.corpus_alt import DTM
 from preprocessing.presetting import load_stoplist
 
 system = "my_mac"

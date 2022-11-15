@@ -5,8 +5,8 @@ if system == "wcph113":
 
 
 
-from preprocessing.distances import IterateDistanceCalc, pairwise_self_counter_av_distances, GroupDistances, InterGroupDistances, random_iterate_rel_ttest, iterate_rel_ttest
-from preprocessing.corpus import DTM
+from metrics.distances import IterateDistanceCalc, pairwise_self_counter_av_distances, GroupDistances, InterGroupDistances, random_iterate_rel_ttest, iterate_rel_ttest
+from preprocessing.corpus_alt import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory, local_temp_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 from preprocessing.sampling import split_to2samples, sample_n_from_cat
@@ -55,16 +55,16 @@ df_R = genre_dtm_obj.data_matrix_df
 bool_select_one_author = True
 bool_select_one_per_period = False
 
-R_dist_obj = GroupDistances(df_R, metric, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
-M_dist_obj = GroupDistances(df_M, metric, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
-E_dist_obj = GroupDistances(df_E, metric, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
-N_dist_obj = GroupDistances(df_N, metric, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
+R_dist_obj = GroupDistances(df_R, metric, select_one_per_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
+M_dist_obj = GroupDistances(df_M, metric, select_one_per_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
+E_dist_obj = GroupDistances(df_E, metric, select_one_per_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
+N_dist_obj = GroupDistances(df_N, metric, select_one_per_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
 
 
 distance_matrix_N_intra = N_dist_obj.dist_matr_df
 print(distance_matrix_N_intra)
 distance_matrix_N_intra.to_csv(os.path.join(local_temp_directory(system), "N_intra_dist_matrix.csv"))
 
-N_E_inter_dist_obj = InterGroupDistances(df_N, df_E, metric,select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period, smaller_sample_size=False)
+N_E_inter_dist_obj = InterGroupDistances(df_N, df_E, metric, select_one_per_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period, smaller_sample_size=False)
 N_E_dist_matr = N_E_inter_dist_obj.dist_matr_df
 N_E_dist_matr.to_csv(os.path.join(local_temp_directory(system), "N_E_inter_dist_matrix.csv"))

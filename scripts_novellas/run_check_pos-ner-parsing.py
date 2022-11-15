@@ -2,7 +2,7 @@ import spacy
 from preprocessing.presetting import global_corpus_directory, set_DistReading_directory, local_temp_directory
 from preprocessing.text import Text
 import os
-from preprocessing.corpus import check_save_pos_ner_parsing_corpus
+from preprocessing.corpus_alt import check_save_pos_ner_parsing_corpus
 system = "my_mac"
 list_of_file_ids_Johannes = ["00104-00", "00117-00", "00119-00", "00136-00", "00138-00", "00139-00", "00162-00", "00190-00", "00191-00", "00195-00","00595-00","00597-00","00598-00"
 
