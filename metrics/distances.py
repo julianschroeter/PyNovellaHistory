@@ -83,6 +83,7 @@ class InterGroupDistances(GroupDistances):
                 red_both_df = sample_n_from_cat(both_dfs)
                 grouped = red_both_df.groupby(genre_cat)
                 dfs_list = [grouped.get_group(df) for df in grouped.groups]
+                print(dfs_list)
                 df_1 = dfs_list[0].drop(columns=genre_cat)
                 df_2 = dfs_list[1].drop(columns=genre_cat)
 

@@ -8,7 +8,7 @@ from numpy import mean, std
 import pandas as pd
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, local_temp_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 
 from classification.custom_classification import resample_boostrapped_LR, resample_boostrapped_SVM
 

@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 from preprocessing.text import Text
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 
 class SettingShare(Text):
     def __init__(self, filepath, text, id, chunks, token_length, pos_triples,

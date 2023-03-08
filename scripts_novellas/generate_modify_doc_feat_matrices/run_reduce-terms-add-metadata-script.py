@@ -1,4 +1,4 @@
-from preprocessing.corpus_alt import DTM, DocFeatureMatrix
+from preprocessing.corpus import DTM, DocFeatureMatrix
 from preprocessing.metadata_transformation import years_to_periods
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, merge_several_stopfiles_to_list, load_stoplist, vocab_lists_dicts_directory, save_stoplist
 

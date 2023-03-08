@@ -43,7 +43,7 @@ class DocFeatureMatrix():
 
 
         if self.metadata_csv_filepath is not None:
-            self.metadata_df = pd.read_csv(self.metadata_csv_filepath, sep="\t").set_index("id")
+            self.metadata_df = pd.read_csv(self.metadata_csv_filepath, index_col=0)
 
         if self.data_matrix_filepath is not None:
 

@@ -6,7 +6,7 @@ if system == "wcph113":
 
 
 from metrics.distances import DistResults, GroupDistances
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory, local_temp_directory
 from preprocessing.presetting import local_temp_directory
 

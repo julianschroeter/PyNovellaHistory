@@ -95,3 +95,19 @@ def join_all_documents(corpus_path, outfile_directory, outfile_name, correct_ocr
             os.makedirs(outfile_directory)
         with open(os.path.join(outfile_directory, outfile_name), "w", encoding="utf8") as file:
             file.write(text)
+
+
+def select_all_episodes(corpus_path):
+    """
+    RETURN all filename ids for all files in corpus path, which are episodes, as a list
+    """
+    list_of_fileIDs = []
+    for filename in os.listdir(corpus_path):
+        full_id = re.search("\d{5}-\d{2}", filename).group() if re.search("\d{5}-\d{2}", filename) else None
+        if full_id:
+            episode_id = full_id[6:8]
+            if episode_id != "00":
+                list_of_fileIDs.append(full_id)
+    return list_of_fileIDs    
+
+

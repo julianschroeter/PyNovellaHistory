@@ -1,14 +1,14 @@
 system = "wcph113" # "my_mac"
 if system == "wcph113":
     import sys
-    sys.path.append('/mnt/data/users/schroeter/git/Heftromane')
+    sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
 
 import os
 import pandas as pd
 import numpy as np
 
 from preprocessing.presetting import local_temp_directory,conll_base_directory, load_stoplist, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_representation_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 
 
 metadata_filepath = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
@@ -19,7 +19,7 @@ print(meta_df)
 #heftroman_stoplist = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "heftroman_stopwords_header.txt"))
 
 corpus_path = conll_base_directory(system)
-outfile_directory = os.path.join(local_temp_directory(system), "conll_chunks_novellas")
+outfile_directory = os.path.join(local_temp_directory(system), "conll_chunks_novellas_episodes")
 
 if not os.path.exists(outfile_directory):
     os.makedirs(outfile_directory)
@@ -55,7 +55,10 @@ for filename in os.listdir(corpus_path):
             basename = os.path.splitext(basename)[0]
             basename = basename.replace(".txt", "")
             basename = basename.replace(".tsv", "")
+            basename = basename[:8]
+            print(basename)
             chunk_filename = "{}{}{:04d}".format(basename, "_", i)
+            print(chunk_filename)
             chunk_df.to_csv(os.path.join(outfile_directory, chunk_filename))
 
 print("process finished")

@@ -8,7 +8,7 @@ import numpy as np
 from collections import defaultdict
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_raw_dtm_directory, local_temp_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 from preprocessing.sampling import principled_sampling
 from classification.perspectivalmodeling import split_features_labels
 from clustering.my_plots import plot_prototype_concepts
@@ -22,7 +22,7 @@ from metrics.scores import c_at_1
 
 metadata_path = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
-label_list = ["R", "M"]
+label_list = ["N", "E"]
 
 name_cat = "Nachname"
 periods_cat = "Jahr_ED"
@@ -33,9 +33,9 @@ probabs_dict = {}
 acc_scores = []
 optima_x, optima_y = [],[]
 
-n= 1
+n= 100
 for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
-    if filename == "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv":
+    if filename == "raw_dtm_l1_lemmatized_use_idf_False2500mfw.csv": # alternative: "no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
         filepath = os.path.join(global_corpus_raw_dtm_directory(system), filename)
 
 
@@ -48,8 +48,8 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
             dtm_obj = dtm_obj.eliminate(["roman", "märchen", "fle", "be", "te", "ge"])
 
             df = dtm_obj.data_matrix_df
-            df_E = df[df[genre_cat] == "R"]
-            df_N = df[df[genre_cat] == "M"]
+            df_E = df[df[genre_cat] == "E"]
+            df_N = df[df[genre_cat] == "N"]
 
             train_set, test_set = principled_sampling(df_N, df_E)
 
@@ -62,7 +62,7 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
             X_train, Y_train_orig = split_features_labels(train_set)
             X_test, Y_test_orig = split_features_labels(test_set)
 
-            subs_dict = {"R": 1, "M": 0}
+            subs_dict = {"N": 1, "E": 0}
             Y_train = list(map(subs_dict.get, Y_train_orig, Y_train_orig))
             Y_test = list(map(subs_dict.get, Y_test_orig, Y_test_orig))
 
@@ -125,7 +125,7 @@ for entry in all_coef_features:
 df = pd.DataFrame.from_dict(dictionary, orient="index", columns=["mean", "st_dev"])
 df = df.sort_values(by="mean")
 print(df)
-df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_features_coefs_n10.csv"))
+df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_features_coefs_n100.csv"))
 
 dictionary = defaultdict(list)
 for entry in probabs_list:
@@ -146,7 +146,7 @@ predict_probs_inv = [1 - value for value in means]
 predict_probs = means
 labels = df[genre_cat].values.tolist()
 
-subs_dict = {"R": "red", "M": "green"}
+subs_dict = {"N": "red", "E": "green"}
 genre_c_labels = list(map(subs_dict.get, labels, labels))
 
 subs_dict = {"red": 1, "green": 0}
@@ -177,7 +177,7 @@ plt.title("Accuracy score at optimal boundary of undecidability")
 plt.show()
 
 
-outfile_output = os.path.join(local_temp_directory(system), "output_av_pred_probabs_N-E_n1000.txt")
+outfile_output = os.path.join(local_temp_directory(system), "output_av_pred_probabs_N-E_n100.txt")
 with open(outfile_output, "w") as file:
     file.write(str1 +"\n")
     file.write(str2)
@@ -186,7 +186,7 @@ with open(outfile_output, "w") as file:
 #romeo_prototyp = 1 - df.loc["00306-00", "mean"]
 #annotation = ["Romeo und Julia auf dem Dorfe", romeo_prototyp]
 
-df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_pred_probabs_N-E_n1000.csv"))
+df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_pred_probabs_N-E_n100.csv"))
 
 #plot_prototype_concepts(predict_probs_inv, genre_c_labels, threshold=optimum_x, annotation=annotation)
 

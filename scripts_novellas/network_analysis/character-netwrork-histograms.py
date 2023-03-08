@@ -1,7 +1,7 @@
 import pandas as pd
 from preprocessing.presetting import global_corpus_representation_directory, local_temp_directory
 from preprocessing.presetting import load_stoplist
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 import os
 import matplotlib.pyplot as plt
 

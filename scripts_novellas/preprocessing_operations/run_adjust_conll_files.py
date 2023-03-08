@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 from preprocessing.presetting import local_temp_directory,conll_base_directory, load_stoplist, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_representation_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 
 
 metadata_filepath = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
@@ -19,7 +19,7 @@ print(meta_df)
 #heftroman_stoplist = load_stoplist(os.path.join(vocab_lists_dicts_directory(system), "heftroman_stopwords_header.txt"))
 
 corpus_path = conll_base_directory(system)
-outfile_directory = os.path.join(local_temp_directory(system), "conll_novellas")
+outfile_directory = os.path.join(local_temp_directory(system), "conll_novellas_episodes")
 
 if not os.path.exists(outfile_directory):
     os.makedirs(outfile_directory)

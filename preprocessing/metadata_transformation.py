@@ -50,10 +50,10 @@ def full_genre_labels(input_df, replace_dict= {"Gattungslabel_ED_normalisiert": 
 def standardize_meta_data_medium(df, medium_column_name):
     df[medium_column_name] = df[medium_column_name].astype("category")
     df['medium'] = df[medium_column_name].apply(lambda x: 'urania' if 'Urania' in x else(
-                                                            'westermanns monatshefte' if 'Westermanns' in x else(
+                                                            'westmon' if 'Westermanns' in x else(
                                                             'gartenlaube' if 'Gartenlaube' in x else(
                                                              'daheim' if 'Daheim' in x else(
-                                                             'Urania' if 'urania' in x else(
+                                                             'urania' if 'urania' in x else(
                                                              'dtrundsch' if 'Deutsche Rundschau' in x else(
                                                              'werke' if 'Werke' in x else(
                                                               'aglaja' if 'aglaja' in x else(
@@ -77,14 +77,15 @@ def standardize_meta_data_medium(df, medium_column_name):
                                                               'kalender' if 'Kalender' in x else(
                                                               'zyklus' if 'Zyklus' in x else 'other')))))))))))))))))))))))))))
 
-    df['medium_type'] = df['medium'].apply(lambda x: 'tb' if (x == 'aglaja' or x == 'urania' or x == "tbvielliebchen" or x == 'tb' or x == 'iris' or x == 'kalender') else(
-                        'anthologie' if (x == 'anthologie' or x == "almanachnovellenkranz" or x == 'grimm_khm' or x == 'werke') else(
-                            'novsamml' if (x == 'dtnovsch' or x == 'pantheon') else(
-                                 'famblatt' if (x == 'gartenlaube' or x == 'daheim') else(
-                                    'rundschau' if (x == 'dtrundsch' or x == 'westmon' or x == 'neuerundschau') else(
-                                       'journal' if (x == 'journal' or x == 'cotta' or x == 'neuepressewien') else(
-                                               'anthologie' if x == 'zyklus' else(
-                                                   'buch' if (x == 'roman' or x == 'buch') else 'No_journal'))))))))
+    df['medium_type'] = df['medium'].apply(lambda x: 'Taschenbuch' if (x == 'aglaja' or x == "tb_fuer_damen" or
+                                                                       x == 'urania' or x == "tbvielliebchen" or x == 'tb' or x == 'iris' or x == 'kalender') else(
+                        'Anthologie' if (x == 'anthologie' or x == "almanachnovellenkranz" or x == 'grimm_khm' or x == 'werke' or x == "zyklus" or x == "jahrbuch") else(
+                            'Novellenschatz' if (x == 'dtnovsch') else(
+                                "Pantheon" if  x == 'pantheon' else(
+                                 'Familienblatt' if (x == 'gartenlaube' or x == 'daheim') else(
+                                    'Rundschau' if (x == 'dtrundsch' or x == 'westmon' or x == 'neuerundschau') else(
+                                       'Journal' if (x == 'journal' or x == 'cotta' or x == 'neuepressewien') else(
+                                            'Buch' if (x == 'roman' or x == 'buch') else x))))))))
 
     return df
 

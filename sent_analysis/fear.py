@@ -1,5 +1,5 @@
 from preprocessing.text import Text
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 
 import pandas as pd
 import os

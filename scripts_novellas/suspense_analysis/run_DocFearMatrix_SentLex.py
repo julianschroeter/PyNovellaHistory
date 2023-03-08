@@ -22,7 +22,7 @@ for k, v in fear_dict.items():
 
 print(fear_dict)
 
-corpus_path = os.path.join(local_temp_directory(system), "SemantLemma_novellas_chunks")
+corpus_path = os.path.join(local_temp_directory(system), "SemantLemma_novellas_episodes_chunks")
 
 matrix_obj = DocSentFearMatrix(sent_dict=fear_dict,
                              corpus_path= corpus_path,
@@ -44,5 +44,5 @@ matrix_obj = DocSentFearMatrix(sent_dict=fear_dict,
                              language_model=my_model_de)
 print(matrix_obj.data_matrix_df)
 
-outfile_path = os.path.join(local_temp_directory(system), "DocSentFearMatrix_novellas.csv")
+outfile_path = os.path.join(local_temp_directory(system), "DocSentFearMatrix_novellas_episodes.csv")
 matrix_obj.save_csv(outfile_path)

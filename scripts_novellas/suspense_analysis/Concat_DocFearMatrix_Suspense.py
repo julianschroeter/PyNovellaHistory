@@ -5,7 +5,7 @@ if system == "wcph113":
 
 import pandas as pd
 from preprocessing.presetting import global_corpus_representation_directory, local_temp_directory
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 
 import os
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
@@ -55,8 +55,8 @@ danger_df["UnbekannteEindr"] = df["UnbekannteEindr"]
 danger_df["Liebe"] = df["Liebe"]
 danger_df["doc_chunk_id"] = danger_df.index
 #danger_df["doc_chunk_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[:-4])
-danger_df["doc_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[:-3])
-danger_df["chunk_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[-3:])
+danger_df["doc_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[:-5])
+danger_df["chunk_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[-4:])
 
 print(danger_df)
 

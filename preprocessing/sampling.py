@@ -1,5 +1,8 @@
 from copy import copy
+import random
 import pandas as pd
+
+
 
 # meta date category names are hard coded here and should be changed for individual purposes
 name_cat = "Nachname"
@@ -77,3 +80,38 @@ def principled_sampling(input_df_1, input_df_2, select_one_per_period=True, sele
     test_sample = equal_sample(test_df_1, test_df_2)
 
     return train_sample, test_sample
+
+def select_consecutive_rows(df, n):
+    """
+    returns a new data frame with n consecutive and randomly chosen rows from df
+    """
+    if df.shape[0] > n:
+        k = random.randint(0, df.shape[0]-n)
+        return df[k:k+n]
+    else:
+        return df
+
+
+def consecutive_rows_to_one(df,n):
+    new_df = select_consecutive_rows(df,n)
+    new_df = new_df.groupby(["doc_id"])["sent_string"].apply(" ".join).reset_index()
+    return new_df
+
+def select_from_corpus_df(df,n, list_of_ids=None, id_cat="doc_id", join_sent=True):
+    """
+    returns a new data frame with n consecutive and randomly chosen rows for all rows that match the id from list_of_ids
+    """
+    list_of_dfs = []
+    if not list_of_ids:
+        list_of_ids = pd.unique(df.doc_id).tolist()
+
+    for id in list_of_ids:
+        text_df = df[df[id_cat] == id]
+        if join_sent == True:
+            selected_df = consecutive_rows_to_one(text_df, n)
+        else:
+            selected_df = select_consecutive_rows(df,n)
+        list_of_dfs.append(selected_df)
+    new_df = pd.concat(list_of_dfs)
+    return new_df
+

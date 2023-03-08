@@ -1,23 +1,23 @@
 system = "wcph113" # "my_mac"
 if system == "wcph113":
     import sys
-    sys.path.append('/mnt/data/users/schroeter/git/Heftromane')
+    sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
 
 import os
 import pandas as pd
 import numpy as np
 
 from preprocessing.presetting import local_temp_directory, load_stoplist, vocab_lists_dicts_directory, global_corpus_representation_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 
 
 metadata_filepath = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
 
-corpus_path = os.path.join(local_temp_directory(system), "conll_chunks_novellas")
+corpus_path = os.path.join(local_temp_directory(system), "conll_chunks_novellas_episodes")
 
-outfile_dir_names = os.path.join(local_temp_directory(system), "Namen_novellas_chunks")
-outfile_dir_semant = os.path.join(local_temp_directory(system), "SemantLemma_novellas_chunks")
+outfile_dir_names = os.path.join(local_temp_directory(system), "Namen_novellas_episodes_chunks")
+outfile_dir_semant = os.path.join(local_temp_directory(system), "SemantLemma_novellas_episodes_chunks")
 
 if not os.path.exists(outfile_dir_names):
     os.makedirs(outfile_dir_names)

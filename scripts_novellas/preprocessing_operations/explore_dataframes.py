@@ -5,7 +5,7 @@ from preprocessing.metadata_transformation import full_genre_labels
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from clustering.my_plots import scatter
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 from collections import Counter
 
 system = "wcph113"

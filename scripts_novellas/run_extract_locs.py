@@ -5,7 +5,7 @@ if system == "wcph113":
 
 
 from preprocessing.presetting import global_corpus_directory, global_corpus_representation_directory, language_model_path, vocab_lists_dicts_directory
-from preprocessing.corpus_alt import DocNetworkfeature_Matrix, DocNEs_Matrix
+from preprocessing.corpus import DocNetworkfeature_Matrix, DocNEs_Matrix
 
 import os
 

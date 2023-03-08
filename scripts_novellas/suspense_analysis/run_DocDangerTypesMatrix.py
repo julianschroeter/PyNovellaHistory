@@ -6,7 +6,7 @@ if system == "wcph113":
 import os
 
 from preprocessing.presetting import vocab_lists_dicts_directory, load_stoplist, language_model_path, global_corpus_representation_directory, local_temp_directory
-from semantic_analysis.themes_alt import DocThemesMatrix
+from semantic_analysis.themes import DocThemesMatrix
 
 my_model_de = language_model_path(system)
 print(my_model_de)
@@ -25,7 +25,7 @@ for filepath in os.listdir(vocab_lists_dicts_directory(system)):
 print(list_of_wordlists)
 
 normalization_table_path = os.path.join(vocab_lists_dicts_directory(system), "normalization_table.txt")
-corpus_folder = "SemantLemma_novellas_chunks" #"ergaenzt_chunks5parts_semant_lemma" #
+corpus_folder = "SemantLemma_novellas_episodes_chunks" #"ergaenzt_chunks5parts_semant_lemma" #
 corpus_path = os.path.join(local_temp_directory(system), corpus_folder)
 matrix_obj = DocThemesMatrix(list_of_wordlists=list_of_wordlists,
                              corpus_path= corpus_path,
@@ -47,5 +47,5 @@ matrix_obj = DocThemesMatrix(list_of_wordlists=list_of_wordlists,
                              language_model=my_model_de)
 print(matrix_obj.data_matrix_df)
 
-outfile_path = os.path.join(local_temp_directory(system), "DocDangerTypesMatrix_novellas.csv")
+outfile_path = os.path.join(local_temp_directory(system), "DocDangerTypesMatrix_novellas_episodes.csv")
 matrix_obj.save_csv(outfile_path)

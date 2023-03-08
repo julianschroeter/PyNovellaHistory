@@ -7,7 +7,7 @@ import os
 import numpy as np
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict, global_corpus_raw_dtm_directory, local_temp_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 from classification.perspectivalmodeling import split_features_labels
 from clustering.my_plots import plot_prototype_concepts
 from sklearn import model_selection

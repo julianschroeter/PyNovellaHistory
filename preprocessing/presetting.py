@@ -121,7 +121,7 @@ def load_stoplist(filepath):
     :param filepath: the input file should be plain text file. Terms should be separated by \n
     :return: a list of lower cased comma separated terms that can be used as elimination or reduction list
     """
-    with open(filepath, "r", encoding="latin-1") as infile:
+    with open(filepath, "r", encoding="utf-8") as infile:
         text = infile.read()
     stopword_list = list(map(str, list(text.split("\n"))))
     stopword_list = [x for x in stopword_list if x]
@@ -149,7 +149,7 @@ def save_stoplist(stopword_list, outfilepath):
     :return: stopword file as txt file in outfilepath with items separated by \n,
     """
     text = '\n'.join(map(str, stopword_list))
-    with open(outfilepath, "w", encoding="utf8") as outfile:
+    with open(outfilepath, "w", encoding="utf-8") as outfile:
         outfile.write(text)
 
 

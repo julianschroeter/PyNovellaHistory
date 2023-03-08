@@ -3,6 +3,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import os
+
+from preprocessing.presetting import local_temp_directory
+
+system = "wcph113"
 
 class PC_df():
     """
@@ -31,13 +36,15 @@ class PC_df():
         pc_target_df.columns = ["PC_1", "PC_2", "target"]
         pc_target_df.dropna(subset=["target"], axis=0, inplace=True)
         self.pc_target_df = pc_target_df
-        self.component_loading_df = pd.DataFrame(self.pca.components_, columns=self.input_df.iloc[:, :-1].columns)
+        loadings = self.pca.components_.T * np.sqrt(self.pca.explained_variance_)
+        self.component_loading_df = pd.DataFrame(loadings, index=self.input_df.iloc[:, :-1].columns)
 
 
-    def scatter(self, colors_list):
+    def scatter(self, colors_list, lang="en", filename=os.path.join(local_temp_directory(system),"figures","pca.png" )):
         list_targetlabels = ", ".join(map(str, set(self.pc_target_df["target"].values))).split(", ")
 
         zipped_dict = dict(zip(list_targetlabels, colors_list[:len(list_targetlabels)]))
+        print(zipped_dict)
         list_target = list(self.pc_target_df["target"].values)
         print(list_target)
 
@@ -48,10 +55,15 @@ class PC_df():
         colors_str = colors_str.translate(zipped_dict)
         list_targetcolors = [zipped_dict[label] for label in list_target]
         plt.figure(figsize=(6, 6))
-        plt.title("Principal Component Analyses (PCA)")
         plt.scatter(self.pc_target_df.iloc[:,0], self.pc_target_df.iloc[:,1], c=list_targetcolors, cmap='rainbow', alpha=0.8)
-        plt.xlabel(str('First Component, var expl.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
-        plt.ylabel(str('Second Component, var. expl: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+        if lang == "en":
+            plt.xlabel(str('First Component, var expl.: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
+            plt.ylabel(str('Second Component, var. expl: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+            plt.title("Principal Component Analyses (PCA)")
+        elif lang == "de":
+            plt.xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
+            plt.ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+            plt.title("Hauptkomponentenanalyse (PCA)")
         #plt.xscale(value="log")
         #plt.yscale(value="log")
         #plt.xlim(-50000,500000)
@@ -60,6 +72,7 @@ class PC_df():
             patch = mpatches.Patch(color=value, label=key)
             mpatches_list.append(patch)
         plt.legend(handles=mpatches_list)
+        plt.savefig(filename)
         plt.show()
 
 

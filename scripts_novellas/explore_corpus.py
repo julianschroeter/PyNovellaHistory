@@ -7,7 +7,7 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist, global_corpus_raw_dtm_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 

@@ -7,7 +7,7 @@ genre_cat = "Gattungslabel_ED_normalisiert"
 import os
 import pandas as pd
 from preprocessing.presetting import local_temp_directory, global_corpus_representation_directory
-from preprocessing.corpus_alt import DocFeatureMatrix
+from preprocessing.corpus import DocFeatureMatrix
 from clustering.my_plots import plot_prototype_concepts
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches

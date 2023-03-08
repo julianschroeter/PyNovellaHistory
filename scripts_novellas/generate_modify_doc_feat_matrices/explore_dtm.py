@@ -1,6 +1,6 @@
 import os
 from preprocessing.presetting import global_corpus_raw_dtm_directory, global_corpus_representation_directory
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 system = "wcph113"
 
 infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "RFE_reduced_dtmLR.csv")

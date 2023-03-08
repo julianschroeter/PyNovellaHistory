@@ -6,7 +6,7 @@ if system == "wcph113":
 import os
 
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_directory, language_model_path, vocab_lists_dicts_directory, word_translate_table_to_dict
-from preprocessing.corpus_alt import DTM
+from preprocessing.corpus import DTM
 
 
 outfile_dtm_path = os.path.join(global_corpus_representation_directory(system), "raw_dtm")
