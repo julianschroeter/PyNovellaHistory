@@ -1,4 +1,4 @@
-system = "wcph113" #
+system = "my_xps"  # "wcph113" #
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -144,3 +144,7 @@ grouped_df.unstack().plot(kind="line", stacked=False,
                           ylabel=str("Länge in Wort-Token"))
 plt.tight_layout()
 plt.show()
+
+print(N_df.sort_values().iloc[-10:])
+
+print(E_df.sort_values().iloc[-10:])

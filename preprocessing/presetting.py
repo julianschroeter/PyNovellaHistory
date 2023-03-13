@@ -13,18 +13,18 @@ import spacy
 def set_DistReading_directory(system_name):
     """
        :param system_name: "my_mac", "my_xps", or "wcph104". Here, the respective Computer system with its respective directory structure has to be selected"
-       :return: the path for the the DistReading directory in Spaces (common cloud for all systems)
+       :return: the path for the the DistReading directory in Documents (common cloud for all systems)
     """
     if system_name == "my_mac":
-        return "/Users/karolineschroter/Spaces/DistReading"
+        return "/Users/karolineschroter/Documents/DistReading"
     elif system_name == "my_xps":
-        return "/home/julian/Spaces/DistReading"
+        return "/home/julian/Documents/DistReading"
     elif system_name == "wcph104":
-        return os.path.join( "C:" + os.sep, "Users", "jus71hy", "Documents", "Spaces", "DistReading")
+        return os.path.join( "C:" + os.sep, "Users", "jus71hy", "Documents", "Documents", "DistReading")
         pass
     else:
         print("Warning: The file system has not been specified correctly! Filepath is set to my_xps per default")
-        return "/home/julian/Spaces/DistReading"
+        return "/home/julian/Documents/DistReading"
 
 
 def set_system_data_directory(system_name):
