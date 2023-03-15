@@ -26,14 +26,14 @@ matrix_obj = matrix_obj.reduce_to_categories("Gattungslabel_ED_normalisiert", ca
 
 df = matrix_obj.data_matrix_df
 
-replace_dict = {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "MLP",
-                                    "R": "novel", "M": "fairy tale", "XE": "MLP"}}
+replace_dict = {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "MLP0",
+                                    "R": "Roman", "M": "Märchen", "XE": "MLP0"}}
 df = full_genre_labels(df, replace_dict=replace_dict)
 
 replace_dict = {"Medientyp_ED": {"Zeitschrift": "Journal", "Zeitung": "Journal",
                                  "Kalender": "Kalender", "Rundschau" : "Rundschau",
                                  "Zyklus" : "Anthologie", "Roman" : "Buch",
-                                 "(unbekannt)" : "(unbekannt)",
+                                 "(unbekannt)" : "Buch",
                                     "Illustrierte": "Journal", "Sammlung": "Anthologie",
                                  "Nachlass": "Buch", "Jahrbuch":"Jahrbuch",
                                  "Monographie": "Buch", "Werke": "Buch"}}
@@ -46,9 +46,12 @@ df = df[df["Jahr_ED"] >= 1790] # remove all rows where medium is "unbekannt"
 # ANOVA with scipy.stats: calculte F-statistic and p-value
 N_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'Novelle']
 E_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'Erzählung']
-otherE_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'MLP']
-R_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'novel']
-M_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'fairy tale']
+otherE_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'MLP0']
+all_MLP_df = df[df.isin({"Gattungslabel_ED_normalisiert": ["Novelle", "Erzählung", "MLP0"]}).any(1)]
+all_MLP_df = all_MLP_df.loc[:,"token_count"]
+print(all_MLP_df)
+R_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'Roman']
+M_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'Märchen']
 F, p = stats.f_oneway(N_df, E_df)
 print("F, p statistics of ANOVA test for Novellen versus Erzählungen:", F, p)
 F, p = stats.f_oneway(N_df, otherE_df)
@@ -67,12 +70,12 @@ print("F, p statistics of ANOVA test for Familienblatt versus Rundschau:", F, p)
 
 fig, axes = plt.subplots(1,2, figsize=(12,5))
 axes[0].boxplot([N_df.values.tolist(), E_df.values.tolist(), otherE_df.values.tolist(),
-                 R_df.values.tolist(), M_df.values.tolist()], labels=["Novelle", "Erzählung", "MLP", "novel", "fairy tale"])
+                 R_df.values.tolist(), M_df.values.tolist()], labels=["›Novelle‹", "›Erzählung‹", "sonst_MLP", "Roman", "Märchen"])
 axes[0].set_title("Gattungen")
 axes[0].set_ylabel("Textlänge in Wort-Token")
 left, right = axes[0].set_xlim()
 axes[0].hlines(y=50000,xmin=left, xmax=right, color="red")
-
+axes[0].set_ylim([0, 150000])
 
 axes[1].boxplot([TB_df.values.tolist(), Ant_df.values.tolist(), FB_df.values.tolist(), RS_df.values.tolist(), Buch_df.values.tolist()],
                 labels=["Taschenbuch", "Anthologie", "Familienblatt", "Rundschau", "Buch"])
@@ -80,10 +83,26 @@ axes[1].set_title("Medientypen")
 axes[1].set_yticks([])
 left, right = axes[1].set_xlim()
 axes[1].hlines(y=50000,xmin=left, xmax=right, label= "200 Normseiten", color="red")
+axes[1].set_ylim([0, 150000])
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.suptitle("Gattungs- und Medienabhängigkeit der Textlänge")
+
 plt.tight_layout()
 plt.show()
+
+fig, ax = plt.subplots()
+ax.boxplot([all_MLP_df.values.tolist(), R_df.values.tolist(), ], labels=["alle_MLP", "Roman"])
+ax.set_ylabel("Textlänge in Wort-Token")
+left, right = ax.set_xlim()
+ax.hlines(y=50000,xmin=left, xmax=right, color="red")
+ax.set_ylim([0, 150000])
+
+plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
+plt.title("Textsortenabhängigkeit der Textlänge")
+
+plt.tight_layout()
+plt.show()
+
 
 genre_grouped = df.groupby("Gattungslabel_ED_normalisiert")
 
