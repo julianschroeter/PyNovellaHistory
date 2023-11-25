@@ -1,8 +1,8 @@
 The PyNovellaHistory repository contains all python code for the text analysis within the novella history project (Habilitationsprojekt). 
 
-A (German) project description can be found here: https://www.germanistik.uni-wuerzburg.de/lehrstuehle/computerphilologie/mitarbeiter/schroeter/forschung-publikationen/habilitationsprojekt/
+A (German) project description can be found here: https://www.germanistik.uni-muenchen.de/personal/ndl/professoren/schroeter/projekte/index.html, Parts of the project were conducted within a Walter-Benjamin Fellowship, funded by the German Research Foundation (DFG): https://gepris.dfg.de/gepris/projekt/449668519?language=en
 
-Parts of the project are conducted within a Walter-Benjamin Fellowship, funded by the German Research Foundation (DFG): https://gepris.dfg.de/gepris/projekt/449668519?language=en
+For replicating the analysis of the paper J. Schröter: "Machine Learning as a Measure of the Conceptual Looseness of Disordered Genres: Studies on German Novellen." In: Christof Schöch, Robert Hesselbach (eds.): Digital Stylistics in Romance Studies and Beyond, Heidelberg University Publishing 2023, use the scripts in the "pca_distance_plots" and "perspectival_classificaton_genres" folders. Note that the analyses of that paper were conducted in 2020. Since then, the corpus has considerably been extended so that the original results of the paper cannot be replicated exactly.
 
 The python (version 3) code is organized as modules. The basic structure of the modules starts with objects as text representations (Text class in Preprocessing.Text). Based on text representations, corpus representations objects are generated as document features matrices (or child classes such as document term matrices). The parent class is FeatureDocMatrix in the Preprocessing.Corpus module.
 
