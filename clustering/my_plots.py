@@ -47,7 +47,8 @@ def rd_vectors_around_center(probabs):
     y_results = np.multiply(np.sin(rd_angles),probabs)
     return x_results, y_results
 
-def plot_prototype_concepts(probabs, labels, threshold, annotation=None):
+def plot_prototype_concepts(probabs, labels, threshold, annotation=None,
+                            lang="en", legend_dict=None, filepath=None):
 
     x_results, y_results = rd_vectors_around_center(probabs)
     lower_threshold_level = 0.5 - (threshold / 2)
@@ -65,11 +66,27 @@ def plot_prototype_concepts(probabs, labels, threshold, annotation=None):
         x_results = np.multiply(np.cos(rd_angle), annotation[1])
         y_results = np.multiply(np.sin(rd_angle), annotation[1])
         plt.annotate(annotation[0], (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+    if lang == "de":
+        plt.title("Prototypenkonzept für Genre-Paare")
+        plt.xlabel(str("Grenzbereich der Unentscheidbarkeit: " + str(lower_threshold_level) + " – " + str(upper_threshold_level)))
+        plt.ylabel("Nähe zum Prototypenzentrum (inv. Vorhersagewahrsch.)")
 
-    plt.title("Prototype Concept for Genre Pairs")
-    plt.xlabel(str("Boundary of undecidabilty: "+str(lower_threshold_level)+ " – "+ str(upper_threshold_level)))
-    plt.ylabel("closeness to center (inv. pred. prob.)")
+    if lang == "en":
+        plt.title("Prototype Concept for Genre Pairs")
+        plt.xlabel(str("Boundary of undecidabilty: "+str(lower_threshold_level)+ " – "+ str(upper_threshold_level)))
+        plt.ylabel("closeness to center (inv. pred. prob.)")
+
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
+
+    if legend_dict:
+        mpatches_list = []
+        for key, value in legend_dict.items():
+            patch = mpatches.Patch(color=value, label=key)
+            mpatches_list.append(patch)
+        plt.legend(handles=mpatches_list)
+
+    if filepath:
+        plt.savefig(filepath)
 
     plt.show()

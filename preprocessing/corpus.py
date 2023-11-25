@@ -10,6 +10,10 @@ from preprocessing.sna import NEnetwork
 import networkx as nx
 from copy import deepcopy
 from collections import Counter
+import matplotlib.pyplot as plt
+from preprocessing.sna import get_centralization
+
+from preprocessing.presetting import local_temp_directory
 
 
 """
@@ -104,7 +108,7 @@ class DocFeatureMatrix():
     def reduce_to_categories(self, metadata_category, label_list):
         values_dict = {metadata_category: label_list}
         object = deepcopy(self)
-        object.data_matrix_df = object.data_matrix_df[object.data_matrix_df.isin(values_dict).any(1)]
+        object.data_matrix_df = object.data_matrix_df[object.data_matrix_df.isin(values_dict).any(axis=1)]
         return object
 
     def save_csv(self, outfile_path):
@@ -282,6 +286,7 @@ class ChunkCorpus():
                                keep_pos_items=self.keep_pos_items, list_keep_pos_tags=self.list_keep_pos_tags,
                                remove_stopwords=self.remove_stopwords, stopword_list=self.stopword_list,
                                language_model=self.language_model)
+            print("language model in ChunkCorpus class is: ", self.language_model)
             text_object()
             text_object.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
             text_object.f_save_chunks(self.outfile_directory)
@@ -475,6 +480,7 @@ def check_save_pos_ner_parsing_corpus(corpus_path, outfile_path, list_of_file_id
 
 
 class DocNetworkfeature_Matrix(DocFeatureMatrix):
+
     def __init__(self, corpus_path=None, data_matrix_df=None, data_matrix_filepath=None, metadata_csv_filepath=None,
                  metadata_df=None, encoding="utf-8", normalization="tfidf", correct_ocr=True, eliminate_pagecounts=True,
                  handle_special_characters=True,
@@ -483,7 +489,8 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
                  remove_hyphen=True, sz_to_ss=False, translate_umlaute=False,
                  remove_stopwords=False, stoplist_filepath=None, n_mfw=0, segmentation_type="paragraph",
                  fixed_chunk_length=1000, num_chunks=5, language_model=None, mallet=False,
-                 corpus_as_dict=None, corpus_characters_list=None, corpus_locs_list=None, **kwargs):
+                 corpus_as_dict=None, corpus_characters_list=None, corpus_locs_list=None,
+                 generate_network_plots=True, plots_directory=None, **kwargs):
         DocFeatureMatrix.__init__(self, data_matrix_df, data_matrix_filepath, metadata_csv_filepath, metadata_df,
                                   mallet)
         self.corpus_path = corpus_path
@@ -521,38 +528,64 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
         This method is to be called by generate_from_textcorpus method as the basis for vectorization.
         returns dictionary with doc ids as keys and processed text for each document as values.
         """
+
+
         if self.corpus_as_dict is None:
             dic = {}
             corpus_characters_list = []
             for filepath in os.listdir(self.corpus_path):
-                char_netw = NEnetwork(filepath=os.path.join(self.corpus_path, filepath), minimal_reference=2, text=None, id=None, chunks=None,
+                basename = os.path.splitext(os.path.basename(filepath))[0]
+                char_netw = NEnetwork(filepath=os.path.join(self.corpus_path, filepath), minimal_reference=5, text=None, id=None, chunks=None,
                                       pos_triples=None, remove_hyphen=True,
                                       correct_ocr=self.correct_ocr, eliminate_pagecounts=self.eliminate_pagecounts, handle_special_characters=self.handle_special_characters,
                                       inverse_translate_umlaute=self.inverse_translate_umlaute,
                                       eliminate_pos_items=self.eliminate_pos_items, list_keep_pos_tags=self.list_of_pos_tags,
                                       list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=False,
-                                      sz_to_ss=False, translate_umlaute=False, max_length=5000000,
+                                      sz_to_ss=False, translate_umlaute=False, max_length=1000000,
                                       remove_stopwords="before_chunking", stopword_list=None,
                                       language_model=self.language_model, token_length=0, normalize_orthogr=self.normalize_orthogr,
                                       normalization_table_path=normalization_table_path, keep_pos_items=self.keep_pos_items,
                                       reduce_to_words_from_list=False, reduction_word_list=None)
                 char_netw()
                 char_netw.f_chunking(segmentation_type=self.segmentation_type, fixed_chunk_length=self.fixed_chunk_length, num_chunks=self.num_chunks)
-                char_netw.generate_characters_graph(reduce_to_one_name=False)
-                print(char_netw.characters_counter)
-                print(char_netw.characters_list)
-                print(nx.degree_centrality(char_netw.graph))
-                print(nx.degree(char_netw.graph, weight="weight"))
+                char_netw.generate_characters_graph(reduce_to_one_name=True)
+
+
+
+                degree_centrality = nx.degree_centrality(char_netw.graph)
+
+                if len(degree_centrality) == 0:
+                    degree_centrality = {"NO_CHARACTER": 0}
+
 
                 dic[char_netw.id] = [". ".join(char_netw.characters_list), len(char_netw.characters_list), nx.density(char_netw.graph), char_netw.proportion_of_characters_with_degree(value_degree_centrality=1),
-                                     nx.degree_centrality(char_netw.graph) , nx.degree(char_netw.graph, weight="weight")]
+                                     nx.degree_centrality(char_netw.graph) , nx.degree(char_netw.graph, weight="weight"),
+                                     get_centralization(degree_centrality, "degree")]
                 corpus_characters_list += char_netw.characters_list
+
+                print(generate_network_plots)
+                print(plots_directory)
+                if generate_network_plots == True:
+                    nx.draw(char_netw.graph, with_labels=True, font_weight='bold')
+                    filename = str(basename + ".png")
+                    print(filename)
+                    plt.title(basename)
+                    plt.savefig(os.path.join(plots_directory, filename))
+                    plt.show()
+                    plt.clf()
+
+
             self.corpus_as_dict = dic
             self.corpus_characters_list = corpus_characters_list
 
+
+
+
     def generate_df(self):
         df = pd.DataFrame(self.corpus_as_dict).T
-        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte", "Anteil Figuren mit degree centrality == 1","deg_centr",  "weighted_deg_centr"]
+        df.columns = ["Figuren", "Figurenanzahl", "Netwerkdichte",
+                      "Anteil Figuren mit degree centrality == 1","deg_centr",  "weighted_deg_centr",
+                      "centralization"]
         self.data_matrix_df = df
 
     def corpus_characters_list_to_file(self, outfilepath):
@@ -560,7 +593,6 @@ class DocNetworkfeature_Matrix(DocFeatureMatrix):
         with open(outfilepath, "w") as infile:
             infile.write(names_string.replace(", ", "\n"))
         pass
-
 
     def corpus_character_counter(self):
         return Counter(self.corpus_characters_list)

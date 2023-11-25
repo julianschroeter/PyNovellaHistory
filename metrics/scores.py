@@ -47,3 +47,34 @@ def c_at_1(true_y, pred_y, threshold_range=0.1):
             nu += 1.0
 
     return (1 / n) * (nc + (nu * nc / n))
+
+
+def calculate_share(text_as_list, ne_list, normalize='l1', standardize=False, case_sensitive=False):
+    """
+    proceeds the calculation operation and stores the result wordlist_shares attribute.
+    returns the abs/relative/normalized number of hits of the tokens of an input list relative to a list of searched types (ne_list)
+    """
+    # text_as_list = text.split(" ")
+
+    print(text_as_list)
+    print(len(text_as_list))
+    hits = 0
+    if case_sensitive == True:
+        for token in text_as_list:
+            if token in ne_list:
+                hits += 1
+    elif case_sensitive == False:
+        wordlist_lower = [token.lower() for token in ne_list]
+        for token in text_as_list:
+            if token.lower() in wordlist_lower:
+                hits += 1
+
+    if normalize ==  "abs" and standardize == False:
+        share = hits
+    elif normalize == "l1" and standardize == False:
+        share = hits / len(text_as_list)
+    elif normalize == "l1" and standardize == True:
+        share = hits / (len(text_as_list) * len(ne_list))
+
+
+    return share

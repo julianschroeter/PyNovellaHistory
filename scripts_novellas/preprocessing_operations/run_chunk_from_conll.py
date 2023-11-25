@@ -1,4 +1,4 @@
-system = "wcph113" # "my_mac"
+system = "my_xps" # "wcph113" # "my_mac"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')

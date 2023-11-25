@@ -83,7 +83,7 @@ def standardize_meta_data_medium(df, medium_column_name):
                             'Novellenschatz' if (x == 'dtnovsch') else(
                                 "Pantheon" if  x == 'pantheon' else(
                                  'Familienblatt' if (x == 'gartenlaube' or x == 'daheim') else(
-                                    'Rundschau' if (x == 'dtrundsch' or x == 'westmon' or x == 'neuerundschau') else(
+                                    'Rundschau' if (x == 'dtrundsch' or x == 'westmon' or x == 'neuerundschau' or x == "neue rundschau") else(
                                        'Journal' if (x == 'journal' or x == 'cotta' or x == 'neuepressewien') else(
                                             'Buch' if (x == 'roman' or x == 'buch') else x))))))))
 

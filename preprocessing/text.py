@@ -20,7 +20,7 @@ class Text():
                  eliminate_pos_items=True, keep_pos_items=False, list_keep_pos_tags=None, list_eliminate_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"], lemmatize=True,
                  sz_to_ss=False, translate_umlaute=False,
                  reduce_to_words_from_list=False, reduction_word_list=None,
-                 max_length=1000000,
+                 max_length=900000,
                  remove_stopwords=False, stopword_list=None, language_model=None):
         self.filepath = filepath
         self.text = text
@@ -48,11 +48,13 @@ class Text():
         self.token_length = token_length
         self.normalize_orthogr = normalize_orthogr
         self.normalization_table_path = normalization_table_path
+        print("Language model is: ", self.language_model)
 
     def f_extract_id(self):
         basename = os.path.basename(self.filepath)
         self.id = re.search("\d{5}-\d{2}_\d{4}", basename).group() if re.search("\d{5}-\d{2}_\d{4}", basename) else \
             ( re.search("\d{5}-\d{2}", basename).group() if re.search("\d{5}-\d{2}", basename) else basename)
+        print(self.id)
 
     def f_read_file(self):
         if self.filepath.endswith(".txt"):

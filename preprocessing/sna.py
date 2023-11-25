@@ -3,7 +3,7 @@ import re
 import spacy
 from collections import Counter
 from itertools import combinations
-
+from math import sqrt
 from preprocessing.text import Text
 
 
@@ -62,8 +62,11 @@ class NEnetwork(Text):
         if not self.chunks:
             print("Instance method self.f_chunking() has to be called first / self.chunks attribute must not be empty!")
             pass
+        chunk_nr = 0
         for chunk in self.chunks:
-            doc = nlp(chunk)
+            chunk_nr += 1
+            print(chunk_nr)
+            doc = nlp(chunk[:self.max_length])
             paragr_characters = [ent.text for ent in doc.ents if ent.label_ == "PER"]
             raw_nested_character_occurence.append(paragr_characters)
             raw_all_character_occurences += paragr_characters
@@ -99,6 +102,23 @@ class NEnetwork(Text):
                         print(name)
                         print(red_name)
                         name = red_name
+                elif re.search("s[,.;]?$", name):
+                    red_name = name[:-2]
+                    print(name)
+                    print(red_name)
+                    if red_name in raw_all_character_occurences:
+                        print(name)
+                        print(red_name)
+                        name = red_name
+
+                elif re.search("s'[,.;]?$", name):
+                    red_name = name[:-3]
+                    print(name)
+                    print(red_name)
+                    if red_name in raw_all_character_occurences:
+                        print(name)
+                        print(red_name)
+                        name = red_name
 
                 corr_s_raw_all_character_occurences.append(name)
 
@@ -113,7 +133,7 @@ class NEnetwork(Text):
                         name = red_name
                 corr_raw_all_character_occurences.append(name)
 
-
+            print(corr_raw_all_character_occurences)
             # ersetze Namen, die aus einem Wort bestehen, durch den vollständigen mehrteiligen Namen
 
             # erster Schritt: zwei neue Listen: der Ein-Wort-Namen und der Mehrwort-Namen:
@@ -137,33 +157,33 @@ class NEnetwork(Text):
                         paragr_characters_corr.append(name)
 
 
-        counter_all_occurences = Counter(corr_raw_all_character_occurences)
+            counter_all_occurences = Counter(corr_raw_all_character_occurences)
 
-        less_frq_name_to_most_frq_name_dict = {}
+            less_frq_name_to_most_frq_name_dict = {}
 
-        if reduce_to_one_name == True:
-            for character in corr_raw_all_character_occurences:
-                name_parts = character.split(" ")
-                if len(name_parts) > 1:
-                    new_counter_dict = {}
-                    for part in name_parts:
-                        new_counter_dict[part] = counter_all_occurences[part]
+            if reduce_to_one_name == True:
+                for character in corr_raw_all_character_occurences:
+                    name_parts = character.split(" ")
+                    if len(name_parts) > 1:
+                        new_counter_dict = {}
+                        for part in name_parts:
+                            new_counter_dict[part] = counter_all_occurences[part]
 
-                    more_frequent_name = max(new_counter_dict, key=new_counter_dict.get)
-                    if more_frequent_name in ["Herr", "Herrn", "Don", "Graf", "Gräfin", "Frau"]:
-                        false_more_freq_name = more_frequent_name
-                        more_frequent_name = character.replace(false_more_freq_name, "")
-                        less_frequent_name = false_more_freq_name
-                    else:
-                        less_frequent_name = character.replace(more_frequent_name, "")
-                        less_frequent_name = less_frequent_name.replace(" ", "")
-                    less_frq_name_to_most_frq_name_dict[less_frequent_name] = more_frequent_name
-            print("less to most frequent name dictionary:", less_frq_name_to_most_frq_name_dict)
+                        more_frequent_name = max(new_counter_dict, key=new_counter_dict.get)
+                        if more_frequent_name in ["Herr", "Herrn", "Don", "Graf", "Gräfin", "Frau"]:
+                            false_more_freq_name = more_frequent_name
+                            more_frequent_name = character.replace(false_more_freq_name, "")
+                            less_frequent_name = false_more_freq_name
+                        else:
+                            less_frequent_name = character.replace(more_frequent_name, "")
+                            less_frequent_name = less_frequent_name.replace(" ", "")
+                        less_frq_name_to_most_frq_name_dict[less_frequent_name] = more_frequent_name
+                print("less to most frequent name dictionary:", less_frq_name_to_most_frq_name_dict)
 
-            # standardize names which consist of more than one word to the most frequent name part
-            for paragraph in raw_nested_character_occurence:
+                # standardize names that consist of more than one word to the most frequent name part
                 standard_all_character_occurences = []
-                for character in paragraph:
+                for character in corr_raw_all_character_occurences:
+
                     name_parts = character.split(" ")
                     if len(name_parts) > 1:
                         for part in name_parts:
@@ -185,16 +205,14 @@ class NEnetwork(Text):
                 if characters_pairs_in_paragraph:
                     character_pairs_global += characters_pairs_in_paragraph
 
-        elif reduce_to_one_name == False:
-            characters_in_paragraph_set = list(set(corr_raw_all_character_occurences))
-            final_characters_list += characters_in_paragraph_set
+            elif reduce_to_one_name == False:
+                characters_in_paragraph_set = list(set(corr_raw_all_character_occurences))
+                final_characters_list += characters_in_paragraph_set
 
-            characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))
-            characters_pairs_in_paragraph = [tuple(sorted(pair)) for pair in characters_pairs_in_paragraph]
-            if characters_pairs_in_paragraph:
-                character_pairs_global += characters_pairs_in_paragraph
-
-        print(character_pairs_global)
+                characters_pairs_in_paragraph = list(combinations(characters_in_paragraph_set, 2))
+                characters_pairs_in_paragraph = [tuple(sorted(pair)) for pair in characters_pairs_in_paragraph]
+                if characters_pairs_in_paragraph:
+                    character_pairs_global += characters_pairs_in_paragraph
 
 
         self.characters_counter = Counter(final_characters_list)
@@ -237,3 +255,77 @@ class NEnetwork(Text):
         pass
 
 
+def get_centralization(centrality, c_type):
+    if len(centrality) < 3: # there was a false condition in the existing function - in fact, the number of nods must not be 0, 1, or 2.
+        network_centrality = 0
+    else:
+        c_denominator = float(1)
+
+        n_val = float(len(centrality))
+
+        print(str(len(centrality)) + "," + c_type + "\n")
+
+        if (c_type == "degree"):
+            c_denominator = (n_val - 1) * (n_val - 2)
+
+        if (c_type == "close"):
+            c_top = (n_val - 1) * (n_val - 2)
+            c_bottom = (2 * n_val) - 3
+            c_denominator = float(c_top / c_bottom)
+
+        if (c_type == "between"):
+            c_denominator = (n_val * n_val * (n_val - 2))
+
+        if (c_type == "eigen"):
+            '''
+            M = nx.to_scipy_sparse_matrix(G, nodelist=G.nodes(),weight='weight',dtype=float)
+            eigenvalue, eigenvector = linalg.eigs(M.T, k=1, which='LR') 
+            largest = eigenvector.flatten().real
+            norm = sp.sign(largest.sum())*sp.linalg.norm(largest)
+            centrality = dict(zip(G,map(float,largest)))
+            '''
+
+            c_denominator = sqrt(2) / 2 * (n_val - 2)
+        #if c_denominator == 0:
+         #   c_denominator = 10000000 # debatable choice here
+
+        # start calculations
+
+        c_node_max = max(centrality.values())
+
+        c_sorted = sorted(centrality.values(), reverse=True)
+
+        print("max node" + str(c_node_max) + "\n")
+
+        c_numerator = 0
+
+        for value in c_sorted:
+
+            if c_type == "degree":
+                # remove normalisation for each value
+                c_numerator += (c_node_max * (n_val - 1) - value * (n_val - 1))
+            else:
+                c_numerator += (c_node_max - value)
+
+        print('numerator:' + str(c_numerator) + "\n")
+        print('denominator:' + str(c_denominator) + "\n")
+
+        network_centrality = float(c_numerator / c_denominator)
+
+        if c_type == "between":
+            network_centrality = network_centrality * 2
+
+    return network_centrality
+
+
+def scale_centrality(degree_centr_dict, weighted_dict):
+    """
+    calcuate the scaled weighted degree centrality for each node, based on two dictionaries:
+    a dictionary with nodes as keys and degree centrality as values
+    and a dictionary with the same nodes as keys and weighted degree centrality as values
+    return a dictionary with nodes as keys scaled weighted degree centrality as values
+    """
+    scaled_centrality_dict = {}
+    for key, value in degree_centr_dict.items():
+        scaled_centrality_dict[key] = weighted_dict[key] / max(weighted_dict.values()) * degree_centr_dict[max(weighted_dict, key=weighted_dict.get)]
+    return scaled_centrality_dict

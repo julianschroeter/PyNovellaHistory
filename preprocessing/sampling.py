@@ -6,8 +6,8 @@ import pandas as pd
 
 # meta date category names are hard coded here and should be changed for individual purposes
 name_cat = "Nachname"
-periods_cat = "Jahr_ED"
-genre_cat = "Gattungslabel_ED_normalisiert"
+periods_cat = "Jahr_ED" # "date" # set do corpus "Jahr_ED"
+genre_cat = "Gattungslabel_ED_normalisiert" #"in_Deutscher_Novellenschatz" # "Kanon_Status" #  "genre" #"Gattungslabel_ED_normalisiert"
 
 def equal_sample(df_group1, df_group2, minor_frac=1.0):
     """generate a sample with two groups of equal size,
@@ -37,9 +37,9 @@ def sample_n_from_cat(df, cat_name="Nachname", n=1):
 def split_to2samples(input_df, metadata_category, label_list):
     df = input_df
     df_1 = df[df[metadata_category] == label_list[0]]
-    df_1 = df_1.drop([metadata_category], axis=1)
+   # df_1 = df_1.drop([metadata_category], axis=1)
     df_2 = df[df[metadata_category] == label_list[1]]
-    df_2 = df_2.drop([metadata_category], axis=1)
+   # df_2 = df_2.drop([metadata_category], axis=1)
     return df_1, df_2
 
 def principled_sampling(input_df_1, input_df_2, select_one_per_period=True, select_one_per_author=True):
@@ -64,7 +64,7 @@ def principled_sampling(input_df_1, input_df_2, select_one_per_period=True, sele
 
 
     train_sample = equal_sample(df_1, df_2)
-    train_sample = train_sample.drop(columns=[periods_cat])
+#    train_sample = train_sample.drop(columns=[periods_cat])
     train_sample = train_sample.sample(frac=0.8)
 
     all_df = pd.concat([input_df_1, input_df_2])

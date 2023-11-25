@@ -29,7 +29,7 @@ def resample_boostrapped_LR(n, df, genre_category="Gattungslabel_ED_normalisiert
         #fit_predictions = model.predict(X_validation)
         #accuracy_scores_list.append(accuracy_score(Y_validation, fit_predictions))
         #f1_scores_list.append(f1_score(Y_validation, fit_predictions, pos_label=genre_labels[0]))
-        scores = cross_val_score(model, X, Y, cv=5)
+        scores = cross_val_score(model, X, Y, cv=3)
         for element in scores:
             accuracy_scores_list.append(element)
     return mean(accuracy_scores_list), std(accuracy_scores_list)

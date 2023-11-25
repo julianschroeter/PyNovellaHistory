@@ -1,37 +1,8 @@
-
-def calculate_share(text_as_list, ne_list, normalize='l1', standardize=False, case_sensitive=False):
-    """
-    proceeds the calculation operation and stores the result wordlist_shares attribute.
-    """
-    # text_as_list = text.split(" ")
-
-
-    hits = 0
-    if case_sensitive == True:
-        for token in text_as_list:
-            if token in ne_list:
-                hits += 1
-    elif case_sensitive == False:
-        wordlist_lower = [token.lower() for token in ne_list]
-        for token in text_as_list:
-            if token.lower() in wordlist_lower:
-                hits += 1
-
-    if normalize ==  "abs" and standardize == False:
-        share = hits
-    elif normalize == "l1" and standardize == False:
-        share = hits / len(text_as_list)
-    elif normalize == "l1" and standardize == True:
-        share = hits / (len(text_as_list) * len(ne_list))
-
-
-    return share
-
-
+from metrics.scores import calculate_share
 import pandas as pd
 import os
 from sklearn.preprocessing import StandardScaler
-from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist, merge_several_stopfiles_to_list
+from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist
 
 system = "my_xps" # "wcph113"
 
@@ -53,10 +24,11 @@ print(rom_list)
 rom_list = list(set(rom_list))
 
 
-df_infilepath = os.path.join(global_corpus_representation_directory(system), "NEs_document_Matrix_test.csv")
+df_infilepath = os.path.join(global_corpus_representation_directory(system), "conll_locations_Matrix.csv")
+#os.path.join(global_corpus_representation_directory(system), "conll_loc_share_Matrix.csv")
 df = pd.read_csv(df_infilepath, index_col=0)
 
-df_outfilepath = os.path.join(global_corpus_representation_directory(system), "toponym_share_Matrix.csv")
+df_outfilepath = os.path.join(global_corpus_representation_directory(system), "conll_toponym_share_Matrix.csv")
 
 print(df)
 

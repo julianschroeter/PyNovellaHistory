@@ -9,8 +9,9 @@ from preprocessing.util import from_n_dict_entries, first_n_dict_entries
 
 name_cat = "Nachname"
 periods_cat = "periods"
+genre_cat = "Medientyp_ED" # nur für Gruppierung nach Medienformaten
+genre_cat = "in_Deutscher_Novellenschatz" # "Kanon_Status" #
 genre_cat = "Gattungslabel_ED_normalisiert"
-
 class GroupDistances():
     """
     calculates the ingroup metrics and stores them in a distance_matrix and a list of metrics as attributes.
@@ -38,7 +39,7 @@ class GroupDistances():
         self.distances = pdist(df, metric=metric)
         v = squareform(self.distances)
         self.dist_matr_df = pd.DataFrame(v, index=df.index, columns=df.index)
-        self.dist_matr_df = self.dist_matr_df.replace({0: pd.NA})
+        #self.dist_matr_df = self.dist_matr_df.replace({0: pd.NA})
         self.dist_matr_df["mean_dist"] = self.dist_matr_df.mean(axis=1)
         self.sample_length = len(df)
 

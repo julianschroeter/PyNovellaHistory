@@ -15,9 +15,9 @@ def sample_perspectival_sets(input_df, period_category="periods_100a", metadata_
     set (for example: metadata_cat_train "texts before 1850" and metadata_cat_val "texts after 1850")
     genre_labels is a list of two genre labels, for example ["N", "E"]
     """
-    fit_df = input_df[input_df.isin({period_category: metadata_cat_fit_list}).any(1)]
+    fit_df = input_df[input_df.isin({period_category: metadata_cat_fit_list}).any(axis=1)]
     fit_df = fit_df.drop([period_category], axis=1)
-    transfer_df = input_df[input_df.isin({period_category: metadata_cat_transfer_list}).any(1)]
+    transfer_df = input_df[input_df.isin({period_category: metadata_cat_transfer_list}).any(axis=1)]
     transfer_df = transfer_df.drop([period_category], axis=1)
     df_genre0_fit_df = fit_df[fit_df[genre_category] == genre_labels[0]]
     df_genre1_fit_df = fit_df[fit_df[genre_category] == genre_labels[1]]
@@ -60,11 +60,14 @@ def LR_perspectival_resample(n, fit_val_size, input_df, period_category, metadat
     fit_f1scores_list = []
     transfer_accuracy_scores_list = []
     transfer_f1scores_list = []
+    fit_df_sizes, transfer_df_sizes = [], []
     for i in range(n):
         fit_df, transfer_df = sample_perspectival_sets(input_df, period_category, metadata_cat_fit_list,
                              metadata_cat_transfer_list, genre_category, genre_labels,
                              equal_sample_size_fit,equal_sample_size_transfer,
                              minor_frac_fit, minor_frac_transfer)
+        fit_df_sizes.append(fit_df.shape[0])
+        transfer_df_sizes.append(transfer_df.shape[0])
 
         X_model_fit, X_model_transfer, Y_model_fit, Y_model_transfer = perspectival_sets_split(fit_df, transfer_df)
         X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X_model_fit, Y_model_fit, test_size=fit_val_size,
@@ -74,9 +77,11 @@ def LR_perspectival_resample(n, fit_val_size, input_df, period_category, metadat
         fit_predictions = lr_model.predict(X_validation)
         transfer_predictions = lr_model.predict(X_model_transfer)
         fit_accuracy_scores_list.append(accuracy_score(Y_validation, fit_predictions))
-        fit_f1scores_list.append(f1_score(Y_validation, fit_predictions, pos_label=genre_labels[0]))
+        fit_f1scores_list.append(f1_score(Y_validation, fit_predictions, pos_label=genre_labels[1]))
         transfer_accuracy_scores_list.append(accuracy_score(Y_model_transfer, transfer_predictions))
-        transfer_f1scores_list.append(f1_score(Y_model_transfer, transfer_predictions, pos_label=genre_labels[0]))
+        transfer_f1scores_list.append(f1_score(Y_model_transfer, transfer_predictions, pos_label=genre_labels[1]))
+    print("fit df sizes: ", fit_df_sizes)
+    print("transfer df sizes: ", transfer_df_sizes)
     return fit_accuracy_scores_list, fit_f1scores_list, transfer_accuracy_scores_list, transfer_f1scores_list
 
 
