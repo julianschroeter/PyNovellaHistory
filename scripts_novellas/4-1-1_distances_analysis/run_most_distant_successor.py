@@ -73,8 +73,8 @@ for pair in combinations(list_of_periods_dfs,2):
     start_a, start_b = a[0], b[0]
     start_a, start_b = int(start_a[:4]), int(start_b[:4])
     if abs(start_b - start_a) >= 40:
-        distances = results_2groups_dist(10, a[1], b[1], select_one_author=False,select_one_per_period=False, metric="cosine")
-        print(f"Wähle aus Periode {a[0]} den Text aus, der zu den Texten aus Period {b[0]} die kleinste Distanz hat:")
+        distances = results_2groups_dist(10, b[1], a[1], select_one_author=False,select_one_per_period=False, metric="cosine")
+        print(f"Wähle aus Periode {b[0]} den Text aus, der zu den Texten aus Period {a[0]} die größte Distanz hat:")
         print("mittlere Cosinus-Gruppendistanz (und std) für die Texte des zweiten Zeitraums, Samplegrößen, Texte mit min. /max. Distanz aus der ersten Gruppe zur zweiten: ", distances)
         print("Text mit geringster Distanz")
         print(metatdata_df.loc[distances["instance_of_df1_with_min_dist_to_df2_group"][0][0],["Nachname", "Titel", "Jahr_ED", "Gattungslabel_ED_normalisiert"]])

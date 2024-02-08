@@ -1,4 +1,4 @@
-system = "wcph113"
+system = "my_xps" # "wcph113"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -50,28 +50,28 @@ dtm_obj.data_matrix_df = dtm_obj.data_matrix_df.drop(["00475-00", "00349-00", "0
 dtm_obj.data_matrix_df = years_to_periods(dtm_obj.data_matrix_df,category_name=year_cat, start_year=1790, end_year=1950, epoch_length=1,
                                           new_periods_column_name="periods")
 
-dtm_obj.data_matrix_df = years_to_periods(dtm_obj.data_matrix_df,category_name=year_cat, start_year=1750, end_year=1950, epoch_length=100,
-                                          new_periods_column_name="periods100a")
+#dtm_obj.data_matrix_df = years_to_periods(dtm_obj.data_matrix_df,category_name=year_cat, start_year=1750, end_year=1950, epoch_length=100,
+ #                                         new_periods_column_name="periods100a")
 
 dtm_obj = dtm_obj.eliminate([year_cat])
 
 list_of_author_dfs = []
 
-names_list = ["Goethe", "Tieck", "Storm", "Keller", "Schopenhauer", "Meyer", "Wieland", "Schnitzler", "Pichler"]
+names_list = ["Eichendorff", "Büchner", "Goethe", "Tieck", "Kleist", "Storm", "Keller", "Chamisso",
+              "Häring", "Raabe", "John", "Fontane", "Musil", "Schnitzler", "Zweig", "Mann", "Roth"]
 
 label_list = ["N", "E", "0E", "XE"]
 dtm_obj_red = dtm_obj.reduce_to_categories(metadata_category=genre_cat, label_list=label_list)
 
-print(dtm_obj_red.data_matrix_df)
 
 periods_list = ["1750-1850", "1850-1950"]
 
-before_df, after_df = split_to2samples(dtm_obj_red.data_matrix_df, metadata_category="periods100a", label_list=periods_list)
+#before_df, after_df = split_to2samples(dtm_obj_red.data_matrix_df, metadata_category="periods100a", label_list=periods_list)
 
 n = 1
 
-outfile_df_name = str(n) + "_" + metric + "before_1850_author-distance_results_6000mfw.csv"
-outfile_dict_name = str(n) + "N" + metric + "author-min_max_distances_dict_6000mfw.txt"
+outfile_df_name = str(n) + "_" + metric + "selectet_author-distance_results_6000mfw.csv"
+outfile_dict_name = str(n) + "N" + metric + "selectet_author-min_max_distances_dict_6000mfw.txt"
 outfile_results_df_path = os.path.join(local_temp_directory(system), outfile_df_name)
 
 print("proceed: " + outfile_df_name)
@@ -83,18 +83,17 @@ min_max_results_dict = {}
 bool_select_one_author = False
 bool_select_one_per_period =False
 
-df = before_df
-print(df)
+#df = before_df
+df_all = dtm_obj_red.data_matrix_df
 
-
-dist_results_obj = DistResults(n, input_df_1=df, input_df_2=None, metric=metric, label1="all", label2=None,
+dist_results_obj = DistResults(n, input_df_1=df_all, input_df_2=None, metric=metric, label1="all", label2=None,
                                select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
 
 list_of_author_dfs = []
 
 
 
-new_dtm_obj = DTM(data_matrix_df=df, metadata_csv_filepath=metadata_path)
+new_dtm_obj = DTM(data_matrix_df=df_all, metadata_csv_filepath=metadata_path)
 #new_dtm_obj = new_dtm_obj.add_metadata([name_cat, genre_cat])
 
 label_list = ["Goethe"]
@@ -121,7 +120,7 @@ list_of_author_dfs.append([label_list, df])
 
 
 
-label_list = ["Hoffmann"]
+label_list = ["Storm"]
 new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
 df = new_dtm_obj_genre.data_matrix_df
 list_of_author_dfs.append([label_list, df])
@@ -133,22 +132,38 @@ list_of_author_dfs.append([label_list, df])
 print(list_of_author_dfs)
 
 
-label_list = ["Pichler"]
+label_list = ["Büchner"]
 new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
 df = new_dtm_obj_genre.data_matrix_df
 list_of_author_dfs.append([label_list, df])
 
-label_list = ["Schopenhauer"]
+label_list = ["Keller"]
 new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
 df = new_dtm_obj_genre.data_matrix_df
 list_of_author_dfs.append([label_list, df])
 
-label_list = ["Ahlefeld"]
+label_list = ["Häring"]
+new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
+df = new_dtm_obj_genre.data_matrix_df
+list_of_author_dfs.append([label_list, df])
+
+label_list = ["Raabe"]
+new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
+df = new_dtm_obj_genre.data_matrix_df
+list_of_author_dfs.append([label_list, df])
+
+label_list = ["John"]
+new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
+df = new_dtm_obj_genre.data_matrix_df
+list_of_author_dfs.append([label_list, df])#
+
+label_list = ["Fontane"]
 new_dtm_obj_genre = new_dtm_obj.reduce_to_categories(metadata_category=name_cat, label_list=label_list)
 df = new_dtm_obj_genre.data_matrix_df
 list_of_author_dfs.append([label_list, df])
 
 for label_list, df in list_of_author_dfs:
+    print(df)
     dist_results_obj.add_result(n, input_df_1=df, label1=str(label_list[0]), metric=metric)
 
 from itertools import combinations, permutations

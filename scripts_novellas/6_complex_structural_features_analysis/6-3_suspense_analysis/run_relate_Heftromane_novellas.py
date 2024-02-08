@@ -63,7 +63,7 @@ replace_dict = {"genre": {"N": "Novelle", "E": "Erzählung", "0E": "sonst. MLP",
 replace_dict = {"genre": {"N": "MLP", "E": "MLP", "0E": "MLP", "XE": "MLP",
                                                   "0P": "non-fiction", "0PB":"non-fiction",
                                     "R": "Roman", "M": "Märchen",
-                          "krimi": "Spannungs-Heftroman", "abenteuer": "Spannungs-Heftroman", "krieg": "Spannungs-Heftroman"}}
+                          "krimi": "Heftroman", "abenteuer": "Heftroman", "krieg": "Heftroman"}}
 
 
 whole_df = full_genre_labels(whole_df, replace_dict=replace_dict)
@@ -111,7 +111,7 @@ print(df)
 
 genres_list = ["N", "E", "R", "0E", "XE", "M", "0P", "0PA", "0X_Essay", "0PB"]
 genres_list = ["Novelle", "Erzählung", "sonst. MLP"]
-genres_list = ["MLP", "Märchen", "Spannungs-Heftroman", "Roman", "Pantheon"] #,
+genres_list = ["MLP", "Märchen", "Heftroman", "Roman", "Pantheon"] #,
 
 
 df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]

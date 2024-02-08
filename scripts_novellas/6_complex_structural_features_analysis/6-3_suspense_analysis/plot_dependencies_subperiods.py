@@ -84,7 +84,7 @@ scaled_values = scaler.fit_transform(whole_df[["Gewaltverbrechen", "Kampf", "Ent
 whole_df[["Gewaltverbrechen", "Kampf", "Entführung", "Krieg","Spuk","max_value", "Angstempfinden", "Sturm", "Feuer", "lin_susp_model"]] = scaled_values
 #whole_df = pd.DataFrame(scaled_features, index=df.index, columns=df.columns)
 
-whole_df = years_to_periods(input_df=whole_df, category_name=year_cat_name, start_year=1770,end_year=1940, epoch_length=40,
+whole_df = years_to_periods(input_df=whole_df, category_name=year_cat_name, start_year=1810,end_year=1940, epoch_length=20,
                             new_periods_column_name="periods")
 
 #whole_df = whole_df[whole_df["lin_susp_model"] != 0]
@@ -296,12 +296,12 @@ plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
-subperiod_df = df[df["periods"] == "1850-1890"]
+subperiod_df = df[df["periods"] == "1830-1850"]
 subperiod_df.boxplot(column="max_value", by=genre_cat_name)
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.title("Für Teilperiode 1850-1890")
-plt.ylim(0,0.6)
+#plt.xticks(rotation=90)
+#plt.tight_layout()
+plt.title("Für Teilperiode 1830-1850")
+#plt.ylim(0,0.6)
 plt.show()
 
 subperiod_df = df[df["periods"] == "1890-1930"]

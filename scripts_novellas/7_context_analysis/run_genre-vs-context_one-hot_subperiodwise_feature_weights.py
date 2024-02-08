@@ -20,8 +20,8 @@ df = df[["Gattungslabel_ED_normalisiert", "Nachname", "Gender", "Medientyp_ED", 
 
 
 labels = ["N", "R"]
-labels = ["N", "R"]
 labels = ["N", "E", "0E", "XE", "R"]
+labels = ["N", "E"]
 values_dict = {"Gattungslabel_ED_normalisiert": labels}
 df = df[df.isin(values_dict).any(axis=1)]
 df = df.dropna()
@@ -38,19 +38,20 @@ df = full_genre_labels(df, replace_dict=replace_dict)
 
 subs_dict = {"N": 1, "R": 0}
 subs_dict = {"N": 1, "E": 1, "XE":1, "0E":1, "R":0}
+subs_dict = {"N": 1, "E": 0}
 df = df.replace({"Gattungslabel_ED_normalisiert":subs_dict})
 
 data = years_to_periods(input_df=df, category_name="Jahr_ED", start_year=1770, end_year=1950, epoch_length=5,
                       new_periods_column_name="periods5a")
 
 
-data =  data[["Nachname" , "periods5a" , "Gender","Jahr_ED", "Gattungslabel_ED_normalisiert"]] #   "Kanon_Status", "Medientyp_ED" ,
-data = years_to_periods(input_df=data, category_name="Jahr_ED", start_year=1770, end_year=1910, epoch_length=40,
+data =  data[["Nachname" , "periods5a" , "Gender","Jahr_ED","Medientyp_ED" , "Kanon_Status","Gattungslabel_ED_normalisiert"]] #
+data = years_to_periods(input_df=data, category_name="Jahr_ED", start_year=1790, end_year=1910, epoch_length=30,
                       new_periods_column_name="periods")
 
 
 
-columns_list = ["periods5a", "Nachname"  , "Gender" ] # "Jahr_ED" ,,  ,"Kanon_Status",  "Medientyp_ED" ,
+columns_list = ["Kanon_Status"] # "Jahr_ED" ,"periods5a", "Nachname","Medientyp_ED",  ,,"Gender",  ,
 
 train_size = 0.8
 
@@ -72,7 +73,7 @@ for period in periods:
         df1, df2 = split_to2samples(period_data, "Gattungslabel_ED_normalisiert", label_list= [0,1])
         sample = equal_sample(df1, df2)
         labels = sample["Gattungslabel_ED_normalisiert"]
-        sample = sample.drop(columns=["periods", "Gattungslabel_ED_normalisiert", "Jahr_ED"])
+        sample = sample.drop(columns=["Gender", "periods" ,"Gattungslabel_ED_normalisiert", "Jahr_ED", "periods5a", "Nachname","Medientyp_ED"])
         df_dummies = pd.get_dummies(sample, columns=columns_list)
 
         X = df_dummies.values

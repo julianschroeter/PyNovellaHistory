@@ -21,12 +21,12 @@ df = df[df.isin(values_dict).any(axis=1)]
 df = df.dropna()
 
 
-data =  df[["Gender", "Jahr_ED", "Gattungslabel_ED_normalisiert"]] #,," ,"Kanon_Status","Medientyp_ED" "Nachname"
-data = years_to_periods(input_df=data, category_name="Jahr_ED", start_year=1800, end_year=1950, epoch_length=50,
+data =  df[[ "Jahr_ED", "Gattungslabel_ED_normalisiert","Medientyp_ED", "Nachname"]] # "Gender", ,"Kanon_Status"
+data = years_to_periods(input_df=data, category_name="Jahr_ED", start_year=1790, end_year=1950, epoch_length=30,
                       new_periods_column_name="periods")
 
 
-columns_list = ["Gender" ] #,, , "Medientyp_ED", "Jahr_ED" "Kanon_Status", "Nachname"
+columns_list = ["Medientyp_ED", "Jahr_ED", "Nachname"] #,"Gender", , "Kanon_Status"
 
 train_size = 0.80
 seed = 7
@@ -48,7 +48,7 @@ for period in periods:
     Y = labels.values
     print("sample size: ",len(X), len(Y))
 
-    n = 100
+    n = 10
     lr_acc_scores = []
     for i in range(n):
         X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, train_size=train_size)

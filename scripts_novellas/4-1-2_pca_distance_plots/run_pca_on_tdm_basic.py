@@ -15,11 +15,14 @@ colors_list = random.sample(colors_list, len(colors_list))
 
 
 colors_list = [ "lightgreen","orange", "red", "green"]
-colors_list = ["red", "green", "blue", "orange", "cyan"]
+
+
+
 colors_list = [ "orange","blue", "lightgreen","red", "green"]
+colors_list = ["red", "green", "blue", "orange", "cyan"]
 
 #colors_list = random.sample(colors_list, len(colors_list))
-filename = filename = "RFECV_red-to-381_LRM-R-N-E-0E-XEno-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" # "raw_dtm_non-lemmatized_abs_10000mfw.csv"# "raw_dtm_l2__use_idf_True1000mfw.csv" # "red-to-2500mfw_scaled_no-stopwords_no-names_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" #   "raw_dtm_lemmatized_l1_10000mfw.csv" # "raw_dtm_lemmatized_abs_10000mfw.csv" #  "red-to-2500mfw_raw_dtm_lemmatized_l1__use_idf_True6000mfw.csv" # "raw_dtm_l1_lemmatized_use_idf_False2500mfw.csv" #
+filename = filename = "no-stopwords_no-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" # "RFECV_red-to-381_LRM-R-N-E-0E-XEno-names_RFECV_red-to-515_LRM-R-N-E-0E-XEscaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" # "raw_dtm_non-lemmatized_abs_10000mfw.csv"# "raw_dtm_l2__use_idf_True1000mfw.csv" # "red-to-2500mfw_scaled_no-stopwords_no-names_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv" #   "raw_dtm_lemmatized_l1_10000mfw.csv" # "raw_dtm_lemmatized_abs_10000mfw.csv" #   "raw_dtm_l1_lemmatized_use_idf_False2500mfw.csv" #
 dtm_infile_path = os.path.join(global_corpus_raw_dtm_directory(system), filename)
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
@@ -29,10 +32,13 @@ dtm_object = dtm_object.add_metadata(["Gattungslabel_ED_normalisiert", "Nachname
 #dtm_object = dtm_object.reduce_to_categories("Medientyp_ED", ["Rundschau", "Familienblatt"])
 
 labels_list = ["E", "N"]
-labels_list = ["N", "E"]
+
+
+
+labels_list = ["R", "M", "E", "N", "0E", "XE"]
 
 labels_list = ["R", "M"]
-labels_list = ["R", "M", "E", "N", "0E", "XE"]
+labels_list = ["N", "E"]
 
 dtm_object = dtm_object.reduce_to_categories(metadata_category="Gattungslabel_ED_normalisiert", label_list=labels_list)
 
@@ -75,6 +81,6 @@ print(pc_df.component_loading_df.iloc[:,1].sort_values(ascending=False)[:20])
 print(pc_df.component_loading_df.iloc[:,0].sort_values(ascending=True)[:20])
 print(pc_df.component_loading_df.loc[:,1].sort_values(ascending=True)[:20])
 print(pc_df.pca.explained_variance_)
-pc_df.scatter(colors_list, lang="en", filename=os.path.join(local_temp_directory(system), "figures","genres_pca.svg"))
+pc_df.scatter(colors_list, lang="de", filename=os.path.join(local_temp_directory(system), "figures","genres_pca-R-M.svg"))
 
 

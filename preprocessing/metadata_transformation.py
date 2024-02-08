@@ -54,11 +54,11 @@ def standardize_meta_data_medium(df, medium_column_name):
                                                             'gartenlaube' if 'Gartenlaube' in x else(
                                                              'daheim' if 'Daheim' in x else(
                                                              'urania' if 'urania' in x else(
-                                                             'dtrundsch' if 'Deutsche Rundschau' in x else(
+                                                             'N_dtrundsch' if 'Neue Deutsche Rundschau' in x else(
                                                              'werke' if 'Werke' in x else(
                                                               'aglaja' if 'aglaja' in x else(
                                                               'aglaja' if 'Aglaja' in x else(
-                                                              'neue rundschau' if 'neue Rundschau' in x else(
+                                                               'dtrundsch' if 'Deutsche Rundschau' in x else(
                                                               'tb_fuer_damen' if 'Taschenbuch für Damen' in x else(
                                                               'sonst_tb' if 'TB' in x else(
                                                               'jahrbuch' if 'Jahrbuch' in x else(
