@@ -32,6 +32,7 @@ Die Funktion conll_base_directory verweist auf das Verzeichnis, in dem die extra
 Für die grundlegende Architektur der KLassen und Funktionen ist wichtig, von zwei zentralen Klassen auszugehen: 
 
 a) Der Klasse Text im Modul preprocessing.text, die Methoden bereitstellt, mit denen Features aus Textdateien extrahiert werden können. Unterklassen können auch komplexe Features extrahieren. 
+
 b) Die Klasse DocFeatureMatrix im Modul preprocessing.corpus, die Methoden bereitstellt, um (mit der Text-Klasse) die Features aller (oder mehrerer) Texte  eines Korpus (oder Stichprobe) in einer Document-Feature-Matrix abzubilden. Die wichtigste Unterklasse ist DTM, die eine Document-Term-Matrix mit einer hohen Flexibilität zu Formen der Normalisierung und Featureselektion erzeugt. 
 Weitere Unterklassen erstellen Repräsentationen komplexer Features auf Korpusebene. Dazu gehören: DocThemesMatrix, DocNetworkFeatureMatrix, etc.
 
