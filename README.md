@@ -1,4 +1,7 @@
-The PyNovellaHistory repository contains all python code for the text analysis within the novella history project (Habilitationsprojekt). 
+# PyNovellaHistory (Julian Schröter)
+The PyNovellaHistory repository includes all python code for computational literary text analysis in the context of a novella history project (Habilitationsprojekt). 
+
+Scripts to reproduce analyses, results and visualizations are stored in the folder scripts_novellas with a structure that repeats the chapter structure of the book (Habilitationsschrift) on the history of the German "Novelle". For further instruction on how to replicate the results of my book see the "Anleitung_zur_Replikation_der Habilitationsschrift.md" file.
 
 A (German) project description can be found here: https://www.germanistik.uni-muenchen.de/personal/ndl/professoren/schroeter/projekte/index.html, Parts of the project were conducted within a Walter-Benjamin Fellowship, funded by the German Research Foundation (DFG): https://gepris.dfg.de/gepris/projekt/449668519?language=en
 
@@ -19,7 +22,9 @@ SNA (social network analyis tools) are featured in the preprocessing area: In th
 A set of further modules includes functions for different types of text analysis:
 - postprocessing for Topic Modeling based on mallet,
 - PCA for different feature representations: DTM
-- Supervised Learning (classification tasks, mostly organized as "perspective modeling", inspired by Ted Underwood, Distant Horizons 2019)
+- Supervised Learning (classification tasks, mostly organized as "perspectival modeling", inspired by Ted Underwood, Distant Horizons 2019)
+- Operationalization of several complex features such as Romance setting, dangerous situations as suspense environment, length, and a poetological sense of concentration as SNA-based centralization.
+- Functions and visualization to model the idea of conceptual vagueness (according to Wittgensteins idea of family resemblance and prototype theory) wihtin the frame of supervised machine learning (using logistic regression and c@1-accuracy-score by Penas/Rodrigo 2011)
 
 
 The folder Scripts contains all python scripts that execute text analyses based on the the above mentioned modules.

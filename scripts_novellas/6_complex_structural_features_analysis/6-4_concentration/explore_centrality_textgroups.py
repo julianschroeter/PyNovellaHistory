@@ -35,7 +35,7 @@ metadata_filepath= os.path.join(global_corpus_representation_directory(system), 
 matrix_obj = DocFeatureMatrix(data_matrix_filepath=filepath, metadata_csv_filepath= metadata_filepath)
 df1 = matrix_obj.data_matrix_df
 
-matrix_obj = matrix_obj.add_metadata([genre_cat, year_cat, medium_cat, "Nachname", "Titel", "Kanon_Status"])
+matrix_obj = matrix_obj.add_metadata([genre_cat, year_cat, medium_cat, "Nachname", "Titel", "Kanon_Status", "in_Deutscher_Novellenschatz"])
 
 
 
@@ -270,12 +270,12 @@ plt.show()
 data = df.loc[:, ("Zentralisierung",genre_cat,medium_cat, "Kanon_Status", "periods", "token_count", "Netzwerkdichte", year_cat)]
 
 
-#zipped_dict = {True:"red", False:"grey"}
+zipped_dict = {True:"red", False:"grey"}
 
-#sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="in_Deutscher_Novellenschatz",
- #            palette=zipped_dict)
-#plt.title("Zentralisierung – Novellenschatz")
-#plt.show()
+sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="in_Deutscher_Novellenschatz",
+             palette=zipped_dict)
+plt.title("Zentralisierung – Novellenschatz")
+plt.show()
 
 
 canon_dict = {"hoch":"red", "niedrig":"grey"}

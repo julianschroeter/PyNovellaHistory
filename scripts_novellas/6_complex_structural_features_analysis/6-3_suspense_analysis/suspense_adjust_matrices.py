@@ -46,7 +46,7 @@ df = df[df["doc_chunk_id"].map(len) == 8]
 print(df)
 
 labels_list = ["R", "M", "E", "N", "0E", "XE", "0P", "0PB", "krimi", "abenteuer", "krieg"]
-labels_list = ["R", "E", "N", "0E", "XE"]
+labels_list = ["R", "E", "N", "0E", "XE", "M"]
 df = df[df.isin({genre_cat_name: labels_list}).any(axis=1)]
 
 other_cat_labels_list =  ["Taschenbuch", "Familienblatt", "Rundschau"]
@@ -273,12 +273,39 @@ plt.scatter(media_df["max_value"], media_df["Angstempfinden"], c=media_colors_li
 x = media_df.loc[:, "max_value"]
 res = siegelslopes(media_df.loc[:, "Angstempfinden"], x)
 plt.plot(x, res[1] + res[0] * x, color="grey", linewidth=3)
+annotation = media_df.loc["00085-00", "title"]
+x_results = media_df.loc["00085-00", "max_value"]
+y_results = media_df.loc["00085-00", "Angstempfinden"]
+plt.annotate(annotation, (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+
+id = "00016-00"
+annotation = df.loc[id, "title"]
+x_results = df.loc[id, "max_value"]
+y_results = df.loc[id, "Angstempfinden"]
+plt.annotate(annotation, (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+
+
+id = "00217-00"
+annotation = df.loc[id, "title"]
+x_results = df.loc[id, "max_value"]
+y_results = df.loc[id, "Angstempfinden"]
+plt.annotate(annotation, (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+
+id = "00310-00"
+annotation = df.loc[id, "title"]
+x_results = df.loc[id, "max_value"]
+y_results = df.loc[id, "Angstempfinden"]
+plt.annotate(annotation, (x_results, y_results), arrowprops=dict(facecolor='black', shrink=0.05))
+
+
+
 plt.legend(handles=media_mpatches_list)  # authors_mpatches_list
 plt.ylabel("Angstempfinden")
 plt.xlabel("Gefahrenlevel")
 plt.xlim(0,0.8)
 plt.ylim(0,0.5)
 plt.title("Korrelation von Gefahr und Angst in Medienformaten")
+plt.savefig("/home/julian/Documents/CLS_temp/figures/Gefahr_Angst_vor1850.svg")
 plt.show()
 
 plt.scatter(media_df["max_value"], media_df["UnbekannteEindr"], c=media_colors_list)

@@ -12,8 +12,8 @@ from classification.perspectivalmodeling import split_features_labels
 label_list = ["R", "M", "E", "N", "0E", "XE"]
 metric="cosine"
 
-filename = "scaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
 filename = "red-to-2500mfw_red-to-2500mfw_scaled_raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
+filename = "raw_dtm_lemmatized_l1__use_idf_False6000mfw.csv"
 metadata_path = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 filepath = os.path.join(global_corpus_raw_dtm_directory(system), filename)
 
@@ -24,7 +24,7 @@ dtm_obj = dtm_obj.reduce_to_categories(metadata_category="Gattungslabel_ED_norma
 dtm_obj = dtm_obj.eliminate(["novelle","erzählung", "roman", "märchen", "fle", "be", "te", "ge"])
 
 df = dtm_obj.data_matrix_df
-
+df_dtm = df.copy()
 df = df.drop(columns=["Gattungslabel_ED_normalisiert"])
 dist_matrix = pdist(df, metric=metric)
 v = squareform(dist_matrix)

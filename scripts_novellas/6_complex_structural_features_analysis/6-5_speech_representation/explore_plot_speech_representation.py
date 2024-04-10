@@ -146,7 +146,8 @@ sns.lineplot(data=df, x="Jahr_ED", y="fraction_dirspeech", hue="Gattungslabel_ED
              palette=zipped_dict)
 plt.plot(x, res[1] + res[0] * x, color="black", linewidth=3)
 plt.title("Gattungen nach Anteil direkter Rede")
-plt.ylabel("Anteil direkte Rede")
+plt.ylabel("Anteil direkter Rede")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Gattungen_nach_Anteil_direkter_Rede.svg"))
 plt.show()
 
 
@@ -159,6 +160,8 @@ plt.show()
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_indirspeech", hue="Gattungslabel_ED_normalisiert",
              palette=zipped_dict)
 plt.title("Gattungen nach Anteil indirekter Rede")
+plt.ylabel("Anteil indirekter Rede")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Gattungen_nach_Anteil_indirekter_Rede.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_repspeech", hue="Gattungslabel_ED_normalisiert",
@@ -188,26 +191,28 @@ canon_dict = {"hoch":"red", "niedrig":"grey"}
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_indirspeech", hue="Kanon_Status",
              palette=canon_dict)
-plt.title("Gattungen nach Anteil des Redewiedergabetyps")
-plt.ylabel("Anteil indirekte Rede")
+plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
+plt.ylabel("Anteil indirekter Rede")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_indirekte_Rede.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_dirspeech", hue="Kanon_Status",
              palette=canon_dict)
-plt.title("Gattungen nach Anteil des Redewiedergabetyps")
-plt.ylabel("Anteil direkte Rede")
+plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
+plt.ylabel("Anteil direkter Rede")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_direkte_Rede.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_fid", hue="Kanon_Status",
              palette=canon_dict)
-plt.title("Gattungen nach Anteil des Redewiedergabetyps")
-plt.ylabel("Anteil erlebte Rede")
+plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
+plt.ylabel("Anteil erlebter Rede")
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_repspeech", hue="Kanon_Status",
              palette=canon_dict)
-plt.title("Gattungen nach Anteil des Redewiedergabetyps")
-plt.ylabel("Anteil erzählte Rede")
+plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
+plt.ylabel("Anteil erzählter Rede")
 plt.show()
 
 mpatches_list = []
@@ -230,6 +235,7 @@ for period in periods:
     plt.ylim(0,1)
     plt.xlim(0,0.3)
     plt.legend(handles=mpatches_list)
+    plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_indirekte_auf_direkte_rede"+ str(period) + ".svg"))
     plt.show()
 
 
@@ -292,7 +298,7 @@ res = siegelslopes(fid_df.loc[:, "value"], df.loc[:,"Jahr_ED"])
 plt.plot(x, res[1] + res[0] * x, color="red", linewidth=1)
 sns.lineplot(data=new_df, x="Jahr_ED", y="value", hue="speech_type", palette=["blue", "orange", "green", "red"])
 plt.title("Tendenz der Redewiedergabetypen (MLP)")
-plt.ylabel("Wert: Redewiedergabetyp")
+plt.ylabel("Anteil für jeden Redewiedergabetyp")
 plt.xlabel("Jahr des Erstdrucks")
 plt.ylim(0,1)
 plt.savefig(os.path.join(local_temp_directory(system), "figures", "Tendenz_Redewiedergabetypen.svg"))

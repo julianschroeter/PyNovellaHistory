@@ -21,6 +21,7 @@ from itertools import combinations
 import json
 from sklearn.model_selection import train_test_split
 from scipy import stats
+from statsmodels.stats.multitest import multipletests
 
 
 
@@ -101,7 +102,7 @@ list_of_real_genres_dfs.append([label_list[5], df_XE])
 bool_select_one_author = True
 print("Select one author: ", str(bool_select_one_author))
 
-bool_select_one_per_period = False
+bool_select_one_per_period = True
 print("select one per period: ", str(bool_select_one_per_period))
 
 df = dtm_obj.data_matrix_df.sample(frac=1.0)
@@ -194,6 +195,10 @@ p_to_df1, F_to_df1, p_to_df2, F_to_df2 = iterate_inter_tests(n, df_N, df_E,
                                     smaller_sample_size=False, sample_size_df_1=None, sample_size_df_2=None)
 print("average over n samples: N_E vs N sign. MannWhitneyU Test, test-statistic, p-value: ")
 print(np.array(F_to_df1).mean(), np.array(p_to_df1).mean())
+
+
+print("Bonferroni correction: ", multipletests(p_to_df1))
+
 print(" average over n samples: N_E vs E sign. MannWhitneyU Test, test-statistic, p-value: ")
 print(np.array(F_to_df2).mean(), np.array(p_to_df2).mean())
 
@@ -206,9 +211,10 @@ p_to_df1, F_to_df1, p_to_df2, F_to_df2 = iterate_inter_tests(n, df_R, df_M,
                         smaller_sample_size=False, sample_size_df_1=None, sample_size_df_2=None)
 print("average over n samples: R_M vs R sign. MannWhitneyU Test, test-statistic, p-value: ")
 print(np.array(F_to_df1).mean(), np.array(p_to_df1).mean())
+print("Bonferroni correction: ", multipletests(p_to_df1))
 print(" average over n samples: R_M vs M sign. MannWhitneyU Test, test-statistic, p-value: ")
 print(np.array(F_to_df2).mean(), np.array(p_to_df2).mean())
-
+print("Bonferroni correction: ", multipletests(p_to_df1))
 p_to_df1, F_to_df1, p_to_df2, F_to_df2 = iterate_inter_tests(n, rd_sample1.sample(120), rd_sample2.sample(120), metric=metric, alternative="greater", test_function=stats.mannwhitneyu, select_one_author=bool_select_one_author, select_one_per_period=bool_select_one_per_period)
 print("average over n samples: rd1_all vs rd2_all D(inter) sign. MannWhitneyU Test, test-statistic, p-value: ")
 print(np.array(F_to_df1).mean(), np.array(p_to_df1).mean())
