@@ -1,4 +1,5 @@
-# Anleitung zur Verwendung des Repositoriums für die Replikation der Ergebnisse der Habiliationsschrift Julian Schröter: Gattung – Medium – Praxis (2024)
+# Anleitung zur Verwendung des Repositoriums für die Replikation der Ergebnisse der Habiliationsschrift:
+## Julian Schröter: Gattung – Medium – Praxis. Zu einer quantitativen Novellengeschichte des 19. Jahrhunderts (2024)
 
 Dieses Repositorium versteht sich als eigenständige und modular aufgebaute Bibliothek zur computergestützten Analyse literarischer Texte, zugleich aber ist sie die programmtechnische Grundlage oder obengenannten Arbeit. 
 Als solche dient das Repositorium dazu, sämtliche der in der Arbeit vollzogenen Analysen zu wiederholen, die Methoden weiterzuverwenden und, im besten Fall, weiter zu entwickeln.
@@ -29,12 +30,24 @@ vocab_lists_dicts_directory(system_name) verweist auf ein Verzeichnis, in dem di
 
 Die Funktion conll_base_directory verweist auf das Verzeichnis, in dem die extrahierten Features (POS-Tags, Lemmata, NER, Koreferenzauflösung, Redewiedergabe) als Output der NLP-Pipeline LLPro (Ehrmanntraut/Jannidis/Konle 2023) gespeichert sind.
 
-Für die grundlegende Architektur der KLassen und Funktionen ist wichtig, von zwei zentralen Klassen auszugehen: 
+Für die grundlegende Architektur der KLassen und Funktionen ist wichtig, von folgenden 4 zentralen Klassen bzw. Modulen auszugehen: 
 
-a) Der Klasse Text im Modul preprocessing.text, die Methoden bereitstellt, mit denen Features aus Textdateien extrahiert werden können. Unterklassen können auch komplexe Features extrahieren. 
+a) Der Klasse Text im Modul preprocessing.text, die Methoden bereitstellt, mit denen Features aus Textdateien extrahiert werden können. Unterklassen können auch komplexe Features extrahieren. 7
+Zu den Unterklassen gehören: FearShare im Modul sent_fear_analysis.fear
 
 b) Die Klasse DocFeatureMatrix im Modul preprocessing.corpus, die Methoden bereitstellt, um (mit der Text-Klasse) die Features aller (oder mehrerer) Texte  eines Korpus (oder Stichprobe) in einer Document-Feature-Matrix abzubilden. Die wichtigste Unterklasse ist DTM, die eine Document-Term-Matrix mit einer hohen Flexibilität zu Formen der Normalisierung und Featureselektion erzeugt. 
-Weitere Unterklassen erstellen Repräsentationen komplexer Features auf Korpusebene. Dazu gehören: DocThemesMatrix, DocNetworkFeatureMatrix, etc.
+Weitere Unterklassen erstellen Repräsentationen komplexer Features auf Korpusebene. Dazu gehören: DocThemesMatrix, DocNetworkFeatureMatrix, DocSentFearMatrix, DocTopicMatrixetc.
+
+c) Im Modul metrics.distances befinden sich eine Reihe von Klassen mit Methoden und weiterführenden Funktionen zur Bestimmung von Textsorten über Inner- und Zwischengruppen-Distanz (Kapitel 4.1 der Arbeit; siehe entsprechend die Skripte zur Durchführung der Analysen) 
+[Achtung! Im Moment sind in diesem Modul einige Variablen im global name space definiert. Dies führt leicht zu Fehlern und wird noch geändert]
+
+d) Funktionen zur perspektivischen Modellierung mit überwachtem maschinellen Lernen im MOdul classification.perspectivalmodeling; und im MOdul metrics.scores der c@1-score nach Penas/Rodrigo (2011).
 
 
 
+
+# Literatur
+
+Peñas, Anselmo/Alvaro Rodrigo (2011): »A Simple Measure to Assess Non-response.« Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics, 1415–1424.
+
+Ted Underwood (2019): Distant Horizons. Digital Evidence and Literary Change. Chicago, London: Univ. of Chicago Press.
