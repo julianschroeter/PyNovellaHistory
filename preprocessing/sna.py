@@ -256,6 +256,11 @@ class NEnetwork(Text):
 
 
 def get_centralization(centrality, c_type):
+    """
+    This function is directly imported from https://gist.github.com/aldous-rey/e6ee7b0e82e23a686d5440bf3987ee23
+    This function is used to calculate the centralization of a whole network.
+    It uses a list of centrality values, and it requires the type of centrality that is used to be specified.
+    """
     if len(centrality) < 3: # there was a false condition in the existing function - in fact, the number of nods must not be 0, 1, or 2.
         network_centrality = 0
     else:
