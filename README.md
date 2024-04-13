@@ -27,15 +27,20 @@ A set of further modules includes functions for different types of text analysis
 - Functions and visualization to model the idea of conceptual vagueness (according to Wittgensteins idea of family resemblance and prototype theory) wihtin the frame of supervised machine learning (using logistic regression and c@1-accuracy-score by Penas/Rodrigo 2011)
 
 
-The folder Scripts contains all python scripts that execute text analyses based on the the above mentioned modules.
+The folder Scripts contains all python scripts that execute text analyses based on the above-mentioned modules.
 
 
 The following libraries are required:
 - numpy
 - pandas
-- spacy
-- sklearn
+- spacy (Version conflicts are likely to occur because language models very fine-tuned on an older spacy version.)
+- scikit-learn
 - networkx
 - matplotlib
+- seaborn
+- arviz
+- bambi
+- causalgraphicalmodels
+- daft
 
 The following built-in modules are used: os, copy, collections, pickle, re, string, itertools,

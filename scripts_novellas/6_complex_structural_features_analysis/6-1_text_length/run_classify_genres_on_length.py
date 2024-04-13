@@ -96,6 +96,7 @@ plt.vlines(right, 0, 1, label="Decision boundary")
 #plt.hlines(0.5, 20000, np.mean(np.array(x_boundaries)), label="Decision Boundary: ")
 plt.text(right, 0, "Entscheidungsgrenzbereich um: " + str(int(np.mean(np.array(x_boundaries)))), ha='left', va='center')
 plt.legend
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Entscheidungsgrenze_sigmoid_function_length.svg"))
 plt.show()
 
 print( 50000 * lr_model.coef_ + lr_model.intercept_)

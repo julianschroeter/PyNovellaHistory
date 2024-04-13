@@ -98,8 +98,8 @@ axes[1].hlines(y=50000,xmin=left, xmax=right, label= "200 Normseiten", color="re
 axes[1].set_ylim([0, 150000])
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.suptitle("Gattungs- und Medienabhängigkeit der Textlänge")
-
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplots_Gattungen_Medienformate_Länge.svg"))
 plt.show()
 
 fig, ax = plt.subplots()
@@ -108,11 +108,10 @@ ax.set_ylabel("Textlänge in Wort-Token")
 left, right = ax.set_xlim()
 ax.hlines(y=50000,xmin=left, xmax=right, color="red")
 ax.set_ylim([0, 150000])
-
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.title("Textsortenabhängigkeit der Textlänge")
-
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Textsortenabhängigkeit_Länge_MLP-vs-R.svg"))
 plt.show()
 
 fig, ax = plt.subplots()
@@ -124,8 +123,8 @@ ax.set_ylim([0, 150000])
 
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.title("Textsortenabhängigkeit der Textlänge")
-
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Textsortenabhängigkeit_Länge_Alle-Gattungen.svg"))
 plt.show()
 
 
@@ -173,6 +172,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 fig.supxlabel("Zeitverlauf")
 #fig.text(0.5, 0.04, 'Zeitverlauf von 1790 bis 1950 (in 20-Jahres-Schritten)', ha='center')
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Entwicklung_Textlänge_Gattungen-und-Medien.svg"))
 plt.show()
 
 print(grouped_df)
@@ -189,6 +189,7 @@ grouped_df.unstack().plot(kind="line", stacked=False,
                     xlabel="Zeitverlauf von 1770 bis 1950",
                           ylabel=str("Länge in Wort-Token"))
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplots_Medientypen.svg"))
 plt.show()
 
 print(N_df.sort_values().iloc[-10:])
