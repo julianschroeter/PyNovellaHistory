@@ -46,15 +46,16 @@ matrix_obj = DocFeatureMatrix(data_matrix_filepath=infile_name, metadata_csv_fil
 df1 = matrix_obj.data_matrix_df
 
 matrix_obj = DocFeatureMatrix(data_matrix_filepath=None, data_matrix_df=matrix_obj.data_matrix_df, metadata_csv_filepath=old_infile_name)
-matrix_obj = matrix_obj.add_metadata(["Netzwerkdichte"])
+#matrix_obj = matrix_obj.add_metadata(["Netzwerkdichte"])
 
 length_infile_df_path = os.path.join(local_temp_directory(system), "novella_corpus_length_matrix.csv")
 matrix_obj = DocFeatureMatrix(data_matrix_filepath=None, data_matrix_df=matrix_obj.data_matrix_df,
                               metadata_csv_filepath=length_infile_df_path)
 matrix_obj = matrix_obj.add_metadata(["token_count"])
 
-cat_labels = ["N", "E", "0E", "XE"]
+
 cat_labels = ["N", "E"]
+cat_labels = ["N", "E", "0E", "XE", "R"]
 matrix_obj = matrix_obj.reduce_to_categories(genre_cat, cat_labels)
 
 matrix_obj = matrix_obj.eliminate(["Figuren"])
@@ -63,17 +64,38 @@ df = matrix_obj.data_matrix_df
 
 df.rename(columns={"scaled_centralization_conll": "dep_var"}, inplace=True) # "Netzwerkdichte"
 
-df = df[~df["token_count"].isna()]
+#df = df[~df["token_count"].isna()]
+#df = df[~df["Netzwerkdichte_conll"].isna()]
+#df = df[~df["Zentralisierung"].isna()]
+#df = df[~df["dep_var"].isna()]
 
 
 dep_var = "dep_var"
 df.rename(columns={"Zentralisierung": "dep_var",
                    "Netzwerkdichte_conll":"Netzwerkdichte"}, inplace=True) # "Netzwerkdichte"
-df["dep_var"] = df["dep_var"].astype(float)
+#df["dep_var"] = df["dep_var"].astype(float)
+df.dropna(subset = ['token_count', 'Netzwerkdichte', "dep_var"], inplace=True)
 
-plt.scatter(df['dep_var'], df['token_count'])
-plt.title("Centralization auf Textumfang")
+
+print(df["token_count"])
+print(df["Netzwerkdichte"])
+print(len(df["dep_var"]))
+#
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 8))
+axes[0].scatter(df['dep_var'], df['token_count'], color="grey")
+axes[0].set_title("Zentralisierung auf Textumfang")
+axes[0].set_ylabel("Zentralisierung")
+axes[1].scatter(df['Netzwerkdichte'], df['token_count'], color="black")
+axes[1].set_title("Netzwerkdichte")
+axes[1].set_ylabel("Netzwerkdichte")
+fig.supxlabel("Textumfang")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Umfang_auf_Zentralisierung_und_Netzwerkdichte.svg"))
 plt.show()
+
+
+
+
 
 plt.scatter(df["dep_var"], df["Netzwerkdichte"])
 plt.title("Netzwerkdichte: Überschneidung zwischen beiden Verfahren")

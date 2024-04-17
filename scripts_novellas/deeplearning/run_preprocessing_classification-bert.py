@@ -13,7 +13,7 @@ import numpy as np
 import os
 
 # load data
-sentences_df = pd.read_csv(os.path.join(local_temp_directory(system), "novella_corpus_sentences.csv"), index_col=0)
+sentences_df = pd.read_csv(os.path.join(global_corpus_representation_directory(system), "novella_corpus_as_sentences_for_BERT-class.csv"), index_col=0)
 
 metadata_df = pd.read_csv(os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv"), index_col=0)
 

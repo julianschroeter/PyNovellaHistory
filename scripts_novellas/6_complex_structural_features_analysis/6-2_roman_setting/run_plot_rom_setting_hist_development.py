@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from preprocessing.corpus import DocFeatureMatrix
-from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist
+from preprocessing.presetting import global_corpus_representation_directory, vocab_lists_dicts_directory, load_stoplist,local_temp_directory
 from preprocessing.metadata_transformation import full_genre_labels, years_to_periods
 
 
@@ -50,10 +50,11 @@ df_corpus_statistics = pd.DataFrame(corpus_statistics)
 df_corpus_statistics.unstack().plot(kind='bar', stacked=False, title= "Corpus Size (for periods)")
 plt.show()
 
-sns.lineplot(df, x="Jahr_ED", y="rom_top", hue="Gattungslabel_ED_normalisiert", palette=["blue","red","orange","green"])
+sns.lineplot(df, x="Jahr_ED", y="rom_top", hue="Gattungslabel_ED_normalisiert", palette=["red","orange","blue","green"])
 plt.ylabel("NamedEntShare")
 plt.xlabel("Zeitverlauf")
 plt.title("Entwicklung der Dominanz romanischen Settings")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Lineplot_Entwicklung_Romanisches_Setting.svg"))
 plt.show()
 
 df = df.loc[:,["periods20a", "Gattungslabel_ED_normalisiert","rom_top"]]
@@ -76,5 +77,6 @@ for column_name in df_grouped.columns.values.tolist():
     #ax.set_xticks(x_ticks)
     ax.set_xticks(range(len(x_ticks)))
     ax.set_xticklabels(["1790", "1810","1830","1850","1870","1890", "1910", "1930"])
+    plt.savefig(os.path.join(local_temp_directory(system), "figures", "Pyplot_line_Entwicklung_Romanisches_Setting.svg"))
     plt.show()
 

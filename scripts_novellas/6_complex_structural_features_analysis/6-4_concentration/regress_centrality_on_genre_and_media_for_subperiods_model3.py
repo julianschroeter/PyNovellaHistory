@@ -65,7 +65,7 @@ df = df[~df["token_count"].isna()]
 dep_var = "dep_var"
 
 plt.scatter(1-df['dep_var'], df['token_count'])
-plt.title("Centralization auf Textumfang")
+plt.title("Zentralisierung auf Textumfang")
 plt.show()
 
 plt.scatter(df["dep_var"], df["Netzwerkdichte"])

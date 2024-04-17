@@ -1,7 +1,9 @@
 import networkx as nx
 from networkx.algorithms import bipartite
 import matplotlib.pyplot as plt
-
+import os
+from preprocessing.presetting import local_temp_directory
+system = "my_xps"
 B = nx.Graph()
 
 # Add nodes with the node attribute "bipartite"
@@ -42,5 +44,5 @@ nx.draw(G, pos, node_color=["blue", "blue", "blue", "blue","red"],
                      "red", "blue","blue","red", "blue", "red"
                       ],
         with_labels=True)
-
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "bipartite_graph_events-characters.svg"))
 plt.show()

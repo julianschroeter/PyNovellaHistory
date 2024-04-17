@@ -162,8 +162,8 @@ for serial, color in {"seriell publiziert":"orange", "nicht-seriell publiziert":
     patch = mpatches.Patch(color=color, label=serial)
     serial_mpatches_list.append(patch)
 
-y_variable ="Angstempfinden" #  "lin_susp_model"
-x_variables = [year_cat_name, "max_value", "Liebe", "UnbekannteEindr"]
+y_variable = "max_value" #"Angstempfinden" #  "lin_susp_model"
+x_variables = [year_cat_name ] # "Liebe", "UnbekannteEindr"
 
 if y_variable == "max_value":
     y_variable_legend = "Gefahrenlevel im Text"
@@ -198,6 +198,7 @@ sns.lineplot(data=df, x=year_cat_name, y="max_value", hue=genre_cat_name,
 plt.title("Zeitliche Zu- und Abnahme von Spannung nach Gattungen")
 plt.ylabel("Gefahrenlevel im Text")
 plt.xlabel("Jahr des Erstdrucks")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Lineplot_Spannung_Nach_Gattungen_Zeitverlauf.svg"))
 plt.show()
 
 for x_variable in x_variables:
@@ -263,7 +264,7 @@ for x_variable in x_variables:
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=serial_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_seriality" + x_variable + y_variable + ".png"
+    outfilename = "correlation_seriality" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 
@@ -383,12 +384,16 @@ plt.show()
 whole_df.boxplot(column="lin_susp_model", by="periods")
 plt.xticks(rotation=90)
 plt.tight_layout()
+
 plt.show()
 
 
 whole_df.boxplot(column="max_value", by="periods")
 plt.xticks(rotation=90)
+plt.title("Boxplots: Gefahrenniveau für Teilzeiträume")
+plt.ylabel("Gefahrenlevel im Text")
 plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Spannung_für_Teilperioden20a.svg"))
 plt.show()
 
 subperiod_df = df[df["periods"] == "1850-1870"]

@@ -41,7 +41,11 @@ df = years_to_periods(df, category_name="Jahr_ED", start_year=1750, end_year=195
 df = df.rename(columns={"mean":"mean_E_R"})
 E_R_df_E = df[df.isin({"Gattungslabel_ED_normalisiert":["E"]}).any(axis=1)]
 
+E_R_df_E =E_R_df_E.drop(["00751-00", '00752-00', '00753-00', '00755-00', '00756-00', '00757-00',"00758-00", '00760-00', '00762-00', '00763-00', '00764-00', '00765-00', '00768-00'])
+
+
 N_E_df = pd.read_csv(N_E_data_matrix_filepath, index_col=0)
+
 E_R_df_E["inv_N_E"] = E_R_df_E.apply(lambda x: N_E_df.loc[x.name, "mean"], axis=1)
 E_R_df_E["E_R"] = E_R_df_E.apply(lambda x: 1 - x.mean_E_R, axis=1)
 

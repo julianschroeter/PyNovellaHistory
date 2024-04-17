@@ -12,6 +12,8 @@ from scipy import stats
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+import seaborn as sns
+
 
 my_model_de = language_model_path(system)
 
@@ -61,41 +63,43 @@ clf = LogisticRegression()
 clf.fit(X, y)
 
 # and plot the result
-plt.figure()
-plt.clf()
+fig, axes = plt.subplots(1,2, figsize=(12,6))
+
+X_train, X_test, y_train, y_test = train_test_split(X,y, test_size= 0.3)
+colors_list = ["orange" if x == 0 else "blue" for x in y_train.tolist()]
+
+#plot logistic regression curve
+sns.regplot(x=X_train, y=y_train, logistic=True, ci=None, scatter_kws={'color': colors_list}, line_kws={'color': 'red'}, ax=axes[0])
+#axes[0].set_xlabel("Textlänge in Wort-Token")
+
+axes[0].set_title("Training")
+axes[0].set_xlim(0,250000)
+
 X_test = np.linspace(0, 100000, 1000)
 loss = expit(X_test * clf.coef_ + clf.intercept_).ravel()
-plt.plot(X_test, loss, label="Modell", color="red", linewidth=3)
+axes[1].plot(X_test, loss, label="Modell", color="red", linewidth=3)
 sample0_loss = expit(sample0 * clf.coef_ + clf.intercept_).ravel()
-plt.scatter(sample0, sample0_loss, label="Märchen", color="orange")
+axes[1].scatter(sample0, sample0_loss, label="Märchen", color="orange")
 sample1_loss = expit(sample1 * clf.coef_ + clf.intercept_).ravel()
-plt.scatter(sample1, sample1_loss, label="Romane", color="blue")
-plt.xlim(0,60000)
-plt.title("Logistische Regression zur Klassifikation von Märchen vs. Romane")
-plt.axhline(y=0.5 + 0.03/2, c="black")
-plt.axhline(y=0.5 - 0.03/2, c="black")
-plt.legend()
-plt.show()
+axes[1].scatter(sample1, sample1_loss, label="Romane", color="blue")
+axes[1].set_xlim(0,60000)
+axes[1].set_title("Klassifikation")
+axes[1].axhline(y=0.5 + 0.03/2, c="black")
+axes[1].axhline(y=0.5 - 0.03/2, c="black")
+axes[1].legend()
 
 print(loss)
 print(clf.coef_, clf.intercept_)
 
 
-import seaborn as sns
-import pandas as pd
-import matplotlib.pyplot as plt
-
-
 #define the predictor variable and the response variable
 
-X_train, X_test, y_train, y_test = train_test_split(X,y, test_size= 0.3)
 
-colors_list = ["orange" if x == 0 else "blue" for x in y_train.tolist()]
-
-#plot logistic regression curve
-ax = sns.regplot(x=X_train, y=y_train, logistic=True, ci=None, scatter_kws={'color': colors_list}, line_kws={'color': 'red'})
-ax.set_xlabel("Textlänge in Wort-Token")
-ax.set_ylabel("Wahrscheinlichkeit für die Vorhersage: Roman")
-ax.set_title("Trainingsdaten und Logistisches Regressionsmodell")
-ax.legend()
+#axes[0].legend()
+fig.supylabel("Wahrscheinlichkeit für die Vorhersage: Roman")
+fig.suptitle("Funktionsweise Logistischer Regression")
+fig.supxlabel("Textlänge in Wort-Token")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Beispiel_Training-und-Klassifikation_Log_Reg_Länge.svg"))
 plt.show()
+

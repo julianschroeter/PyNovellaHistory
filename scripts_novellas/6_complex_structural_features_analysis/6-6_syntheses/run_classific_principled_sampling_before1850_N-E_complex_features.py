@@ -35,7 +35,7 @@ optima_x, optima_y = [],[]
 
 n= 200
 for filename in os.listdir(global_corpus_representation_directory(system)):
-    if filename ==  "doc_complex_features_matrix.csv":
+    if filename ==  "all_complex_features_matrix.csv":
         filepath = os.path.join(global_corpus_representation_directory(system), filename)
 
         all_scores_nested = []
@@ -52,12 +52,12 @@ for filename in os.listdir(global_corpus_representation_directory(system)):
             df = dtm_obj.data_matrix_df
             print("before 1850")
 
-#            df = df[df["Jahr_ED"] < 1850]
+            df = df[df["Jahr_ED"] < 1850]
             df_all = df.copy()
-            df = df.loc[:, ["fraction_dirspeech","fraction_indirspeech","rom_setting", "density", "fear", "centralization", "Gattungslabel_ED_normalisiert", "Jahr_ED", "Nachname"]]
+            df = df.loc[:, ["fraction_dirspeech","fraction_indirspeech","rom_setting", "danger", "fear", "centralization", "length", "Gattungslabel_ED_normalisiert", "Jahr_ED", "Nachname"]]
 
-            df_0 = df[df[genre_cat] == "N"]
-            df_1 = df[df[genre_cat] == "E"]
+            df_0 = df[df[genre_cat] == "E"]
+            df_1 = df[df[genre_cat] == "N"]
 
             train_set, test_set = principled_sampling(df_1, df_0, select_one_per_period=False, select_one_per_author=False)
 

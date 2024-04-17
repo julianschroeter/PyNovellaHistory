@@ -116,7 +116,7 @@ for id, combs in comb_dic.items():
     centr_dic[id] = [degree_centrality, weighted_degree_centrality, density, centralization, max_deg_centr]
 
     nx.draw(G,with_labels=True, font_weight='bold')
-    filename = str(id + ".png")
+    filename = str(id + ".svg")
     print(filename)
     plt.title(filename)
     plt.savefig(os.path.join(plots_directory, filename))

@@ -16,7 +16,7 @@ class GroupDistances():
     """
     calculates the ingroup metrics and stores them in a distance_matrix and a list of metrics as attributes.
     """
-    def __init__(self, input_df, metric, select_one_per_author, select_one_per_period, sample_size_df):
+    def __init__(self, input_df, metric, select_one_per_author, select_one_per_period, sample_size_df=None):
         frac_sample = None
         if sample_size_df is None:
             frac_sample = 1
@@ -55,7 +55,7 @@ class InterGroupDistances(GroupDistances):
 
     """
     def __init__(self, input_df_1, input_df_2, metric, select_one_per_author, select_one_per_period,
-                 smaller_sample_size, sample_size_df_1, sample_size_df_2):
+                 smaller_sample_size, sample_size_df_1=None, sample_size_df_2=None):
 
         frac_sample_1, frac_sample_2 = None, None
         if sample_size_df_1 is None:

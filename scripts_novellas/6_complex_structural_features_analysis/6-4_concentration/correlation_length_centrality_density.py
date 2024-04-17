@@ -26,6 +26,7 @@ year_cat = "Jahr_ED"
 old_infile_name = os.path.join(global_corpus_representation_directory(system), "SNA_novellas.csv")
 
 filename = "conll_based_networkdata-matrix-novellas.csv"
+filename = "conll_based_networkdata-matrix-novellas_15mostcommon.csv"
 filepath = os.path.join(local_temp_directory(system), filename)
 #filepath = os.path.join(global_corpus_representation_directory(system), "Network_Matrix_all.csv")
 
@@ -173,21 +174,27 @@ for key, value in media_dict.items():
 
 df1 = df.copy()
 
-plt.scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
-plt.title("Zentralisierung - Textumfang")
-plt.ylabel("Zentralisierung")
-plt.xlabel("Textumfang")
-plt.xlim(0,200000)
-plt.legend(handles=mpatches_list)
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12,8))
+
+axes[0].scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
+#axes[0].set_title("Zentralisierung - Textumfang")
+axes[0].set_ylabel("Zentralisierung")
+axes[0].set_xlim(0,200000)
+axes[0].set_ylim(0,1)
+#plt.legend(handles=mpatches_list)
 plt.show()
 
 
-plt.scatter(df['token_count'],df['Netzwerkdichte'],  color=list_colors_target, alpha=0.5)
-plt.title("Netzwerkdichte – Textumfang")
-plt.ylabel("Netzwerkdichte")
-plt.xlabel("Textumfang")
-plt.xlim(0,200000)
-plt.legend(handles=mpatches_list)
+axes[1].scatter(df['token_count'],df['Netzwerkdichte'],  color=list_colors_target, alpha=0.5)
+#axes[1].set_title("Netzwerkdichte – Textumfang")
+axes[1].set_ylabel("Netzwerkdichte")
+axes[1].set_ylim(0,1)
+axes[1].set_xlim(0,200000)
+axes[1].legend(handles=mpatches_list)
+fig.suptitle("Umfang auf Zentralisierung und Dichte \n15 häufigste Figuren")
+fig.supxlabel("Textumfang")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system),"figures", "15mostcommon_plot_Umfang-auf-Zentralisierung-und-Dichte.svg"))
 plt.show()
 
 
@@ -215,6 +222,7 @@ plt.ylabel("Figurenanzahl")
 plt.xlabel("Umfang")
 plt.xlim(0,200000)
 plt.ylim(0,200)
+plt.savefig(os.path.join(local_temp_directory(system),"figures", "15mc_regplot_Umfang_Figurenanzahl.svg"))
 plt.show()
 
 plt.scatter(df['Figurenanzahl'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
@@ -240,4 +248,5 @@ plt.title("Zentralisierung und Netzwerkdichte")
 plt.legend(handles=mpatches_list)
 plt.xlabel("Zentralisierung")
 plt.ylabel("Netzwerkdichte")
+plt.savefig(os.path.join(local_temp_directory(system),"figures", "Korrelation_Zentralisierung_Netzwerkdichte.svg"))
 plt.show()

@@ -124,6 +124,7 @@ plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", ro
 plt.suptitle("Gattungs- und Medienabhängigkeit der Textlänge")
 
 plt.tight_layout()
+fig.savefig("/home/julian/Documents/CLS_temp/figures/Abb_Boxplot_Gattungs-Medienabh_Textlaenge.svg")
 plt.show()
 
 fig, ax = plt.subplots()

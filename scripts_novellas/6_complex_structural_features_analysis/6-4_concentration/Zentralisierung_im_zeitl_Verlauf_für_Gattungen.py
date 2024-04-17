@@ -81,6 +81,8 @@ df["Zentralisierung"] = df["Zentralisierung"].astype(float)
 
 
 
+
+
 df = years_to_periods(input_df=df, category_name="Jahr_ED", start_year=1800, end_year=1950, epoch_length=50,
                       new_periods_column_name="periods")
 
@@ -135,13 +137,43 @@ for key, value in media_dict.items():
 df1 = df.copy()
 
 
-data = df.loc[:, ("Zentralisierung",genre_cat,medium_cat, "Kanon_Status", "periods", "token_count", "Netzwerkdichte", year_cat)]
+fig, axes = plt.subplots(2,2)
+
+df_R = df[df["Gattungslabel_ED_normalisiert"] == "Roman"]
+x = df_R.loc[:, "Jahr_ED"]
+res = siegelslopes(df_R.loc[:, "Zentralisierung"], x)
+sns.lineplot(data=df_R, x="Jahr_ED", y="Zentralisierung", hue="Gattungslabel_ED_normalisiert",
+             palette=zipped_dict, ax=axes[0,1])
+axes[0,1].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[0,1].set_ylim(0,1)
+axes[0,1].set_title("Roman ")
+
+df_E = df[df["Gattungslabel_ED_normalisiert"] == "Erzählung"]
+x = df_E.loc[:, "Jahr_ED"]
+res = siegelslopes(df_E.loc[:, "Zentralisierung"], x)
+sns.lineplot(data=df_E, x="Jahr_ED", y="Zentralisierung", hue="Gattungslabel_ED_normalisiert",
+             palette=zipped_dict, ax=axes[1,1])
+axes[1,1].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[1,1].set_ylim(0,1)
+axes[1,1].set_title("Erzählung")
 
 
-zipped_dict = {True:"orange", False:"lightgreen"}
+df_N = df[df["Gattungslabel_ED_normalisiert"] == "Novelle"]
+x = df_N.loc[:, "Jahr_ED"]
+res = siegelslopes(df_N.loc[:, "Zentralisierung"], x)
+sns.lineplot(data=df_N, x="Jahr_ED", y="Zentralisierung", hue="Gattungslabel_ED_normalisiert",
+             palette=zipped_dict, ax=axes[1,0])
+axes[1,0].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[1,0].set_ylim(0,1)
+axes[1,0].set_title("Novelle")
 
-sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="in_Deutscher_Novellenschatz",
-             palette=zipped_dict)
-plt.title("Zentralisierung – Novellenschatz")
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Zentralisierung_Dt-Novellenschatz_Zeitverlauf_ch6-4.svg"))
+
+fig.suptitle("Zeitlicher Verlauf der Zentralisierung")
+fig.supxlabel("Zeitverlauf")
+fig.supylabel("Zentralisierung")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Zentralisierung-Zeitverlauf_Einzelgattungen.svg"))
 plt.show()
+
+
+

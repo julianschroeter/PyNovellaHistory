@@ -85,7 +85,25 @@ df["scaled_centralization_combined"] = df.apply(lambda x: (x["centralization_rul
 
 df.to_csv(os.path.join(global_corpus_representation_directory(system), "Network_Matrix_all.csv"))
 
-df.boxplot(column="Zentralisierung", by="Kanon_Status")
+fig, axes = plt.subplots(1,2, figsize=(12,6))
+df.boxplot(column="Zentralisierung", by="Kanon_Status", ax= axes[0])
+axes[0].set_title("Boxplot")
+#plt.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplot_Zentralisierung_Kanon.svg"))
+#plt.show()
+
+
+import seaborn as sns
+zipped_dict = {"hoch":"cyan", "niedrig":"purple"}
+
+sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="Kanon_Status",
+             palette=zipped_dict, ax=axes[1])
+axes[1].set_title("Zeitverlauf")
+axes[1].set_ylabel("")
+axes[1].set_xlabel("Jahr")
+fig.suptitle("Zentralisierung – Kanon")
+fig.supylabel("Zentralisierung")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplot-und-Lineplot_Zentralisierung_Kanon_Zeitverlauf.svg"))
 plt.show()
 
 df.boxplot(column="centralization_conll", by="Kanon_Status")
@@ -114,20 +132,15 @@ plt.ylabel("Zentralisierung")
 plt.title("Korrelation Netzwerkdichte – Zentralisierung für Kanonisierung")
 plt.show()
 
-import seaborn as sns
-zipped_dict = {"hoch":"red", "niedrig":"grey"}
 
-sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="Kanon_Status",
-             palette=zipped_dict)
-plt.title("Zentralisierung – Kanon")
-plt.show()
 
 
 df["Netzwerkdichte_conll"].hist(bins=30)
 plt.title("Historgramm: Netzwerkdichte (LLM)")
 plt.show()
 df["Zentralisierung"].hist(bins=30)
-plt.title("Historgramm: Zentralisierung, skaliert (LLM)")
+plt.title("Historgramm: gew. skaliert Zentralisierung")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Histogramm_Zentralisierung_skaliert.svg"))
 plt.show()
 
 

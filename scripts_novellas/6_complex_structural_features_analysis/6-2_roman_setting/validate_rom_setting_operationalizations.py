@@ -1,11 +1,12 @@
 import statistics
 
-from preprocessing.presetting import language_model_path, vocab_lists_dicts_directory, global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory
+from preprocessing.presetting import (language_model_path, local_temp_directory,
+                                      global_corpus_representation_directory, load_stoplist, set_DistReading_directory, mallet_directory)
 from preprocessing.corpus import DocFeatureMatrix
 from preprocessing.sampling import equal_sample
 import os
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from collections import Counter
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.tree import DecisionTreeClassifier
@@ -48,12 +49,14 @@ matrix.data_matrix_df["region"] = matrix.data_matrix_df["region"].fillna("other"
 df = matrix.data_matrix_df
 
 df = df.rename(columns={"Marseille":"SettingShare"})
+df_Setting_Share = df.copy()
 
 df_whole_corpus = df
 df = df.query("region != '''other'''")
 df = df.query("region != '''lat_am'''")
 
 scaler = StandardScaler()
+scaler = MinMaxScaler()
 df.iloc[:, :1] = scaler.fit_transform(df.iloc[:, :1].to_numpy())
 
 matrix = matrix.eliminate(["stadt_land", "titel", "ende", "liebesspannung"])
@@ -318,23 +321,28 @@ for i in range(n):
     plt.hlines(0.5, -3, x_boundary, label="Decision Boundary: ")
     plt.text(x_boundary, 0, "Entscheidungsgrenze: " + str(x_boundary), ha='left', va='center')
     plt.legend
+    plt.savefig(os.path.join(local_temp_directory(system_name), "figures",
+                             "sigmoid_Entscheidungsgrenze_RomSetting_NEShare.svg"))
     plt.show()
 
 df = final_df.rename(columns={"region":"Romanisches Setting"})
+#df.iloc[:, :1] = scaler.fit_transform(df.iloc[:, :1].to_numpy())
 category ="Romanisches Setting"
 rom_data = df[df["Romanisches Setting"] == "rom"]["NamedEntShare"].values.tolist()
 non_rom_data = df[df["Romanisches Setting"] == "non_rom"]["NamedEntShare"].values.tolist()
 print(non_rom_data)
-fig, ax = plt.subplots()
-ax.boxplot([rom_data, non_rom_data])
-#plt.xlim([0,3])
-plt.xticks([1,2], ["romanisch", "nicht-romanisch"])
 
-ax.axhline(y= x_boundary)
-plt.xlabel("Textgruppen nach Annotation")
-plt.ylabel("NamedEntShare")
-plt.title("Boxplots mit Entscheidungsgrenze")
-plt.show()
+fig, axes = plt.subplots(1,2)
+axes[0].boxplot([rom_data, non_rom_data])
+#plt.xlim([0,3])
+axes[0].set_xticks([1,2], ["romanisch", "nicht-romanisch"])
+axes[0].axhline(y= x_boundary)
+#axes[0].set_xlabel("Textgruppen nach Annotation")
+axes[0].set_ylabel("NamedEntShare")
+axes[0].set_title("NamedEntShare")
+#plt.tight_layout()
+#fig.savefig(os.path.join(local_temp_directory(system_name), "figures", "Boxplot_Entscheidungsgrenze_RomSetting_NEShare.svg") )
+#plt.show()
 
 df = df_whole_corpus.drop(columns=["region"])
 
@@ -379,3 +387,26 @@ X = whole_array[:, 0:(whole_array.shape[1]-1)]
 X = scaler.fit_transform(X)
 counts = Counter(lr_model.predict(X))
 print(counts)
+
+print(final_df)
+
+df = df_Setting_Share.copy()
+df.iloc[:, :1] = scaler.fit_transform(df.iloc[:, :1].to_numpy())
+df = df.rename(columns={"region":"Romanisches Setting"})
+rom_data = df[df["Romanisches Setting"] == "rom"]["SettingShare"].values.tolist()
+non_rom_data = df[df["Romanisches Setting"] == "non_rom"]["SettingShare"].values.tolist()
+print("rom_data: ", rom_data)
+print(non_rom_data)
+
+#fig, ax = plt.subplots()
+axes[1].boxplot([rom_data, non_rom_data])
+#plt.xlim([0,3])
+axes[1].set_xticks([1,2], ["romanisch", "nicht-romanisch"])
+#ax.axhline(y= x_boundary)
+fig.supxlabel("Textgruppen nach Annotation")
+axes[1].set_ylabel("SettingShare(Romanisch)")
+axes[1].set_title("SettingShare")
+fig.suptitle("Boxplots mit Entscheidungsgrenze")
+plt.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system_name), "figures", "Boxplot_Entscheidungsgrenze_RomSetting_NE-and-SettingShare.svg") )
+plt.show()

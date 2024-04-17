@@ -118,6 +118,9 @@ corr, _ = spearmanr(df["Netzwerkdichte"], df["Zentralisierung"])
 print('Spearman correlation: %.3f' % corr)
 
 
+df = df[df["Jahr_ED"] >= 1800]
+df = df[df["Jahr_ED"] <=1950]
+
 df = years_to_periods(input_df=df, category_name="Jahr_ED", start_year=1800, end_year=1950, epoch_length=50,
                       new_periods_column_name="periods")
 
@@ -278,7 +281,7 @@ plt.title("Zentralisierung – Novellenschatz")
 plt.show()
 
 
-canon_dict = {"hoch":"red", "niedrig":"grey"}
+canon_dict = {"hoch":"purple", "niedrig":"cyan"}
 replace_dict = {"Kanon_Status": {0: "niedrig", 1: "niedrig", 2: "hoch",
                                                   3: "hoch"}}
 data = full_genre_labels(data, replace_dict=replace_dict)
@@ -288,7 +291,7 @@ data = full_genre_labels(data, replace_dict=replace_dict)
  #            palette=zipped_dict)
 #plt.title("Gattungen nach Grad an Zentralisierung")
 #plt.show()
-
+zipped_dict = {"Novelle":"red", "Erzählung":"green", "MLP": "cyan", "Märchen":"orange", "Roman":"blue"}
 mpatches_list = []
 
 for key, value in zipped_dict.items():
@@ -301,36 +304,45 @@ for key, value in canon_dict.items():
     patch = mpatches.Patch(color=value, label=key)
     canon_mpatches_list.append(patch)
 
+
+fig, axes = plt.subplots(3,2, figsize=[8, 12])
 periods = list(set(data.periods.values.tolist()))
+periods.sort()
+print(periods)
+i = 0
 for period in periods:
+    print(period)
     df = data[data["periods"] == period]
     canon_list = df["Kanon_Status"].values.tolist()
     media_period_list = df["Medientyp_ED"].values.tolist()
     list_colors_target = [canon_dict[item] for item in canon_list]
 
-    plt.scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
-    plt.title("Zentralisierung und Textlänge: " + str(period))
-    plt.xlabel("Textumfang")
-    plt.ylabel("Zentralisierung")
-    plt.ylim(0,1)
-    plt.xlim(0,60000)
-    plt.legend(handles=canon_mpatches_list)
-    plt.show()
-
+    axes[i,0].scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
+    axes[i,0].set_title("Kanon-Status: " + str(period))
+    
+    axes[i,0].set_ylim(0,1)
+    axes[i,0].set_xlim(0,60000)
+    i +=1
+axes[0,0].legend(handles=canon_mpatches_list)
+i = 0
 for period in periods:
     df = data[data["periods"] == period]
     genre_list = df[genre_cat].values.tolist()
     list_colors_target = [zipped_dict[item] for item in genre_list]
 
-    plt.scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
-    plt.title("Zentralisierung und Textlänge: " + str(period))
-    plt.xlabel("Textumfang")
-    plt.ylabel("Zentralisierung")
-    plt.ylim(0,1)
-    plt.xlim(0,60000)
-    plt.legend(handles=mpatches_list)
-    plt.show()
+    axes[i,1].scatter(df['token_count'], df['Zentralisierung'], color=list_colors_target, alpha=0.5)
+    axes[i,1].set_title("Gattungen: " + str(period))
+    axes[i,1].set_ylim(0,1)
+    axes[i,1].set_xlim(0,60000)
+    i += 1
+axes[0,1].legend(handles=mpatches_list)
 
+fig.supxlabel("Textumfang")
+fig.supylabel("Zentralisierung")
+fig.suptitle("Umfang – Zentralisierung in Gattung und Kanon")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Umfang_Zentralisierung_Subplots_Gattungen_Kanon_Zeitabschnitt.svg"))
+plt.show()
 
 genres = list(set(data.Gattungslabel_ED_normalisiert.values.tolist()))
 for genre in genres:

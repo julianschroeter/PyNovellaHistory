@@ -68,6 +68,6 @@ print(pc_df.component_loading_df.iloc[:,1].sort_values(ascending=False)[:20])
 print(pc_df.component_loading_df.iloc[:,0].sort_values(ascending=True)[:20])
 print(pc_df.component_loading_df.loc[:,1].sort_values(ascending=True)[:20])
 print(pc_df.pca.explained_variance_)
-pc_df.scatter(colors_list, lang="de", filename=os.path.join(local_temp_directory(system), "figures","Kanon_pca.svg"))
+pc_df.scatter(colors_list, lang="de", filename=os.path.join(local_temp_directory(system), "figures","Kanon_pca.svg"), title="Zuordnungspraxis: Kanon")
 
 

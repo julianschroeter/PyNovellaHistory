@@ -112,7 +112,7 @@ for key, value in zipped_dict.items():
     mpatches_list.append(patch)
 
 plt.scatter(df['fraction_indirspeech'], df['token_count'], color=list_colors_target, alpha=0.5)
-plt.title("Centralization auf Textumfang")
+plt.title("Indirekte Rede auf Textumfang")
 plt.xlabel("indirekte Rede")
 plt.ylabel("Textumfang")
 plt.legend(handles=mpatches_list)
@@ -187,26 +187,27 @@ plt.show()
 replace_dict = {"Kanon_Status": {0: "niedrig", 1: "niedrig", 2: "hoch",
                                                   3: "hoch"}}
 df = full_genre_labels(df, replace_dict=replace_dict)
-canon_dict = {"hoch":"red", "niedrig":"grey"}
+canon_dict = {"hoch":"purple", "niedrig":"cyan"}
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_indirspeech", hue="Kanon_Status",
              palette=canon_dict)
 plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
 plt.ylabel("Anteil indirekter Rede")
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_indirekte_Rede.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_indirekte_Rede_Kanon.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_dirspeech", hue="Kanon_Status",
              palette=canon_dict)
 plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
 plt.ylabel("Anteil direkter Rede")
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_direkte_Rede.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_direkte_Rede_Kanon.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_fid", hue="Kanon_Status",
              palette=canon_dict)
 plt.title("Kanonisierungsstatus nach Anteil des Redewiedergabetyps")
 plt.ylabel("Anteil erlebter Rede")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Anteil_erlebte_Rede_Kanon.svg"))
 plt.show()
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_repspeech", hue="Kanon_Status",

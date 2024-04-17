@@ -91,13 +91,43 @@ plt.show()
 
 df.boxplot(column="scaled_centralization_conll", by="in_Deutscher_Novellenschatz")
 plt.title("Zentralisierung")
+plt.ylabel("gewichtete skalierte Zentralisierung")
+plt.savefig(os.path.join(local_temp_directory(system),"figures","Boxplot_Zentralisierung_Novellenschatz.svg"))
 plt.show()
+
+
+
+df["Netzwerkdichte_conll"].hist(bins=30)
+plt.title("Historgramm: Netzwerkdichte (LLM)")
+plt.show()
+df["scaled_centralization_conll"].hist(bins=30)
+plt.title("Historgramm: gew. skaliert Zentralisierung")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Histogramm_Zentralisierung_skaliert.svg"))
+plt.show()
+
+# Subplots: Boxplot + Histogram:
+
+fig, axes = plt.subplots(1,2, figsize=(12,5))
+df.boxplot(column="scaled_centralization_conll", by="in_Deutscher_Novellenschatz", ax=axes[0])
+axes[0].set_title("Boxplot: Deutscher Novellenschatz")
+axes[0].set_ylabel("gewichtete skalierte Zentralisierung")
+df["scaled_centralization_conll"].hist(bins=30, ax=axes[1])
+axes[1].set_title("Historgramm")
+fig.suptitle("Gewichtete skalierte Zentralisierung")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplot-und-Histogramm_Zentralisierung_skaliert.svg"))
+plt.show()
+
+
 
 
 df.boxplot(column="centralization_conll", by="in_Deutscher_Novellenschatz")
 plt.show()
 
 df.boxplot(column="Netzwerkdichte_conll", by="in_Deutscher_Novellenschatz")
+plt.title("Netzwerkdichte")
+plt.ylabel("gewichtete skalierte Zentralisierung")
+plt.savefig(os.path.join(local_temp_directory(system),"figures","Boxplot_Netzwerkdichte_Novellenschatz.svg"))
 plt.show()
 
 

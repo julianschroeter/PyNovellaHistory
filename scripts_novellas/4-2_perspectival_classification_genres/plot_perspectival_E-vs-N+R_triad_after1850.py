@@ -114,7 +114,7 @@ plt.ylabel("Erzählung — Novelle")
 #    patch = mpatches.Patch(color=value, label=key)
 #    mpatches_list.append(patch)
 #plt.legend(handles=mpatches_list)
-plt.savefig(os.path.join("/home/julian/git/PyNovellaHistory/figures/N-E-R_perspektivisch_triadisch_before1850.svg"))
+plt.savefig(os.path.join("/home/julian/git/PyNovellaHistory/figures/N-E-R_perspektivisch_triadisch_after1850.svg"))
 plt.show()
 
 from mpl_toolkits import mplot3d

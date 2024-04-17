@@ -15,7 +15,7 @@ print(torch.cuda.is_available())
 
 system = "wcph113"
 
-from preprocessing.presetting import local_temp_directory
+from preprocessing.presetting import local_temp_directory, global_corpus_representation_directory
 import os
 import pandas as pd
 from preprocessing.sampling import select_from_corpus_df
@@ -36,7 +36,7 @@ typical_novellas_ids = df_novellas[df_novellas["mean"] > 0.6].index.tolist()
 
 print(typical_novellas_ids)
 
-sentences_df = pd.read_csv(os.path.join(local_temp_directory(system), "novella_corpus_sentences.csv"), index_col=0)
+sentences_df = pd.read_csv(os.path.join(global_corpus_representation_directory(system), "novella_corpus_as_sentences_for_BERT-class.csv"), index_col=0)
 
 print(sentences_df)
 

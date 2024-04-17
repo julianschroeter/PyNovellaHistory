@@ -149,6 +149,6 @@ elif lang == "de":
     fig.text(0.04, 0.5, str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))), va='center', rotation='vertical')
 
 
-filename= os.path.join(local_temp_directory(system),"figures", "1750-1810_PCA_media-types-and-genres.tiff")
+filename= os.path.join(local_temp_directory(system),"figures", "1750-1810_PCA_media-types-and-genres.svg")
 plt.savefig(filename)
 plt.show()

@@ -30,9 +30,10 @@ metadata_filepath= os.path.join(global_corpus_representation_directory(system), 
 
 
 matrix_obj = DocFeatureMatrix(data_matrix_filepath=filepath, metadata_csv_filepath= metadata_filepath)
-matrix_obj = matrix_obj.add_metadata([genre_cat, year_cat, medium_cat, "Nachname", "Titel", "Kanon_Status"])
-
 df1 = matrix_obj.data_matrix_df
+
+#matrix_obj = matrix_obj.add_metadata([genre_cat, year_cat, medium_cat, "Nachname", "Titel", "Kanon_Status"])
+
 
 
 length_infile_df_path = os.path.join(local_temp_directory(system), "novella_corpus_length_matrix.csv")
@@ -110,5 +111,6 @@ novellen = df[df["Gattungslabel_ED_normalisiert"] == "Novelle"]
 plt.boxplot([romane["Zentralisierung"], bild_romane["Zentralisierung"], novellen["Zentralisierung"]])
 plt.xticks([1,2,3], ["Romane", "Bildungsromane", "Novellen"])
 plt.title("Gattungsvergleich: Zentralisierung")
-plt.ylabel("Zentralisierung")
+plt.ylabel("Gewichtete skalierte Zentralisierung")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplot_Gattungsvergleich_Bildungsromane.svg"))
 plt.show()

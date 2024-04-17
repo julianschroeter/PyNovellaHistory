@@ -23,7 +23,7 @@ from metrics.scores import c_at_1
 
 metadata_path = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
-label_list = ["N", "R"]
+label_list = ["R", "E"]
 
 name_cat = "Nachname"
 periods_cat = "Jahr_ED"
@@ -36,7 +36,7 @@ optima_x, optima_y = [],[]
 
 n= 100
 for filename in os.listdir(global_corpus_representation_directory(system)):
-    if filename ==  "doc_complex_features_matrix.csv":
+    if filename ==  "all_complex_features_matrix.csv":
         filepath = os.path.join(global_corpus_representation_directory(system), filename)
 
         all_scores_nested = []
@@ -57,7 +57,7 @@ for filename in os.listdir(global_corpus_representation_directory(system)):
 
 
         df_all = df.copy()
-        df = df_all.loc[:, ["fraction_indirspeech","rom_setting","fear","length", "centralization","fraction_dirspeech",  "density", "danger","Gattungslabel_ED_normalisiert", "periods", "Jahr_ED", "Nachname"]]
+        df = df_all.loc[:, ["fraction_indirspeech","length", "rom_setting","fear", "centralization","fraction_dirspeech", "danger", "density", "Gattungslabel_ED_normalisiert", "periods", "Jahr_ED", "Nachname"]]
         periods = list(set(df.periods.values.tolist()))
         print(periods)
         periods = [x for x in periods if x != 0]
@@ -65,12 +65,12 @@ for filename in os.listdir(global_corpus_representation_directory(system)):
 
         results_dict = {}
         for period in periods:
-            if period == "1750-1850":
+            if period == "1850-1950":
                 print("period is: ", period)
                 period_data = df[df["periods"] == period]
                 period_data = period_data.drop(columns=["periods"])
 
-                df_0 = period_data[period_data[genre_cat] == "N"]
+                df_0 = period_data[period_data[genre_cat] == "E"]
                 df_1 = period_data[period_data[genre_cat] == "R"]
 
                 for i in range(n):
@@ -82,7 +82,7 @@ for filename in os.listdir(global_corpus_representation_directory(system)):
                     X_train, Y_train_orig = split_features_labels(train_set)
                     X_test, Y_test_orig = split_features_labels(test_set)
 
-                    subs_dict = {"N": 1, "R": 0}
+                    subs_dict = {"E": 1, "R": 0}
                     Y_train = list(map(subs_dict.get, Y_train_orig, Y_train_orig))
                     Y_test = list(map(subs_dict.get, Y_test_orig, Y_test_orig))
 
@@ -164,7 +164,7 @@ for entry in all_coef_features:
 df = pd.DataFrame.from_dict(dictionary, orient="index", columns=["mean", "st_dev"])
 df = df.sort_values(by="mean")
 print(df)
-df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_features_coefs_n100_N-R_before1850_complexfeatures.csv"))
+df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_features_coefs_n100_R-E_before1850_complexfeatures.csv"))
 
 dictionary = defaultdict(list)
 for entry in probabs_list:
@@ -185,10 +185,10 @@ predict_probs_inv = [1 - value for value in means]
 predict_probs = means
 labels = df[genre_cat].values.tolist()
 
-subs_dict = {"N": "red", "R": "blue"}
+subs_dict = {"R": "blue", "E": "green"}
 genre_c_labels = list(map(subs_dict.get, labels, labels))
 
-subs_dict = {"red": 1, "blue": 0}
+subs_dict = {"blue": 0, "green": 1}
 genre_bin = list(map(subs_dict.get, labels, labels))
 
 #threshold_ranges = np.arange(0.00, 1, 0.01)
@@ -219,7 +219,7 @@ plt.savefig("/home/julian/git/PyNovellaHistory/figures/gridsuche_c-at-one_N-E_co
 plt.show()
 
 
-outfile_output = os.path.join(local_temp_directory(system), "output_av_pred_probabs_R-N_n100_before1850_complexfeatures.txt")
+outfile_output = os.path.join(local_temp_directory(system), "output_av_pred_probabs_R-E_n100_before1850_complexfeatures.txt")
 with open(outfile_output, "w") as file:
     file.write(str1 +"\n")
     file.write(str2)
@@ -228,7 +228,7 @@ with open(outfile_output, "w") as file:
 #romeo_prototyp = 1 - df.loc["00306-00", "mean"]
 #annotation = ["Romeo und Julia auf dem Dorfe", romeo_prototyp]
 
-df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_pred_probabs_R-N_n100_before1850_complexfeatures.csv"))
+df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_pred_probabs_R-E_n100_before1850_complexfeatures.csv"))
 
 #plot_prototype_concepts(predict_probs_inv, genre_c_labels, threshold=optimum_x, annotation=annotation)
 
@@ -236,6 +236,6 @@ df.to_csv(path_or_buf=os.path.join(local_temp_directory(system), "av_pred_probab
 #annotation = ["Romeo und Julia auf dem Dorfe", romeo_prototyp]
 
 print("mean of accuracy scores: ", np.mean(acc_scores))
-print("mean of N F1 score: ", np.mean(E_f1_scores))
+print("mean of E F1 score: ", np.mean(E_f1_scores))
 print("mean of Romane F1 scores: ", np.mean(R_f1_scores))
 print("Improvement: ", optimum_Y / np.mean(acc_scores), " at: ", optimum_x)

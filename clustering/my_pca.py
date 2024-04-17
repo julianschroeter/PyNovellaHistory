@@ -40,7 +40,7 @@ class PC_df():
         self.component_loading_df = pd.DataFrame(loadings, index=self.input_df.iloc[:, :-1].columns)
 
 
-    def scatter(self, colors_list, lang="en", filename=os.path.join(local_temp_directory(system),"figures","pca.png" )):
+    def scatter(self, colors_list, lang="en", filename=os.path.join(local_temp_directory(system),"figures","pca.png" ), title="PCA"):
         list_targetlabels = ", ".join(map(str, set(self.pc_target_df["target"].values))).split(", ")
 
         zipped_dict = dict(zip(list_targetlabels, colors_list[:len(list_targetlabels)]))
@@ -67,6 +67,7 @@ class PC_df():
         #plt.xscale(value="log")
         #plt.yscale(value="log")
         #plt.xlim(-50000,500000)
+        plt.title(title)
         mpatches_list = []
         for key, value in zipped_dict.items():
             patch = mpatches.Patch(color=value, label=key)

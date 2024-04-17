@@ -33,7 +33,7 @@ The folder Scripts contains all python scripts that execute text analyses based 
 The following libraries are required:
 - numpy
 - pandas
-- spacy (Version conflicts are likely to occur because language models very fine-tuned on an older spacy version.)
+- spacy (v. 2.3.5; Version conflicts are likely to occur because language models very fine-tuned on an older spacy version.)
 - scikit-learn
 - networkx
 - matplotlib

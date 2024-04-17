@@ -10,27 +10,34 @@ I) Den Modulen mit umfangreichen Klassen und Funktionen zur Textanalyse, sowie z
 
 II) Den Skripten zur konkreten Durchführung der Analysen
 
-Zu Teil II) Alle relevanten Skripte befinden sich im Ordner scripts_novellas. Darin ist die Kapitelstruktur des Buchs abgebildet. Im Buch wird in jedem Kapitel auf einige der relevanten Skripte verwiesen.
+Zu Teil II) Alle relevanten Skripte befinden sich im Ordner scripts_novellas. Darin ist die Kapitelstruktur des Buchs abgebildet. Im Buch wird in jedem Kapitel auf einige der relevanten Skripte verwiesen. Wichtig ist die Voreinstellung der Verzeichnisse zur Nutzung 
+relevanter Feature- und Korpusrepräsentationen etc. Hinweise dazu finden sich unten.
 
 In Teil (I) sind, mit Blick auf die Replikation folgende Module besonders wichtig:
 
-Das modul preprocessing.presetting enthält Funktionen, die für unterschiedliche Systeme systematisch auf Verzeichnisse zugreifen. Diese Funktionen sollten an die jeweiligen lokalen Gegebenheiten angepasst werden. 
-Am einfachsten ist es, sich einen Zugang zu einem Hochleistungsrechner mit dem Namen "wcph113 am Lehrstuhl für Computerphilologie" der Universität Würzburg zu besorgen, auf dessen Verzeichnisstruktur die Skripte bereits zugeschnitten sind.
+Das Modul preprocessing.presetting enthält Funktionen, die für unterschiedliche Systeme systematisch auf Verzeichnisse zugreifen. Diese Funktionen sollten an die jeweiligen lokalen Gegebenheiten angepasst werden. 
+Am einfachsten ist es, sich einen Zugang zu einem leistungsfähigen Rechner mit dem Namen "wcph113 am Lehrstuhl für Computerphilologie" der Universität Würzburg zu besorgen, auf dessen Verzeichnisstruktur die Skripte bereits zugeschnitten sind.
+Am Beginn jedes Skript muss dann über die System-Variable bestimmt werden, auf welche Verzeichnisstruktur zurückgegriffen werden soll. Bei mir heißt das physische System meines eigenen Rechners "my_xps".
+Achtung: Bei der Einstellung auf "wcph113" muss zugleich die sys_Variable angepasst werden! (Und zwar durch die Zeile: sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory' bzw. den entsprechenden Pfad.))
 
 Wichtig sind folgende Funktionen und Verzeichnisse:
 
 Die Funktion: global_corpus_directory(system_name) Die auf die Volltexte (plain text) des Projektkorpus verweist.
 
 Die Funktion global_corpus_representation_directory(system_name), die auf das Verzeichnis verweist, in dem die Korpora hinsichtlich der extrahierten Features, in der Regel als Document-Feature-Matrizen (z.B. als Document-Term-Matrizen) repräsentiert und als tabellarische Dateien (.csv) gespeichert sind.
+Im zugehörigen Verzeichnis (z.B. ../novella_corpus_representation) sollten die Ausgangsdaten der Korpusrepräsentation (Document-Term-Matrizen, Repräsentationen komplexer Features etc.) etc liegen.  
+ 
+Die Funktion local_temp_directory(system_name), die auf das Verzeichnis verweist, das temporär für alle zwischengespeicherten Daten, Analyseergebnisse (hier auch für Abbildungen und tabellarisch gespeicherte Resultate) genutzt werden kann. 
+Dieses Verzeichnis war im Verlauf der Projektarbeit der Sammelbehälter für fast alles: Abbildungen, strukturierte und unstrukturiert gespeicherte Analyseergebnisse, Tabellen, und zwischenzeitlich erzeugte Feature-Extraktionen. 
+Bei mir heißt dieses Verzeichnis CLS_temp. Da sehr häufig das Korpus aus solchen, in Zwischenschritten erzeugten repräsentiert wird, 
+wurde im Lauf des Projekts immer häufiger dieses Verzeichnis verwendet. Bei der Nachnutzung bietet es sich an, hier wieder mehr Struktur hineinzubringen.
 
-Die Funktion local_temp_directory(system_name), die auf das Verzeichnis verweist, das temporär für alle zwischengespeicherten Daten, Analyseergebnisse (hier auch für Abbildungen und tabellarisch gespeicherte Resultate) genutzt werden kann. Dieses Verzeichnis war im Verlauf der Projektarbeit der Sammelbehälter für fast alles
-
-
-vocab_lists_dicts_directory(system_name) verweist auf ein Verzeichnis, in dem die für die Analysen  relevanten Listen, dictionaries, Wörterbücher etc. gespeichert sind.
+Die Funktion vocab_lists_dicts_directory(system_name) verweist auf ein Verzeichnis, in dem die für die Analysen  relevanten Listen, dictionaries, Wörterbücher etc. gespeichert sind.
 
 Die Funktion conll_base_directory verweist auf das Verzeichnis, in dem die extrahierten Features (POS-Tags, Lemmata, NER, Koreferenzauflösung, Redewiedergabe) als Output der NLP-Pipeline LLPro (Ehrmanntraut/Jannidis/Konle 2023) gespeichert sind.
 
-Für die grundlegende Architektur der KLassen und Funktionen ist wichtig, von folgenden 4 zentralen Klassen bzw. Modulen auszugehen: 
+Für die grundlegende Architektur der KLassen und Funktionen ist wichtig, von folgenden 4 zentralen Klassen bzw. Modulen auszugehen
+Siehe hierzu die pdf-Datei: Notes_on_Code_Class_Text_DocFeatureMatrix.pdf
 
 a) Der Klasse Text im Modul preprocessing.text, die Methoden bereitstellt, mit denen Features aus Textdateien extrahiert werden können. Unterklassen können auch komplexe Features extrahieren. 7
 Zu den Unterklassen gehören: FearShare im Modul sent_fear_analysis.fear
@@ -45,8 +52,7 @@ d) Funktionen zur perspektivischen Modellierung mit überwachtem maschinellen Le
 
 
 
-
-# Literatur
+## Literatur
 
 Peñas, Anselmo/Alvaro Rodrigo (2011): »A Simple Measure to Assess Non-response.« Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics, 1415–1424.
 

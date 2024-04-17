@@ -99,7 +99,7 @@ optimum_y = str(lines[1]).split(": ")[1]
 plt.axhline(y= 0.5 - ( optimum_x / 2), color="red")
 plt.axhline(y=0.5 + ( optimum_x / 2), color="red")
 
-plt.title("Prototypendistanz der Erzählungen zu Romanen und Novellen")
+plt.title("Distanz der Erzählungen zu Romanen und Novellen")
 plt.xlabel("Erzählung --- Roman")
 plt.ylabel("Erzählung ––– Novelle")
 

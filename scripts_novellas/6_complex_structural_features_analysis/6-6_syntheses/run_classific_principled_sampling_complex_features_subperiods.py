@@ -36,7 +36,7 @@ optima_x, optima_y = [],[]
 
 n= 100
 for filename in os.listdir(global_corpus_representation_directory(system)):
-    if filename ==  "doc_complex_features_matrix.csv":
+    if filename ==  "all_complex_features_matrix.csv":
         filepath = os.path.join(global_corpus_representation_directory(system), filename)
 
         all_scores_nested = []

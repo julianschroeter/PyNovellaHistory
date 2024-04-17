@@ -34,22 +34,60 @@ print(idx)
 df = df.loc[df.index.difference(idx)]
 
 
-df_all = df.copy()
+df_start = df.copy()
 
-df = df[df["year"] >= 1850]
+df = df_start[df_start["year"] < 1850]
 
 columns = df.columns.values.tolist()
 print(columns)
-variables = ['Gewaltverbrechen', 'Kampf', 'Entführung', 'Krieg', "Spuk", 'Gefahrenlevel', 'embedding_Angstempfinden', 'Angstempfinden', 'UnbekannteEindr', 'Feuer', "plötzlich", "suspense_sum"]
+variables = [ "plötzlich", "suspense_sum"] # 'Gewaltverbrechen', 'Kampf', 'Entführung', 'Krieg', "Spuk", 'Gefahrenlevel', 'embedding_Angstempfinden', 'Angstempfinden', 'UnbekannteEindr', 'Feuer',
 
+fig, axes = plt.subplots(2,2)
+i = 0
+for variable in variables:
+
+    # for all chunks with value > 0
+    new_df = df[df[variable] != 0]
+    print(new_df)
+    new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,0])
+    #means = df.groupby("Textabschnitt").median()
+    #print(means)
+    #plt.plot(means.index.values.tolist(), means[variable])
+    axes[i,0].set_xlabel("Vor 1850")
+    axes[i,0].set_ylim(0,1)
+    if variable == "suspense_sum":
+        axes[i,0].set_title("Alle Gefahrentypen")
+    elif variable == "plötzlich":
+        axes[i, 0].set_title("Wort: plötzlich")
+    i +=1
+
+
+df = df_start[df_start["year"] >= 1850]
+
+columns = df.columns.values.tolist()
+print(columns)
+variables = ["plötzlich",
+             "suspense_sum"]  # 'Gewaltverbrechen', 'Kampf', 'Entführung', 'Krieg', "Spuk", 'Gefahrenlevel', 'embedding_Angstempfinden', 'Angstempfinden', 'UnbekannteEindr', 'Feuer',
+
+
+i = 0
 for variable in variables:
     # for all chunks with value > 0
     new_df = df[df[variable] != 0]
     print(new_df)
-    new_df.boxplot(by="Textabschnitt", column=variable)
-    #means = df.groupby("Textabschnitt").median()
-    #print(means)
-    #plt.plot(means.index.values.tolist(), means[variable])
-    plt.xlabel("Nach 1850")
-    plt.ylim(0,1)
-    plt.show()
+    axes[i,1] = new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,1])
+    # means = df.groupby("Textabschnitt").median()
+    # print(means)
+    # plt.plot(means.index.values.tolist(), means[variable])
+    axes[i,1].set_xlabel("Nach 1850")
+    axes[i,1].set_ylim(0, 1)
+    if variable == "suspense_sum":
+        axes[i, 1].set_title("Alle Gefahrentypen")
+    elif variable == "plötzlich":
+        axes[i, 1].set_title("Wort: plötzlich")
+    i += 1
+fig.suptitle("Dominanz von Spannungsindikatoren in den Teilabschnitten jeder Episode")
+fig.supxlabel("Nummer der Episode")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplots_ploetzlich_suspense_within_episodes.svg"))
+plt.show()

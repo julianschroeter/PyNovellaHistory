@@ -83,6 +83,8 @@ plt.annotate("R", (0,0), fontsize=30)
 plt.annotate("E", (.95,0), fontsize=30)
 plt.annotate("N", (0,.95), fontsize=30)
 
+plt.annotate("N/R: VR-Enth: 1.03 \n VR-nicht-lin:  1.12", (0.1, 0.85), fontsize=12)
+
 #plt.annotate("Mörike: Der Schatz", (df.loc["00367-00", periods_cat], df.loc["00367-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 plt.xlim(0,1)
 plt.ylim(0,1)
@@ -99,7 +101,7 @@ optimum_y = str(lines[1]).split(": ")[1]
 plt.axhline(y= 0.5 - ( optimum_x / 2), color="red")
 plt.axhline(y=0.5 + ( optimum_x / 2), color="red")
 
-plt.title("Prototypendistanz der Romane zu Novellen und Erzählungen")
+plt.title("Distanz der Romane zu Novellen und Erzählungen")
 plt.xlabel("Roman ––– Erzählung")
 plt.ylabel("Roman ––– Novelle")
 
@@ -108,6 +110,6 @@ plt.ylabel("Roman ––– Novelle")
 #    patch = mpatches.Patch(color=value, label=key)
 #    mpatches_list.append(patch)
 #plt.legend(handles=mpatches_list)
-plt.savefig(os.path.join("/home/julian/git/PyNovellaHistory/figures/R-N-E_perspektivisch_triadisch.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "R-N-E_perspektivisch_triadisch.svg"))
 plt.show()
 

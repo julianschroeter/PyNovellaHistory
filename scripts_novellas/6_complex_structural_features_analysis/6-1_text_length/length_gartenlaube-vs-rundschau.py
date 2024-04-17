@@ -107,6 +107,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 plt.suptitle("Gattungen in der Gartenlaube und in der Deutschen Rundschau 1850–1880")
 
 plt.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_boxplot_Entwicklung_RS-Gartenl.svg"))
 plt.show()
 
 
@@ -162,6 +163,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 fig.supxlabel("Zeitverlauf")
 #fig.text(0.5, 0.04, 'Zeitverlauf von 1790 bis 1950 (in 20-Jahres-Schritten)', ha='center')
 plt.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_barplot_Entwicklung_RS-Gartenl.svg"))
 plt.show()
 
 

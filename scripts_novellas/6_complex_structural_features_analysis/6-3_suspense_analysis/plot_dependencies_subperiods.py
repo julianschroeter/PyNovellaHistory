@@ -84,7 +84,7 @@ scaled_values = scaler.fit_transform(whole_df[["Gewaltverbrechen", "Kampf", "Ent
 whole_df[["Gewaltverbrechen", "Kampf", "Entführung", "Krieg","Spuk","max_value", "Angstempfinden", "Sturm", "Feuer", "lin_susp_model"]] = scaled_values
 #whole_df = pd.DataFrame(scaled_features, index=df.index, columns=df.columns)
 
-whole_df = years_to_periods(input_df=whole_df, category_name=year_cat_name, start_year=1810,end_year=1940, epoch_length=20,
+whole_df = years_to_periods(input_df=whole_df, category_name=year_cat_name, start_year=1810,end_year=1940, epoch_length=40,
                             new_periods_column_name="periods")
 
 #whole_df = whole_df[whole_df["lin_susp_model"] != 0]
@@ -296,29 +296,13 @@ plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
-subperiod_df = df[df["periods"] == "1830-1850"]
-subperiod_df.boxplot(column="max_value", by=genre_cat_name)
+#subperiod_df = df[df["periods"] == "1830-1850"]
+#subperiod_df.boxplot(column="max_value", by=genre_cat_name)
 #plt.xticks(rotation=90)
 #plt.tight_layout()
-plt.title("Für Teilperiode 1830-1850")
-#plt.ylim(0,0.6)
-plt.show()
-
-subperiod_df = df[df["periods"] == "1890-1930"]
-subperiod_df.boxplot(column="max_value", by=genre_cat_name)
-plt.xticks(rotation=90)
-plt.tight_layout()
-plt.title("Für Teilperiode 1890-1930")
-plt.ylim(0,0.6)
-plt.show()
-
-subperiod_df = df[df["periods"] == "1810-1850"]
-subperiod_df.boxplot(column="max_value", by=genre_cat_name)
-plt.xticks(rotation=90)
-plt.ylim(0,0.6)
-plt.tight_layout()
-plt.title("Für Teilperiode 1810-1850")
-plt.show()
+#plt.title("Für Teilperiode 1830-1850")
+##plt.ylim(0,0.6)
+#plt.show()
 
 subperiod_df = df[df["periods"] == "1810-1850"]
 red_df = subperiod_df[subperiod_df.isin({"Medium":["Taschenbuch", "Journal", "Buch", "Anthologie", "Pantheon"]}).any(axis=1)]
@@ -327,7 +311,26 @@ plt.xticks(rotation=90)
 #plt.ylim(0,0.6)
 plt.tight_layout()
 plt.title("Für Teilperiode 1810-1850")
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplots_Medienformate_vor_1850_mit_Pantheon_Gefahrenlevel.svg"))
 plt.show()
+
+
+#subperiod_df = df[df["periods"] == "1890-1930"]
+#subperiod_df.boxplot(column="max_value", by=genre_cat_name)
+#plt.xticks(rotation=90)
+#plt.tight_layout()
+#plt.title("Für Teilperiode 1890-1930")
+#plt.ylim(0,0.6)
+#plt.show()
+
+subperiod_df = df[df["periods"] == "1810-1850"]
+subperiod_df.boxplot(column="max_value", by=genre_cat_name)
+plt.xticks(rotation=90)
+plt.ylim(0,0.6)
+plt.tight_layout()
+plt.title("Für Teilperiode 1810-1850")
+plt.show()
+
 
 
 subperiod_df = df[df["periods"] == "1890-1930"]

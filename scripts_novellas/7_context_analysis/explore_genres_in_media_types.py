@@ -39,11 +39,11 @@ print(df_conc)
 fig, axes = plt.subplots(3,2, figsize= (8,12))
 grouped_urania.plot(kind="pie",
         colors=["blue", "green","red", "orange"], autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*grouped_urania.sum()),
-             ax=axes[1,0]) #,
+             ax=axes[1,0], textprops={'color':"w"}) #,
 
 grouped_agl.plot(kind="pie",
         colors=["blue", "green","red", "orange"], autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*grouped_agl.sum()),
-             ax=axes[0,0])
+             ax=axes[0,0], textprops={'color':"w"})
 
 
 urania_genres = df_urania.Gattungslabel_ED_normalisiert.values.tolist()
@@ -59,7 +59,7 @@ df_daheim = df[df["medium"] == "daheim"]
 df_daheim.rename(columns={"Nachname":"FB Daheim \n (1864–1890)"}, inplace=True)
 daheim_grouped = df_daheim.groupby("Gattungslabel_ED_normalisiert").count().iloc[:,0]
 daheim_grouped.plot(kind="pie", autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*daheim_grouped.sum()),
-        colors=["blue", "green","red", "orange"], ax=axes[1,1])
+        colors=["blue", "green","red", "orange"], ax=axes[1,1], textprops={'color':"w"})
 
 
 df_gartlb = df[df["medium"] == "gartenlaube"]
@@ -67,21 +67,21 @@ df_gartlb.rename(columns={"Nachname":"FB Gartenlaube \n (1853–1890)"}, inplace
 gartlb_grouped = df_gartlb.groupby("Gattungslabel_ED_normalisiert").count().iloc[:,0]
 gartlb_grouped.plot(kind="pie",
         colors=["blue", "green","red", "orange"], ax=axes[0,1],
-        autopct=lambda p: '{:.2f}%\n({:.0f})'.format(p,(p/100)*gartlb_grouped.sum()))
+        autopct=lambda p: '{:.2f}%\n({:.0f})'.format(p,(p/100)*gartlb_grouped.sum()), textprops={'color':"w"})
 
 
 df_pantheon = df[df["medium"] == "pantheon"]
 df_pantheon.rename(columns={"Nachname":"Pantheon \n (1828–1830)"}, inplace=True)
 pantheon_grouped = df_pantheon.groupby("Gattungslabel_ED_normalisiert").count().iloc[:,0]
 pantheon_grouped.plot(kind="pie", autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*pantheon_grouped.sum()),
-        colors=["blue", "green","red", "orange"], ax=axes[2,0])
+        colors=["blue", "green","red", "orange"], ax=axes[2,0], textprops={'color':"w"})
 
 df_dtRS = df[df["medium"] == "dtrundsch"]
 df_dtRS.rename(columns={"Nachname":"Dt. Rundschau \n (1874–1890)"}, inplace=True)
 dtRS_grouped = df_dtRS.groupby("Gattungslabel_ED_normalisiert").count().iloc[:,0]
 dtRS_grouped.plot(kind="pie",
         colors=["green","red", "orange"], ax=axes[2,1],
-        autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*dtRS_grouped.sum()))
+        autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*dtRS_grouped.sum()), textprops={'color':"w"})
 
 plt.suptitle("Verteilung der Gattungsbezeichnungen in einzelnen Organen")
 plt.savefig("/home/julian/Documents/CLS_temp/figures/labels_in_medienformaten.svg")

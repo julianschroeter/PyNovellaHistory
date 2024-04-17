@@ -69,7 +69,7 @@ df_corpus_statistics_genre.unstack().plot(kind='bar', stacked=False, title= titl
                                     color=["green", "orange", "red", "blue", "grey"])
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Genres_and_Periods.png"))
+plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Genres_and_Periods.svg"))
 plt.show()
 
 
@@ -83,7 +83,7 @@ df_corpus_statistics_media.unstack().plot(kind='bar', stacked=False, title= titl
                                     color=["lightgreen", "orange", "purple", "lightblue", "grey", "cyan", "pink", "magenta"])
 plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Media_types_and_Periods.png"))
+plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Media_types_and_Periods.svg"))
 plt.show()
 
 corpus_statistics = df.groupby(["Medientyp_ED"]).size()

@@ -63,8 +63,8 @@ df = years_to_periods(input_df=df, category_name="Jahr_ED", start_year=1770, end
                       new_periods_column_name="periods")
 
 
-replace_dict = {"Gattung_ED": {"N": "Novelle", "E": "Erzählung", "0E": "Prosa",
-                                    "R": "Prosa", "M": "Prosa", "XE": "Prosa"}}
+replace_dict = {"Gattung_ED": {"N": "Novelle", "E": "Erzählung", "0E": "MLP",
+                                    "R": "Roman", "M": "MLP", "XE": "MLP"}}
 df = full_genre_labels(df, replace_dict=replace_dict)
 
 
@@ -82,7 +82,7 @@ df = df[df["Jahr_ED"] >= 1810]
 x = df.loc[:, "Jahr_ED"]
 res = siegelslopes(df.loc[:, "dep_var"], x)
 sns.lineplot(data=df, x="Jahr_ED", y="dep_var", hue="Gattung_ED",
-             palette=["red", "grey","green" ])
+             palette=["red", "grey","green", "blue" ])
 plt.plot(x, res[1] + res[0] * x, color="grey", linewidth=1)
 
 N_df = df[df["Gattung_ED"] == "Novelle"]
@@ -93,4 +93,65 @@ plt.ylim(0,1)
 plt.title("Zentralisierung in Novellen und übriger Prosa")
 plt.ylabel("Zentralisierung")
 plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Zentralisierung_in_Novellen_vs_sonstige_Prosa.svg"))
+plt.show()
+
+
+zipped_dict = {"Novelle":"red", "Erzählung":"green", "MLP": "cyan", "Märchen":"orange", "Roman":"blue", "Prosa": "cyan"}
+fig, axes = plt.subplots(2,2)
+
+df_R = df[df["Gattung_ED"] == "Roman"]
+x = df_R.loc[:, "Jahr_ED"]
+res = siegelslopes(df_R.loc[:, "dep_var"], x)
+sns.lineplot(data=df_R, x="Jahr_ED", y="dep_var", hue="Gattung_ED",
+             palette=zipped_dict, ax=axes[0,1])
+axes[0,1].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[0,1].set_ylim(0,1)
+axes[0,1].set_title("Roman ")
+axes[0,1].set_ylabel("")
+axes[0,1].set_xlabel("")
+
+
+df_E = df[df["Gattung_ED"] == "Erzählung"]
+x = df_E.loc[:, "Jahr_ED"]
+res = siegelslopes(df_E.loc[:, "dep_var"], x)
+sns.lineplot(data=df_E, x="Jahr_ED", y="dep_var", hue="Gattung_ED",
+             palette=zipped_dict, ax=axes[1,1])
+axes[1,1].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[1,1].set_ylim(0,1)
+axes[1,1].set_title("Erzählung")
+axes[1,1].set_ylabel("")
+axes[1,1].set_xlabel("")
+
+
+
+df_N = df[df["Gattung_ED"] == "Novelle"]
+x = df_N.loc[:, "Jahr_ED"]
+res = siegelslopes(df_N.loc[:, "dep_var"], x)
+sns.lineplot(data=df_N, x="Jahr_ED", y="dep_var", hue="Gattung_ED",
+             palette=zipped_dict, ax=axes[1,0])
+axes[1,0].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[1,0].set_ylim(0,1)
+axes[1,0].set_title("Novelle")
+axes[1,0].set_ylabel("")
+axes[1,0].set_xlabel("")
+
+
+
+df_MLP = df[df["Gattung_ED"] == "MLP"]
+x = df_MLP.loc[:, "Jahr_ED"]
+res = siegelslopes(df_MLP.loc[:, "dep_var"], x)
+sns.lineplot(data=df_MLP, x="Jahr_ED", y="dep_var", hue="Gattung_ED",
+             palette=zipped_dict, ax=axes[0,0])
+axes[0,0].plot(x, res[1] + res[0] * x, color="black", linewidth=1)
+axes[0,0].set_ylim(0,1)
+axes[0,0].set_title("MLP")
+axes[0,0].set_ylabel("")
+axes[0,0].set_xlabel("")
+
+
+fig.suptitle("Zeitlicher Verlauf der Zentralisierung")
+fig.supxlabel("Zeitverlauf")
+fig.supylabel("Zentralisierung")
+fig.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Zentralisierung-Zeitverlauf_Einzelgattungen.svg"))
 plt.show()

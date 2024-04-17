@@ -40,7 +40,7 @@ replace_dict = {"Medientyp_ED": {"Zeitschrift": "Journal", "Zeitung": "Journal",
 matrix_obj.data_matrix_df = standardize_meta_data_medium(matrix_obj.data_matrix_df, "Medium_ED")
 
 
-matrix_obj = matrix_obj.reduce_to_categories("periods", ["1825-1845"]) #, "1815-1822" , "1825-1845"
+matrix_obj = matrix_obj.reduce_to_categories("periods", ["1805-1825"]) #, ,"1825-1845" "1815-1822" , "1825-1845"
 matrix_obj = matrix_obj.reduce_to_categories("medium", ["urania","aglaja"])
 
 df = matrix_obj.data_matrix_df
@@ -109,9 +109,10 @@ left, right = axes[1].set_xlim()
 axes[1].hlines(y=25000,xmin=left, xmax=right, label= "100 Normseiten", color="red")
 axes[1].set_ylim([0, 50000])
 plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", rotation= 90)
-plt.suptitle("Gattungen in Taschenbüchern 1825-1845")
+plt.suptitle("Gattungen in Taschenbüchern 1805-1825")
 
 plt.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_boxplot_Entwicklung_Textlänge_in_TBs-Urania-Aglaja_1805-25.svg"))
 plt.show()
 
 
@@ -167,6 +168,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 fig.supxlabel("Zeitverlauf")
 #fig.text(0.5, 0.04, 'Zeitverlauf von 1790 bis 1950 (in 20-Jahres-Schritten)', ha='center')
 plt.tight_layout()
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_barplot_Entwicklung_Textlänge_in_TBs-Urania-Aglaja.svg"))
 plt.show()
 
 

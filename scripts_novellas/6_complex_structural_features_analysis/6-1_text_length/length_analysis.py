@@ -21,7 +21,7 @@ matrix_obj = matrix_obj.reduce_to(["token_count"])
 matrix_obj = matrix_obj.add_metadata(["Gattungslabel_ED_normalisiert", "Jahr_ED", "Medientyp_ED"])
 matrix_obj.data_matrix_df = years_to_periods(matrix_obj.data_matrix_df, category_name="Jahr_ED", start_year=1760, end_year=1970, epoch_length=10, new_periods_column_name="periods")
 
-cat_labels = ["N", "E", "0E", "XE"]
+cat_labels = ["N", "E", "0E", "XE", "R"]
 matrix_obj = matrix_obj.reduce_to_categories("Gattungslabel_ED_normalisiert", cat_labels)
 
 
@@ -99,7 +99,7 @@ axes[1].set_ylim([0, 150000])
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.suptitle("Gattungs- und Medienabhängigkeit der Textlänge")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplots_Gattungen_Medienformate_Länge.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplots_Gattungen_Medienformate_Länge.svg"))
 plt.show()
 
 fig, ax = plt.subplots()
@@ -111,7 +111,7 @@ ax.set_ylim([0, 150000])
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.title("Textsortenabhängigkeit der Textlänge")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Textsortenabhängigkeit_Länge_MLP-vs-R.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_boxplot_Textsortenabhängigkeit_Länge_MLP-vs-R.svg"))
 plt.show()
 
 fig, ax = plt.subplots()
@@ -124,7 +124,7 @@ ax.set_ylim([0, 150000])
 plt.text(right, 50000, "200 Normseiten", ha="right",va="center", color="red", rotation= 90)
 plt.title("Textsortenabhängigkeit der Textlänge")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Textsortenabhängigkeit_Länge_Alle-Gattungen.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Textsortenabhängigkeit_Länge_Alle-Gattungen.svg"))
 plt.show()
 
 
@@ -172,7 +172,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 fig.supxlabel("Zeitverlauf")
 #fig.text(0.5, 0.04, 'Zeitverlauf von 1790 bis 1950 (in 20-Jahres-Schritten)', ha='center')
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Entwicklung_Textlänge_Gattungen-und-Medien.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Entwicklung_Textlänge_Gattungen-und-Medien.svg"))
 plt.show()
 
 print(grouped_df)

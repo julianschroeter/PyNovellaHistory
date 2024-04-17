@@ -89,6 +89,9 @@ plt.annotate("N", (0,0), fontsize=30)
 plt.annotate("R", (.95,0), fontsize=30)
 plt.annotate("E", (0,.95), fontsize=30)
 
+# insert the improvement rates (I did it manually, here, from the improvement rate calculations
+plt.annotate("N/E: VR-Enth: 1.01 \n VR-nicht-lin: 1.00", (0,0.85), fontsize=12)
+
 #plt.annotate("Mörike: Der Schatz", (df.loc["00367-00", periods_cat], df.loc["00367-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 plt.xlim(0,1)
 plt.ylim(0,1)
@@ -114,7 +117,7 @@ plt.ylabel("Distanz zur Erzählung")
 #    patch = mpatches.Patch(color=value, label=key)
 #    mpatches_list.append(patch)
 #plt.legend(handles=mpatches_list)
-plt.savefig(os.path.join("/home/julian/git/PyNovellaHistory/figures/N-E-R_perspektivisch_triadisch.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "N-E-R_perspektivisch_triadisch.svg"))
 plt.show()
 
 from mpl_toolkits import mplot3d

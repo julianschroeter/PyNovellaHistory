@@ -71,7 +71,7 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
         plt.xlabel("Anzahl k der Cluster")
         plt.axis([1.8, 8.5, 0.0, 0.5])
         plt.tight_layout()
-        # plt.save_fig("silhouette_score_vs_k_plot")
+        plt.savefig(os.path.join(local_temp_directory(system), "figures", "silhouette_score_vs_k_plot.svg"))
         plt.show()
 
         kmeans = KMeans(n_clusters=2)
@@ -85,6 +85,7 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
         # get all of the unique clusters
         clusters = unique(result)
 
+        fig, axes = plt.subplots(1,2)
         pca = PCA(n_components=0.95)
         vecs = pca.fit_transform(X, Y)
         # plot the clusters
@@ -92,20 +93,22 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
             # get data points that fall in this cluster
             index = where(result == cluster)
             # make the plot
-            plt.scatter(vecs[index, 0], vecs[index, 1])
-        plt.title("PCA mit Clustering der Novellen und Erzählungen mit k-Means")
-        plt.show()
-
+            axes[1].scatter(vecs[index, 0], vecs[index, 1])
+        axes[1].set_title("Clustering mi K-Means")
+        axes[1].set_xlabel("Unüberwachte Gruppierung")
         legend_dict = {"Novelle": "red", "Erzählung": "green"}
         mpatches_list = []
         for key, value in legend_dict.items():
             patch = mpatches.Patch(color=value, label=key)
             mpatches_list.append(patch)
-        plt.legend(handles=mpatches_list)
+        axes[0].legend(handles=mpatches_list)
 
 
-        plt.scatter(vecs[:,0], vecs[:,1], c="None", edgecolor=Y_color)
-        plt.title("PCA: Novellen und Erzählungen")
+        axes[0].scatter(vecs[:,0], vecs[:,1], c="None", edgecolor=Y_color)
+        axes[0].set_title("PCA")
+        axes[0].set_xlabel("Mit Labels der Erstdrucke")
+        fig.tight_layout()
+        fig.savefig(os.path.join(local_temp_directory(system), "figures", "K-Means-Clustering-ana-PCA_N-E.svg"))
         plt.show()
 
         rnd_model = RandomForestClassifier()

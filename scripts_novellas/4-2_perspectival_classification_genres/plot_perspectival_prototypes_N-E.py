@@ -68,14 +68,17 @@ plt.axhline(y= 0.5 - ( optimum_x / 2))
 plt.axhline(y=0.5 + ( optimum_x / 2))
 plt.title("Historisierende perspektivische Modellierung")
 plt.ylim(0.05, 0.95 )
-plt.xlim(1760,1940)
+plt.xlim(1800,1950)
 
 mpatches_list = []
 for key, value in legend_dict.items():
     patch = mpatches.Patch(color=value, label=key)
     mpatches_list.append(patch)
 plt.legend(handles=mpatches_list)
-plt.savefig("/home/julian/git/PyNovellaHistory/figures/N-vs-E_temporal_perspectival.svg")
-plt.savefig("/home/julian/git/PyNovellaHistory/figures/N-vs-E_temporal_perspectival.png")
+plt.title("Synchrones perspektivisches Modell mit zeitlichem Verlauf für Gattungspaare")
+plt.xlabel("Zeitlicher Verlauf")
+plt.ylabel("Vorhersagewahrscheinlichkeit")
+plt.tight_layout()
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "N-vs-E_temporal_perspectival_one_model.svg"))
 plt.show()
 

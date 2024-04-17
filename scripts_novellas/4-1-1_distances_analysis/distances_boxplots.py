@@ -1,4 +1,5 @@
 system = "wcph113"
+system = "my_xps"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -93,6 +94,7 @@ plt.title("Boxplots der Distanzen innerhalb und zwischen Gattungen")
 plt.xticks([1,2,3,4,5,6,7], ["D(intra)(N)","D(inter)(N,E)", "D(intra)(E)", "D(intra)(RD)", "D(intra)(R)", "D(inter)(R,M)", "D(intra)(M)"])
 plt.xticks(rotation=20)
 plt.figure(figsize=(20,20))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplots_der_Distanzen_innerhalb_und_zwischen_Gattungen.svg"))
 plt.show()
 
 # for paris (dependent samples)

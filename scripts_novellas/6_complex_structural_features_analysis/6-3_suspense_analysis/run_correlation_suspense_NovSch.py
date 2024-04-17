@@ -41,19 +41,19 @@ df = novellas_df
 df = df[df["doc_chunk_id"].map(len) == 8]
 print(df)
 
-heftromane_infilepath = os.path.join(local_temp_directory(system), "MaxDanger_Heftromane_unscaled_with_metadata.csv")
+#heftromane_infilepath = os.path.join(local_temp_directory(system), "MaxDanger_Heftromane_unscaled_with_metadata.csv")
 novellas_infilepath = os.path.join(local_temp_directory(system),  "MaxDangerFearCharacters_novellas_unscaled.csv" )
 novellas_metadata_filepath = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
-heftromane_df = pd.read_csv(heftromane_infilepath, index_col=0)
+#heftromane_df = pd.read_csv(heftromane_infilepath, index_col=0)
 
-heftromane_df= heftromane_df.assign(medium = "Heftroman")
-heftromane_df = heftromane_df.drop(columns=["Figuren", "Figurenanzahl",
-                                            "Netwerkdichte", "Anteil Figuren mit degree centrality == 1",
-                                            "deg_centr", "weighted_deg_centr", "symp_dict", "author_norm", "id",
-                                            "EndCharName_full", "symp_EndChar", "centr_EndChar",
-                                            "weigh_centr_EndChar", "gender_EndChar","EndChar_series_protagonist",
-                                            "GND", "series", "license", "publisher", "tokenCount",
-                                            "Unnamed: 11", "Unnamed: 12", "Unnamed: 13", "Unnamed: 14" ])
+#heftromane_df= heftromane_df.assign(medium = "Heftroman")
+#heftromane_df = heftromane_df.drop(columns=["Figuren", "Figurenanzahl",
+#                                            "Netwerkdichte", "Anteil Figuren mit degree centrality == 1",
+#                                            "deg_centr", "weighted_deg_centr", "symp_dict", "author_norm", "id",
+#                                            "EndCharName_full", "symp_EndChar", "centr_EndChar",
+#                                            "weigh_centr_EndChar", "gender_EndChar","EndChar_series_protagonist",
+#                                            "GND", "series", "license", "publisher", "tokenCount",
+#                                            "Unnamed: 11", "Unnamed: 12", "Unnamed: 13", "Unnamed: 14" ])
 
 novellas_df = pd.read_csv(novellas_infilepath, index_col = 0)
 novellas_dtm_obj = DocFeatureMatrix(data_matrix_filepath=novellas_infilepath, metadata_csv_filepath=novellas_metadata_filepath)
@@ -123,8 +123,8 @@ df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]
 
 df_canon3 = df[df["Novellenschatz"]== "Novellenschatz"]
 df_canon0 = df[df["Novellenschatz"]== "sonst. MLP"]
-colors_list = ["cyan", "yellow", "pink", "blue", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
-colors_list = ["cyan", "red", "green", "yellow", "orange", "blue", "pink", "grey", "magenta", "black", "darkgreen", "lightblue"]
+colors_list = ["cyan", "yellow", "pink", "lightgreen", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
+colors_list = ["cyan", "red", "green", "yellow", "orange", "lightgreen", "pink", "grey", "magenta", "black", "darkgreen", "lightblue"]
 colors_list = ["red", "green", "cyan"]
 genres_dict = dict(zip(genres_list, colors_list[:len(genres_list)]))
 
@@ -148,11 +148,11 @@ for genre, color in authors_dict.items():
 #authors_colors_list = [authors_dict[x] for x in df["author"].values.tolist()]
 
 canon_mpatches_list = []
-for canon, color in {"sonst. MLP":"blue", "Novellenschatz":"orange"}.items():
+for canon, color in {"sonst. MLP":"lightgreen", "Novellenschatz":"orange"}.items():
     patch = mpatches.Patch(color=color, label=canon)
     canon_mpatches_list.append(patch)
 
-y_variable = "Liebe"  #"max_value" # "lin_susp_model"
+y_variable =  "max_value" #" # "lin_susp_model" "Liebe"
 x_variables = [year_cat_name]
 
 if y_variable == "max_value":
@@ -162,7 +162,7 @@ elif y_variable == "lin_susp_model":
 else: y_variable_legend = y_variable
 
 
-sns.lineplot(data=df, x=year_cat_name, y= y_variable, hue="Novellenschatz", palette={"Novellenschatz":"orange", "sonst. MLP":"blue"})
+sns.lineplot(data=df, x=year_cat_name, y= y_variable, hue="Novellenschatz", palette={"Novellenschatz":"orange", "sonst. MLP":"lightgreen"})
 plt.title("Zeitliche Zu- und Abnahme von " + y_variable)
 plt.ylabel(y_variable)
 plt.xlabel("Jahr des Erstdrucks")
@@ -174,10 +174,10 @@ x = df_canon3.loc[:, "Liebe"]
 res = siegelslopes(df_canon3.loc[:, "Angstempfinden"], x)
 plt.plot(x, res[1] + res[0] * x, color="orange", linewidth=3)
 
-plt.scatter(df_canon0["Liebe"], df_canon0["Angstempfinden"], c="blue")
+plt.scatter(df_canon0["Liebe"], df_canon0["Angstempfinden"], c="lightgreen")
 x = df_canon0.loc[:, "Liebe"]
 res = siegelslopes(df_canon0.loc[:, "Angstempfinden"], x)
-plt.plot(x, res[1] + res[0] * x, color="blue", linewidth=3)
+plt.plot(x, res[1] + res[0] * x, color="lightgreen", linewidth=3)
 plt.legend(handles=canon_mpatches_list)  # authors_mpatches_list
 plt.ylabel("Angstempfinden")
 plt.xlabel("Liebe")
@@ -194,17 +194,17 @@ for x_variable in x_variables:
     print("Pearson's r: ", pearsonr(df.loc[:, x_variable], df.loc[:, y_variable])[0])
     fig, ax = plt.subplots()
 
-    plt.scatter(df_canon0.loc[:, x_variable], df_canon0.loc[:, y_variable], color="blue") #  authors_colors_list
+    plt.scatter(df_canon0.loc[:, x_variable], df_canon0.loc[:, y_variable], color="lightgreen") #  authors_colors_list
     regr = LinearRegression()
     regr.fit(df_canon0.loc[:, x_variable].array.reshape(-1, 1), df_canon0.loc[:, y_variable])
     y_pred = regr.predict(df_canon0.loc[:, x_variable].array.reshape(-1, 1))
-    #plt.plot(df_canon0.loc[:, x_variable], y_pred, color="blue", linewidth=1, linestyle=":")
+    #plt.plot(df_canon0.loc[:, x_variable], y_pred, color="lightgreen", linewidth=1, linestyle=":")
 
     # siegel-slope forgotten texts:
     x = df_canon0.loc[:, x_variable]
     res = siegelslopes(df_canon0.loc[:, y_variable], x)
     print(res)
-    plt.plot(x, res[1] + res[0] * x, color="blue", linewidth=3)
+    plt.plot(x, res[1] + res[0] * x, color="lightgreen", linewidth=3)
 
     plt.scatter(df_canon3.loc[:, x_variable], df_canon3.loc[:, y_variable], color="orange")  # authors_colors_list
     regr = LinearRegression()
@@ -239,7 +239,7 @@ for x_variable in x_variables:
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=canon_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_" + x_variable + y_variable + ".png"
+    outfilename = "correlation_" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 
