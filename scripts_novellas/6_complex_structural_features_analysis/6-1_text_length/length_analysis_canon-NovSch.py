@@ -93,8 +93,8 @@ Buch_df = df['token_count'][df['Medientyp_ED'] == 'Buch']
 import seaborn as sns
 fig, ax = plt.subplots()
 sns.lineplot(x="Jahr_ED", y="token_count", hue="Gattungslabel_ED_normalisiert", data=df, palette=["red", "cyan", "green"])
-sns.lineplot(x="Jahr_ED", y="token_count", hue="Novellenschatz", data=df_NovSch, palette=["orange"])
-sns.lineplot(x="Jahr_ED", y="token_count", hue="Kanon_Status", data=df_canon3, palette=["blue"])
+sns.lineplot(x="Jahr_ED", y="token_count", hue="Novellenschatz", data=df_NovSch, palette=["coral"])
+sns.lineplot(x="Jahr_ED", y="token_count", hue="Kanon_Status", data=df_canon3, palette=["purple"])
 
 plt.ylabel("Textlänge")
 plt.xlabel("Jahr")

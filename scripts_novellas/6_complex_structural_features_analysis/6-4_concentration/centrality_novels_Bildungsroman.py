@@ -104,11 +104,13 @@ list_colors_target = [zipped_dict[item] for item in genres_list]
 bildungsroman_ids = ["00549-00", "00557-00", "00558-00",
                                              "00551-00"]
 
-
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
 bild_romane = df.loc[bildungsroman_ids]
 romane = df[df["Gattungslabel_ED_normalisiert"]=="Roman"]
 novellen = df[df["Gattungslabel_ED_normalisiert"] == "Novelle"]
-plt.boxplot([romane["Zentralisierung"], bild_romane["Zentralisierung"], novellen["Zentralisierung"]])
+plt.boxplot([romane["Zentralisierung"], bild_romane["Zentralisierung"], novellen["Zentralisierung"]], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 plt.xticks([1,2,3], ["Romane", "Bildungsromane", "Novellen"])
 plt.title("Gattungsvergleich: Zentralisierung")
 plt.ylabel("Gewichtete skalierte Zentralisierung")

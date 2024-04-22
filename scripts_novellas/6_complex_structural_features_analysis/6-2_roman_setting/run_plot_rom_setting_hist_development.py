@@ -50,7 +50,7 @@ df_corpus_statistics = pd.DataFrame(corpus_statistics)
 df_corpus_statistics.unstack().plot(kind='bar', stacked=False, title= "Corpus Size (for periods)")
 plt.show()
 
-sns.lineplot(df, x="Jahr_ED", y="rom_top", hue="Gattungslabel_ED_normalisiert", palette=["red","orange","blue","green"])
+sns.lineplot(df, x="Jahr_ED", y="rom_top", hue="Gattungslabel_ED_normalisiert", palette={"Novelle":"red","Märchen":"orange","sonstige Prosaerzählung":"cyan", "Erzählung":"green"})
 plt.ylabel("NamedEntShare")
 plt.xlabel("Zeitverlauf")
 plt.title("Entwicklung der Dominanz romanischen Settings")

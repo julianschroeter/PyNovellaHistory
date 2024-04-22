@@ -14,6 +14,7 @@ from sklearn import model_selection
 from sklearn.metrics import accuracy_score, classification_report
 import numpy as np
 import pandas as pd
+import matplotlib.patches as mpatches
 
 system_name = "my_xps" #  "wcph113" # "my_mac" # "wcph104" "my_xps" #
 
@@ -307,20 +308,28 @@ for i in range(n):
     predictions = lr_model.predict(lengths.reshape(-1, 1))
     probabs = lr_model.predict_proba(lengths.reshape(-1, 1))
     probabs = [x[1] for x in probabs]
-    pred_colors = ["red" if x == "rom" else "green" for x in predictions]
+    pred_colors = ["magenta" if x == "rom" else "grey" for x in predictions]
 
     prob_df = pd.DataFrame(data={"lengths": lengths, "probabs": probabs,
                                  "predictions": predictions})
     x_boundary = prob_df[prob_df["probabs"] >= 0.5].iloc[0, 0]
 
     plt.scatter(lengths, probabs, c=pred_colors)
-    plt.title("Entscheidungsgrenze für die Klassifikation (Val)")
+    plt.title("Entscheidungsgrenze für die Klassifikation: \n Romanisch/Nicht-Rom.")
     plt.ylabel("Vorhersagewahrscheinlichkeit")
     plt.xlabel("Romanisches Setting (NamedEntShare)")
-    plt.vlines(x_boundary, 0, 0.5, label="Decision boundary")
-    plt.hlines(0.5, -3, x_boundary, label="Decision Boundary: ")
-    plt.text(x_boundary, 0, "Entscheidungsgrenze: " + str(x_boundary), ha='left', va='center')
-    plt.legend
+    plt.vlines(x_boundary, 0, 0.5, label="Decision boundary", color="grey")
+    plt.hlines(0.5, -3, x_boundary, label="Decision Boundary: ", color="grey")
+    plt.text(x_boundary, 0, "Entscheidungsgrenze: " + str(x_boundary).replace(".",","), ha='left', va='center')
+
+    predictions = ["Romanisch" if "rom" else "Nicht-Rom." for element in predictions]
+    mpatches_list = []
+    zipped_dict = {"Romanisch": "magenta", "Nicht-Rom.": "grey"}
+    for key, value in zipped_dict.items():
+        patch = mpatches.Patch(color=value, label=key)
+        mpatches_list.append(patch)
+
+    plt.legend(handles=mpatches_list)
     plt.savefig(os.path.join(local_temp_directory(system_name), "figures",
                              "sigmoid_Entscheidungsgrenze_RomSetting_NEShare.svg"))
     plt.show()
@@ -333,10 +342,10 @@ non_rom_data = df[df["Romanisches Setting"] == "non_rom"]["NamedEntShare"].value
 print(non_rom_data)
 
 fig, axes = plt.subplots(1,2)
-axes[0].boxplot([rom_data, non_rom_data])
+axes[0].boxplot([rom_data, non_rom_data],  medianprops=dict(color="grey"))
 #plt.xlim([0,3])
 axes[0].set_xticks([1,2], ["romanisch", "nicht-romanisch"])
-axes[0].axhline(y= x_boundary)
+axes[0].axhline(y= x_boundary, color="grey")
 #axes[0].set_xlabel("Textgruppen nach Annotation")
 axes[0].set_ylabel("NamedEntShare")
 axes[0].set_title("NamedEntShare")
@@ -398,8 +407,11 @@ non_rom_data = df[df["Romanisches Setting"] == "non_rom"]["SettingShare"].values
 print("rom_data: ", rom_data)
 print(non_rom_data)
 
+boxplot_colors = dict(boxes='dimgray', whiskers='gray', medians='gray', caps='gray')
+c = "grey"
 #fig, ax = plt.subplots()
-axes[1].boxplot([rom_data, non_rom_data])
+axes[1].boxplot([rom_data, non_rom_data],
+            medianprops=dict(color=c))
 #plt.xlim([0,3])
 axes[1].set_xticks([1,2], ["romanisch", "nicht-romanisch"])
 #ax.axhline(y= x_boundary)

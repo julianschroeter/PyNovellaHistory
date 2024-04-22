@@ -48,8 +48,8 @@ N_R_df_N["inv_N_R"] = N_R_df_N.apply(lambda x: 1 - x.mean_N_R, axis=1)
 N_df = N_R_df_N.loc[:,["inv_N_E", "inv_N_R", "Titel", "Nachname", "periods", "Jahr_ED"]]
 N_df = N_df.sort_values(by=["inv_N_R", "inv_N_E"])
 N_df["centr_dist"] = N_df.apply(lambda x: sqrt(pow(x.inv_N_R,2) + pow(x.inv_N_E,2)), axis=1)
-N_df["Kurztitel"] = N_df.apply(lambda x: str(x.Nachname) + ": " + str(x.Titel), axis=1)
-
+N_df["Kurztitel"] = N_df.apply(lambda x: str(x.Nachname)[0] + ".: " + str(x.Titel)[:15]+".", axis=1)
+N_df_bef = N_df.copy()
 labels = df[genre_cat].values.tolist()
 
 subs_dict = {"R": "blue", "N": "red"}
@@ -147,7 +147,7 @@ N_R_df_N["inv_N_R"] = N_R_df_N.apply(lambda x: 1 - x.mean_N_R, axis=1)
 N_df = N_R_df_N.loc[:,["inv_N_E", "inv_N_R", "Titel", "Nachname", "periods", "Jahr_ED"]]
 N_df = N_df.sort_values(by=["inv_N_R", "inv_N_E"])
 N_df["centr_dist"] = N_df.apply(lambda x: sqrt(pow(x.inv_N_R,2) + pow(x.inv_N_E,2)), axis=1)
-N_df["Kurztitel"] = N_df.apply(lambda x: str(x.Nachname) + ": " + str(x.Titel), axis=1)
+N_df["Kurztitel"] = N_df.apply(lambda x: str(x.Nachname)[0] + ".: " + str(x.Titel)[:15] + ".", axis=1)
 
 labels = df[genre_cat].values.tolist()
 

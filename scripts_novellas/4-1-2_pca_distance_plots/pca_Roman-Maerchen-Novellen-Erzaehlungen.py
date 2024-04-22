@@ -91,8 +91,8 @@ if lang == "en":
     plt.ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
     plt.title("Principal Component Analyses (PCA)")
 elif lang == "de":
-    axes[0].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
-    axes[0].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
+    axes[0].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2)).replace(".", ",")))
+    axes[0].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2)).replace(".", ",")))
 
 # plt.xscale(value="log")
 # plt.yscale(value="log")
@@ -161,8 +161,8 @@ if lang == "en":
     plt.ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
     plt.title("Principal Component Analyses (PCA)")
 elif lang == "de":
-    axes[1].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
-    axes[1].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
+    axes[1].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2)).replace(".", ",")))
+    axes[1].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2)).replace(".",",")))
 
 # plt.xscale(value="log")
 # plt.yscale(value="log")

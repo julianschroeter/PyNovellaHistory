@@ -21,6 +21,8 @@ Am Beginn jedes Skript muss dann über die System-Variable bestimmt werden, auf 
 Achtung: Bei der Einstellung auf "wcph113" muss zugleich die sys_Variable angepasst werden! (Und zwar durch die Zeile: sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory' bzw. den entsprechenden Pfad.))
 
 Wichtig sind folgende Funktionen und Verzeichnisse:
+Alle relevanten Forschungsdaten sind in einer ZIP-Datei verfügbar, die auch die im Folgenden erläuterten Unterverzeichnisse enthält:
+https://syncandshare.lrz.de/getlink/fiWvMUv5XRWuKFJUDVjtDP/Projektdaten_Habil_Novellen_Schroeter.zip
 
 Die Funktion: global_corpus_directory(system_name) Die auf die Volltexte (plain text) des Projektkorpus verweist.
 
@@ -48,7 +50,7 @@ Weitere Unterklassen erstellen Repräsentationen komplexer Features auf Korpuseb
 c) Im Modul metrics.distances befinden sich eine Reihe von Klassen mit Methoden und weiterführenden Funktionen zur Bestimmung von Textsorten über Inner- und Zwischengruppen-Distanz (Kapitel 4.1 der Arbeit; siehe entsprechend die Skripte zur Durchführung der Analysen) 
 [Achtung! Im Moment sind in diesem Modul einige Variablen im global name space definiert. Dies führt leicht zu Fehlern und wird noch geändert]
 
-d) Funktionen zur perspektivischen Modellierung mit überwachtem maschinellen Lernen im MOdul classification.perspectivalmodeling; und im MOdul metrics.scores der c@1-score nach Penas/Rodrigo (2011).
+d) Funktionen zur perspektivischen Modellierung mit überwachtem maschinellen Lernen im Modul classification.perspectivalmodeling; und im Modul metrics.scores der c@1-score nach Penas/Rodrigo (2011).
 
 
 

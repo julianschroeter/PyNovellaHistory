@@ -40,7 +40,7 @@ replace_dict = {"Medientyp_ED": {"Zeitschrift": "Journal", "Zeitung": "Journal",
 matrix_obj.data_matrix_df = standardize_meta_data_medium(matrix_obj.data_matrix_df, "Medium_ED")
 
 
-matrix_obj = matrix_obj.reduce_to_categories("periods", ["1805-1825"]) #, ,"1825-1845" "1815-1822" , "1825-1845"
+matrix_obj = matrix_obj.reduce_to_categories("periods", ["1805-1825","1825-1845" ]) #, ,"1825-1845" "1815-1822" , "1825-1845"
 matrix_obj = matrix_obj.reduce_to_categories("medium", ["urania","aglaja"])
 
 df = matrix_obj.data_matrix_df
@@ -112,7 +112,7 @@ plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", ro
 plt.suptitle("Gattungen in Taschenbüchern 1805-1825")
 
 plt.tight_layout()
-fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_boxplot_Entwicklung_Textlänge_in_TBs-Urania-Aglaja_1805-25.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_boxplot_Entwicklung_Textlänge_in_TBs-Urania-Aglaja_1825-1845.svg"))
 plt.show()
 
 
@@ -134,10 +134,17 @@ aglaja_df = aglaja_df.drop(columns=["medium", "medium_type", "Jahr_ED"], axis=1)
 
 urania_grouped = urania_df.groupby(["periods", "Gattungslabel_ED_normalisiert"]).median()
 grouped_df = pd.DataFrame(urania_grouped)
-grouped_df.unstack().plot(kind='bar', stacked=False,
+
+grouped_df = grouped_df.unstack().reset_index()
+
+grouped_df.set_index("periods", inplace=True)
+
+grouped_df.columns = grouped_df.columns.droplevel()
+
+grouped_df.plot(kind='bar', stacked=False,
                                        title=str("Entwicklung der Textlänge: Prosa im TB Urania"),
 
-                          color=["green", "red", "orange", "blue", "yellow"],
+                          color={"Erzählung" : "green", "andere Label":"cyan","Novelle": "red","Roman": "blue", "kein Label" : "lightgrey"},
                           ylabel=str("Länge in Wort-Token"), ax=axes[0])
 left, right = axes[0].set_xlim()
 axes[0].hlines(y=25000,xmin=left, xmax=right, color="red")
@@ -154,11 +161,13 @@ axes[0].set_xlabel("")
 
 aglaja_grouped = aglaja_df.groupby(["periods", "Gattungslabel_ED_normalisiert"]).median()
 grouped_df = pd.DataFrame(aglaja_grouped)
-#grouped_df = grouped_df.drop(columns=["Jahr_ED"])
+grouped_df = grouped_df.unstack().reset_index()
+grouped_df.set_index("periods", inplace=True)
+grouped_df.columns = grouped_df.columns.droplevel()
 
-grouped_df.unstack().plot(kind='bar', stacked=False,
+grouped_df.plot(kind='bar', stacked=False,
                                        title=str("Entwicklung der Textlänge: Prosa im TB Aglaja"),
-                                        color=["green", "red", "orange", "blue", "yellow"],
+                                        color= {"Erzählung" : "green", "andere Label":"cyan","Novelle": "red","Roman": "blue", "kein Label" : "lightgrey"},
                                       ax=axes[1])
 left, right = axes[1].set_xlim()
 axes[1].hlines(y=25000,xmin=left, xmax=right, color="red")

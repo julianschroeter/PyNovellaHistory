@@ -14,7 +14,7 @@ colors_list = random.sample(colors_list, len(colors_list))
 
 colors_list = ["red", "green", "blue", "orange", "cyan"]
 colors_list = [ "orange","blue", "cyan","red", "green"]
-colors_list = [ "lightgreen","orange", "red", "green"]
+colors_list = [ "lightgreen","grey", "red", "green"]
 
 
 #colors_list = random.sample(colors_list, len(colors_list))

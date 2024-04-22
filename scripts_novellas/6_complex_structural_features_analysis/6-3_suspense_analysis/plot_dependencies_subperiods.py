@@ -304,9 +304,13 @@ plt.show()
 ##plt.ylim(0,0.6)
 #plt.show()
 
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
+
 subperiod_df = df[df["periods"] == "1810-1850"]
 red_df = subperiod_df[subperiod_df.isin({"Medium":["Taschenbuch", "Journal", "Buch", "Anthologie", "Pantheon"]}).any(axis=1)]
-red_df.boxplot(column="max_value", by="Medium")
+red_df.boxplot(column="max_value", by="Medium", medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 plt.xticks(rotation=90)
 #plt.ylim(0,0.6)
 plt.tight_layout()

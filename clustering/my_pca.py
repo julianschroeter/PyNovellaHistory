@@ -61,8 +61,8 @@ class PC_df():
             plt.ylabel(str('Second Component, var. expl: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
             plt.title("Principal Component Analyses (PCA)")
         elif lang == "de":
-            plt.xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[0], 2))))
-            plt.ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[1], 2))))
+            plt.xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[0], 2)).replace(".",",")))
+            plt.ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(self.pca.explained_variance_ratio_[1], 2)).replace(".",",")))
             plt.title("Hauptkomponentenanalyse (PCA)")
         #plt.xscale(value="log")
         #plt.yscale(value="log")

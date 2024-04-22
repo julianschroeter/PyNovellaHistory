@@ -94,6 +94,7 @@ print(pc_df.pca.explained_variance_)
 
 # generate genre coloring
 list_targetlabels = ", ".join(map(str, set(pc_df.pc_target_df["target"].values))).split(", ")
+list_targetlabels = ["Novelle", "Erzählung", "Erzählprosa"]
 zipped_dict = dict(zip(list_targetlabels, colors_list[:len(list_targetlabels)]))
 list_target = list(pc_df.pc_target_df["target"].values)
 colors_str = ", ".join(map(str, pc_df.pc_target_df["target"].values))
@@ -121,8 +122,9 @@ target_df = pc_df.pc_target_df
 pc_df.pc_target_df =  pc_df.pc_target_df.drop(pc_df.pc_target_df["PC_1"].idxmax())
 pc_df.pc_target_df = pc_df.pc_target_df.drop(pc_df.pc_target_df["PC_2"].idxmax())
 
-colors_list = ["orange", "magenta", "grey", "yellow"]
+colors_list = ["lightgreen", "grey","purple", "yellow"]
 list_targetlabels = ", ".join(map(str, set(pc_df.pc_target_df["target"].values))).split(", ")
+list_targetlabels = media_labels_list
 zipped_dict = dict(zip(list_targetlabels, colors_list[:len(list_targetlabels)]))
 list_target = list(pc_df.pc_target_df["target"].values)
 colors_str = ", ".join(map(str, pc_df.pc_target_df["target"].values))
@@ -145,10 +147,10 @@ elif lang == "de":
     #plt.xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
     #plt.ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
     plt.suptitle("Hauptkomponentenanalyse (PCA)")
-    fig.text(0.5, 0.04, str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))), ha='center')
-    fig.text(0.04, 0.5, str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))), va='center', rotation='vertical')
+    fig.text(0.5, 0.04, str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2)).replace(".",",")), ha='center')
+    fig.text(0.04, 0.5, str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2)).replace(".",",")), va='center', rotation='vertical')
 
 
-filename= os.path.join(local_temp_directory(system),"figures", "1750-1810_PCA_media-types-and-genres.svg")
+filename= os.path.join(local_temp_directory(system),"figures", "PCA_media-types-and-genres.svg")
 plt.savefig(filename)
 plt.show()

@@ -24,10 +24,10 @@ year_cat = "Jahr_ED"
 
 
 old_infile_name = os.path.join(global_corpus_representation_directory(system), "SNA_novellas.csv")
-
 filename = "conll_based_networkdata-matrix-novellas.csv"
+filename2 =  "conll_based_networkdata-matrix-novellas_15mostcommon.csv" #"Networkdata_document_Matrix.csv"
 filepath = os.path.join(local_temp_directory(system), filename)
-#filepath = os.path.join(global_corpus_representation_directory(system), "Network_Matrix_all.csv")
+filepath = os.path.join(global_corpus_representation_directory(system), filename2)
 
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
@@ -50,7 +50,7 @@ cat_labels = ["N"]
 cat_labels = ["E"]
 cat_labels = ["R"]
 cat_labels = ["N", "E", "0E", "XE"]
-cat_labels = ["N", "E", "0E", "XE", "M", "R"]
+cat_labels = ["N", "E", "0E", "XE", "M"]
 matrix_obj = matrix_obj.reduce_to_categories(genre_cat, cat_labels)
 
 matrix_obj = matrix_obj.eliminate(["Figuren"])
@@ -68,7 +68,7 @@ df["scaled_centrality_conll"] = df.apply(lambda x: scale_centrality(eval(x["degr
 df["scaled_centralization_conll"] = df.apply(lambda x: get_centralization(dict(x["scaled_centrality_conll"]), c_type="degree"), axis=1)
 
 
-df.rename(columns={"scaled_centralization_conll": "Zentralisierung"}, inplace=True)
+df.rename(columns={"scaled_centralization_conll": "Zentralisierung", "in_Deutscher_Novellenschatz": "Novellenschatz"}, inplace=True)
 df.rename(columns={"density": "Netzwerkdichte"}, inplace=True)
 #df.rename(columns={"Figurenanzahl_conll": "Figurenanzahl"}, inplace=True)
 
@@ -94,6 +94,10 @@ replace_dict = {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählu
 df = full_genre_labels(df, replace_dict=replace_dict)
 
 
+replace_dict = {"Novellenschatz": {True: "Deutscher Novellenschatz", False: "Sonst. MLP"}}
+
+
+df = full_genre_labels(df, replace_dict=replace_dict)
 
 
 
@@ -138,9 +142,9 @@ df1 = df.copy()
 data = df.loc[:, ("Zentralisierung",genre_cat,medium_cat, "Kanon_Status", "periods", "token_count", "Netzwerkdichte", year_cat)]
 
 
-zipped_dict = {True:"orange", False:"lightgreen"}
+zipped_dict = {"Deutscher Novellenschatz":"coral", "Sonst. MLP":"grey"}
 
-sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="in_Deutscher_Novellenschatz",
+sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="Novellenschatz",
              palette=zipped_dict)
 plt.title("Zentralisierung – Novellenschatz")
 plt.savefig(os.path.join(local_temp_directory(system), "figures", "Zentralisierung_Dt-Novellenschatz_Zeitverlauf_ch6-4.svg"))

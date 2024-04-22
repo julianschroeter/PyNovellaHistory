@@ -54,13 +54,13 @@ outfile_path = "/home/julian/git/PyNovellaHistory/figures/prototype_circle_N-E_b
 
 fig, axes = plt.subplots(1,2, figsize=(12,5), width_ratios=[1,2])
 axes[0].scatter(years, predict_probs, c=genre_c_labels)
-axes[0].annotate("Arnim: Altdeutsche Landsleute", (df.loc["00292-00", periods_cat], df.loc["00292-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[0].annotate("A.: Altdeutsche Landsleute", (df.loc["00292-00", periods_cat], df.loc["00292-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 #axes[0].annotate("Schnitzler: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[0].annotate("Neumann: Drei Fackeln", (df.loc["00094-00", periods_cat], df.loc["00094-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[0].annotate("N.: Drei Fackeln", (df.loc["00094-00", periods_cat], df.loc["00094-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 
 axes[0].axhline(y= 0.5 - ( optimum_x / 2))
 axes[0].axhline(y=0.5 + ( optimum_x / 2))
-axes[0].set_title("Vor 1850")
+axes[0].set_title("1800–1850")
 axes[0].set_ylim(0.2, 0.8)
 axes[0].set_xlim(1800,1850)
 
@@ -105,13 +105,13 @@ legend_dict = {"Novelle": "red", "Erzählung":"green"}
 outfile_path = "/home/julian/git/PyNovellaHistory/figures/prototype_circle_N-E_after1850.svg"
 
 axes[1].scatter(years, predict_probs, c=genre_c_labels)
-axes[1].annotate("Keller: Romeo/Julia", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[1].annotate("Schnitzler: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[1].annotate("K.: Romeo/Julia", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[1].annotate("S.: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 #axes[1].annotate("Neumann: Drei Fackeln", (df.loc["00094-00", periods_cat], df.loc["00094-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 
 axes[1].axhline(y= 0.5 - ( optimum_x / 2))
 axes[1].axhline(y=0.5 + ( optimum_x / 2))
-axes[1].set_title("Nach 1850")
+axes[1].set_title("1850–1950")
 axes[1].set_ylim(0.2, 0.8 )
 axes[1].set_xlim(1850,1950)
 

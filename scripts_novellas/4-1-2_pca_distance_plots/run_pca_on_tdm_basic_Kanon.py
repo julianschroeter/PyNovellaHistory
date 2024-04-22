@@ -14,7 +14,7 @@ colors_list = random.sample(colors_list, len(colors_list))
 
 colors_list = ["red", "green", "blue", "orange", "cyan"]
 colors_list = [ "orange","blue", "cyan","red", "green"]
-colors_list = [ "purple","orange", "cyan","red", "green"]
+colors_list = [ "purple","grey"]
 
 
 #colors_list = random.sample(colors_list, len(colors_list))
@@ -45,7 +45,7 @@ input_df = sample_n_from_cat(input_df)
 replace_dict = {"Gattungslabel_ED_normalisiert": {"N": "Novelle", "E": "Erzählung", "0E": "Erzählprosa",
                                     "R": "Roman", "M": "Märchen", "XE": "Erzählprosa"}}
 
-replace_dict = {"Kanon_Status": {3: "Kanon-Novelle", 2: "überlieferte MLP", 1: "sonstige MLP", 0: "sonstige MLP"}}
+replace_dict = {"Kanon_Status": {3: "Kanon-Novelle", 2: "sonstige MLP", 1: "sonstige MLP", 0: "sonstige MLP"}}
 
 
 input_df = full_genre_labels(input_df, replace_dict=replace_dict)

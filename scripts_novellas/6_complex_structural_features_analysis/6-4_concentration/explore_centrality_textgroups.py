@@ -281,7 +281,7 @@ plt.title("Zentralisierung – Novellenschatz")
 plt.show()
 
 
-canon_dict = {"hoch":"purple", "niedrig":"cyan"}
+canon_dict = {"hoch":"purple", "niedrig":"grey"}
 replace_dict = {"Kanon_Status": {0: "niedrig", 1: "niedrig", 2: "hoch",
                                                   3: "hoch"}}
 data = full_genre_labels(data, replace_dict=replace_dict)

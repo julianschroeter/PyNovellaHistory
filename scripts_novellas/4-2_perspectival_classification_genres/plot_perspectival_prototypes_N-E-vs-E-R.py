@@ -99,11 +99,11 @@ plot_prototype_concepts(predict_probs_inv, genre_c_labels, threshold=optimum_x, 
 plot_prototype_concepts(predict_probs, genre_c_labels, threshold=optimum_x, annotation=None, lang="de", legend_dict=legend_dict)
 
 axes[0].scatter(years, predict_probs, c=genre_c_labels)
-axes[0].annotate("Der Einsiedler ...", (df.loc["00603-00", periods_cat], df.loc["00603-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[0].annotate("Eichend.: Ahnung/Gegenwart", (df.loc["00539-00", periods_cat], df.loc["00539-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[0].annotate("Der Einsiedler", (df.loc["00603-00", periods_cat], df.loc["00603-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[0].annotate("Ahnung/Gegenwart", (df.loc["00539-00", periods_cat], df.loc["00539-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 #axes[0].annotate("Mörike: Der Schatz", (df.loc["00367-00", periods_cat], df.loc["00367-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[0].annotate("Sack: Paralyse", (df.loc["00710-00", periods_cat], df.loc["00710-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[0].annotate("Schnitzler: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+#axes[0].annotate("S.: Paralyse", (df.loc["00710-00", periods_cat], df.loc["00710-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[0].annotate("Lieutenant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 
 axes[0].axhline(y= 0.5 - ( optimum_x / 2))
 axes[0].axhline(y=0.5 + ( optimum_x / 2))
@@ -158,10 +158,10 @@ outfile_path = "/home/julian/git/PyNovellaHistory/figures/prototype_circle_E-R.s
 
 axes[1].scatter(years, predict_probs, c=genre_c_labels)
 #axes[1].annotate("Der Einsiedler ...", (df.loc["00603-00", periods_cat], df.loc["00603-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[1].annotate("Eichend.: Ahnung/Gegenwart", (df.loc["00539-00", periods_cat], df.loc["00539-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[1].annotate("›Ahnung/Gegenwart‹", (df.loc["00539-00", periods_cat], df.loc["00539-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 #axes[1].annotate("Mörike: Der Schatz", (df.loc["00367-00", periods_cat], df.loc["00367-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[1].annotate("Sack: Paralyse", (df.loc["00710-00", periods_cat], df.loc["00710-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-axes[1].annotate("Keller: Romeo/Julia", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+#axes[1].annotate("S.: Paralyse", (df.loc["00710-00", periods_cat], df.loc["00710-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+axes[1].annotate("Keller: ›Romeo/Julia‹", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 
 axes[1].axhline(y= 0.5 - ( optimum_x / 2))
 axes[1].axhline(y=0.5 + ( optimum_x / 2))

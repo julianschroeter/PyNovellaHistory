@@ -218,7 +218,7 @@ for x_variable in x_variables:
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=serial_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_seriality" + x_variable + y_variable + ".png"
+    outfilename = "correlation_seriality" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

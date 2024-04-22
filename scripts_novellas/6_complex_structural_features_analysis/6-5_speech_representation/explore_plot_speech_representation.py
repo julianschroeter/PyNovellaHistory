@@ -187,7 +187,7 @@ plt.show()
 replace_dict = {"Kanon_Status": {0: "niedrig", 1: "niedrig", 2: "hoch",
                                                   3: "hoch"}}
 df = full_genre_labels(df, replace_dict=replace_dict)
-canon_dict = {"hoch":"purple", "niedrig":"cyan"}
+canon_dict = {"hoch":"purple", "niedrig":"grey"}
 
 sns.lineplot(data=df, x="Jahr_ED", y="fraction_indirspeech", hue="Kanon_Status",
              palette=canon_dict)

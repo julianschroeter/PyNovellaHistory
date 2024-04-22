@@ -86,8 +86,19 @@ print(np.std(x_boundaries))
 print(np.percentile(x_boundaries, [5,95]))
 left, right = np.percentile(x_boundaries, [5]), np.percentile(x_boundaries, [95])
 
+import matplotlib.patches as mpatches
+mpatches_list = []
+zipped_dict = {"Novelle":"red", "Roman":"blue"}
+for key, value in zipped_dict.items():
+    patch = mpatches.Patch(color=value, label=key)
+    mpatches_list.append(patch)
+
+
+
+predictions =["Novelle" if "N" else "Roman" for element in predictions]
+
 import matplotlib.pyplot as plt
-plt.scatter(lengths, probabs, c=pred_colors)
+plt.scatter(lengths, probabs, c=pred_colors, label=predictions)
 plt.title("Entscheidungsgrenze für die Klassifikation: Novelle vs. Roman")
 plt.ylabel("Vorhersagewahrscheinlichkeit")
 plt.xlabel("Textlänge")
@@ -95,7 +106,7 @@ plt.vlines(left, 0, 1, label="Decision boundary")
 plt.vlines(right, 0, 1, label="Decision boundary")
 #plt.hlines(0.5, 20000, np.mean(np.array(x_boundaries)), label="Decision Boundary: ")
 plt.text(right, 0, "Entscheidungsgrenzbereich um: " + str(int(np.mean(np.array(x_boundaries)))), ha='left', va='center')
-plt.legend
+plt.legend(handles=mpatches_list)
 plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Entscheidungsgrenze_sigmoid_function_length.svg"))
 plt.show()
 

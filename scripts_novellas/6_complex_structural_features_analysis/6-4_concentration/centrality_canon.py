@@ -85,15 +85,18 @@ df["scaled_centralization_combined"] = df.apply(lambda x: (x["centralization_rul
 
 df.to_csv(os.path.join(global_corpus_representation_directory(system), "Network_Matrix_all.csv"))
 
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
 fig, axes = plt.subplots(1,2, figsize=(12,6))
-df.boxplot(column="Zentralisierung", by="Kanon_Status", ax= axes[0])
+df.boxplot(column="Zentralisierung", by="Kanon_Status", ax= axes[0], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 axes[0].set_title("Boxplot")
 #plt.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplot_Zentralisierung_Kanon.svg"))
 #plt.show()
 
 
 import seaborn as sns
-zipped_dict = {"hoch":"cyan", "niedrig":"purple"}
+zipped_dict = {"hoch":"purple", "niedrig":"grey"}
 
 sns.lineplot(data=df, x="Jahr_ED", y="Zentralisierung", hue="Kanon_Status",
              palette=zipped_dict, ax=axes[1])

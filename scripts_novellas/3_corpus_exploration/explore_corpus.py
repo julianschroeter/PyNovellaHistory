@@ -56,31 +56,45 @@ replace_dict = {"Medientyp_ED": {"Zeitschrift": "Journal", "Zeitung": "Journal",
                                  "Rundschau" : "Rundschau", "Werke":"Buch",
                                  "Zyklus" : "Anthologie", "Roman" : "Buch", "(unbekannt)" : "verm. Buch",
                                     "Illustrierte": "Journal", "Sammlung": "Anthologie",
-                                 "Nachlass": "Buch", "Jahrbuch":"Taschenbuch", "Monographie": "Buch"}}
+                                 "Nachlass": "Buch", "Jahrbuch":"Taschenbuch", "Monographie": "Buch", "Deutsche Romanzeitung":"Journal"}}
 
 df = full_genre_labels(df, replace_dict=replace_dict)
-
+start_df = df.copy()
 
 title_en = "Corpus Size for Genres and Periods"
 title_de = "Zusammensetzung des Korpus nach Perioden und Genres"
 corpus_statistics = df.groupby([period_var, "Gattungslabel_ED_normalisiert"]).size()
+
 df_corpus_statistics_genre = pd.DataFrame(corpus_statistics)
-df_corpus_statistics_genre.unstack().plot(kind='bar', stacked=False, title= title_de ,
-                                    color=["green", "orange", "red", "blue", "grey"])
+
+df = df_corpus_statistics_genre
+df = df.unstack().reset_index()
+df.set_index("Perioden",inplace=True)
+df.columns = df.columns.droplevel()
+
+df.plot(kind='bar', stacked=False, title= title_de,
+        color={"Erzählung": "green", "sonstige Prosaerzählung": "cyan", "Novelle": "red", "Roman": "blue",
+               "kein Label": "lightgrey", "Märchen":"orange"})
+
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Genres_and_Periods.svg"))
 plt.show()
 
-
+df = start_df.copy()
 corpus_statistics = df.groupby([period_var, "Medientyp_ED"]).size()
 df_corpus_statistics_media = pd.DataFrame(corpus_statistics)
 
 title_en = "Corpus Size for Media and Periods"
 title_de = "Zusammensetzung des Korpus nach Perioden und Medienformaten"
 
-df_corpus_statistics_media.unstack().plot(kind='bar', stacked=False, title= title_de,
-                                    color=["lightgreen", "orange", "purple", "lightblue", "grey", "cyan", "pink", "magenta"])
+df = df_corpus_statistics_media
+df = df.unstack().reset_index()
+df.set_index("Perioden",inplace=True)
+df.columns = df.columns.droplevel()
+
+df.plot(kind='bar', stacked=False, title= title_de,
+                                    color={"Anthologie":"yellow", "Taschenbuch": "purple", "Familienblatt":"lightgreen", "Rundschau":"grey", "Buch":"darkgreen", "Journal":"lightblue"})
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.savefig(os.path.join(project_path, "figures", "Corpus_Size_for_Media_types_and_Periods.svg"))

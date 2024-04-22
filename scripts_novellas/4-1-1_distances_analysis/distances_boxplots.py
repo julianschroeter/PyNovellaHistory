@@ -88,8 +88,14 @@ N_E_dist_matr.to_csv(os.path.join(local_temp_directory(system), "N_E_inter_dist_
 N_E_inter_dist = N_E_inter_dist_obj.distances
 print(N_E_inter_dist.min())
 
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
+
 fig, ax = plt.subplots()
-ax.boxplot([N_dist, N_E_inter_dist,E_dist, rd_dist, R_dist, R_M_inter_dist , M_dist ], meanline=True)
+ax.boxplot([N_dist, N_E_inter_dist,E_dist, rd_dist, R_dist, R_M_inter_dist , M_dist ], meanline=True,
+           medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops
+           )
 plt.title("Boxplots der Distanzen innerhalb und zwischen Gattungen")
 plt.xticks([1,2,3,4,5,6,7], ["D(intra)(N)","D(inter)(N,E)", "D(intra)(E)", "D(intra)(RD)", "D(intra)(R)", "D(inter)(R,M)", "D(intra)(M)"])
 plt.xticks(rotation=20)

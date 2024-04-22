@@ -60,9 +60,9 @@ plot_prototype_concepts(predict_probs, genre_c_labels, threshold=optimum_x, anno
 
 fig, ax = plt.subplots()
 ax.scatter(years, predict_probs, c=genre_c_labels)
-plt.annotate("Keller: Romeo/Julia", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-plt.annotate("Schnitzler: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
-plt.annotate("Neumann: Drei Fackeln", (df.loc["00094-00", periods_cat], df.loc["00094-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+plt.annotate("Keller: ›Romeo/Julia‹", (df.loc["00306-00", periods_cat], df.loc["00306-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+plt.annotate("Lieutenant Gustl", (df.loc["00494-00", periods_cat], df.loc["00494-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
+plt.annotate("Drei Fackeln", (df.loc["00094-00", periods_cat], df.loc["00094-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 
 plt.axhline(y= 0.5 - ( optimum_x / 2))
 plt.axhline(y=0.5 + ( optimum_x / 2))
@@ -74,8 +74,8 @@ mpatches_list = []
 for key, value in legend_dict.items():
     patch = mpatches.Patch(color=value, label=key)
     mpatches_list.append(patch)
-plt.legend(handles=mpatches_list)
-plt.title("Synchrones perspektivisches Modell mit zeitlichem Verlauf für Gattungspaare")
+plt.legend(handles=mpatches_list, loc="lower right")
+plt.title("Synchrones perspektivisches Modell mit zeitlichem Verlauf")
 plt.xlabel("Zeitlicher Verlauf")
 plt.ylabel("Vorhersagewahrscheinlichkeit")
 plt.tight_layout()

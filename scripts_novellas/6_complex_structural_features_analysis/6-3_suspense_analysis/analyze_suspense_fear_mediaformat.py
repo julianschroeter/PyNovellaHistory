@@ -125,7 +125,7 @@ df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]
 df_serial = df[df.isin({"Serialität": ["Serie"]}).any(axis=1)]
 df_nonserial = df[df.isin({"Serialität": ["nicht-seriell"]}).any(axis=1)]
 colors_list = ["cyan", "yellow", "pink", "blue", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
-media_colors_list = ["darkgreen", "lightblue","pink", "grey",  "cyan", "red", "green", "yellow", "orange", "blue", "magenta", "black",
+media_colors_list = ["purple", "magenta","pink", "grey",  "cyan", "red", "green", "yellow", "orange", "blue", "magenta", "black",
                      ]
 colors_list = ["red", "green", "cyan", "blue", "orange" ]
 genres_dict = dict(zip(genres_list, colors_list[:len(genres_list)]))
@@ -216,7 +216,7 @@ df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]
 df_serial = df[df.isin({"Serialität": ["Serie"]}).any(axis=1)]
 df_nonserial = df[df.isin({"Serialität": ["nicht-seriell"]}).any(axis=1)]
 colors_list = ["cyan", "yellow", "pink", "blue", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
-media_colors_list = ["pink", "grey",  "cyan", "red", "green", "yellow", "orange", "blue", "magenta", "black","darkgreen", "lightblue",
+media_colors_list = ["lightgreen", "grey",  "cyan", "red", "green", "yellow", "orange", "blue", "magenta", "black","darkgreen", "lightblue",
                      ]
 colors_list = ["red", "green", "cyan", "blue", "orange" ]
 genres_dict = dict(zip(genres_list, colors_list[:len(genres_list)]))

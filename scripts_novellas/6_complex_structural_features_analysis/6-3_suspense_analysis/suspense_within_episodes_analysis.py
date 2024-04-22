@@ -42,6 +42,9 @@ columns = df.columns.values.tolist()
 print(columns)
 variables = [ "plötzlich", "suspense_sum"] # 'Gewaltverbrechen', 'Kampf', 'Entführung', 'Krieg', "Spuk", 'Gefahrenlevel', 'embedding_Angstempfinden', 'Angstempfinden', 'UnbekannteEindr', 'Feuer',
 
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
 fig, axes = plt.subplots(2,2)
 i = 0
 for variable in variables:
@@ -49,7 +52,7 @@ for variable in variables:
     # for all chunks with value > 0
     new_df = df[df[variable] != 0]
     print(new_df)
-    new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,0])
+    new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,0], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
     #means = df.groupby("Textabschnitt").median()
     #print(means)
     #plt.plot(means.index.values.tolist(), means[variable])
@@ -75,7 +78,7 @@ for variable in variables:
     # for all chunks with value > 0
     new_df = df[df[variable] != 0]
     print(new_df)
-    axes[i,1] = new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,1])
+    axes[i,1] = new_df.boxplot(by="Textabschnitt", column=variable, ax=axes[i,1], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
     # means = df.groupby("Textabschnitt").median()
     # print(means)
     # plt.plot(means.index.values.tolist(), means[variable])
@@ -87,7 +90,7 @@ for variable in variables:
         axes[i, 1].set_title("Wort: plötzlich")
     i += 1
 fig.suptitle("Dominanz von Spannungsindikatoren in den Teilabschnitten jeder Episode")
-fig.supxlabel("Nummer der Episode")
+fig.supxlabel("Position des Chunks innerhalb der Episoden")
 fig.tight_layout()
 fig.savefig(os.path.join(local_temp_directory(system), "figures", "Boxplots_ploetzlich_suspense_within_episodes.svg"))
 plt.show()

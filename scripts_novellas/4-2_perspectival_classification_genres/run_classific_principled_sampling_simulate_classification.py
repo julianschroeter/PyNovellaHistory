@@ -173,7 +173,7 @@ for i in range(n):
     axes[4, 1].set_xlabel("Verbesserung")
 
 
-plt.tight_layout()
-plt.savefig("/home/julian/git/PyNovellaHistory/figures/gridsuche_c-at-one_simulate.svg")
+fig.tight_layout()
+fig.savefig("/home/julian/git/PyNovellaHistory/figures/gridsuche_c-at-one_simulate.svg")
 plt.show()
 

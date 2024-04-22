@@ -158,7 +158,7 @@ for genre, color in authors_dict.items():
 #authors_colors_list = [authors_dict[x] for x in df["author"].values.tolist()]
 
 serial_mpatches_list = []
-for serial, color in {"seriell publiziert":"orange", "nicht-seriell publiziert":"blue"}.items():
+for serial, color in {"seriell publiziert":"orange", "nicht-seriell publiziert":"grey"}.items():
     patch = mpatches.Patch(color=color, label=serial)
     serial_mpatches_list.append(patch)
 
@@ -231,7 +231,7 @@ for x_variable in x_variables:
     res = siegelslopes(df_serial.loc[:, y_variable], x)
     plt.plot(x, res[1] + res[0] * x, color="orange", linewidth=3)
 
-    plt.scatter(df_nonserial.loc[:, x_variable], df_nonserial.loc[:, y_variable], color="blue")
+    plt.scatter(df_nonserial.loc[:, x_variable], df_nonserial.loc[:, y_variable], color="grey")
     regr = LinearRegression()
     regr.fit(df_nonserial.loc[:, x_variable].array.reshape(-1, 1), df_nonserial.loc[:, y_variable])
     y_pred = regr.predict(df_nonserial.loc[:, x_variable].array.reshape(-1, 1))
@@ -241,7 +241,7 @@ for x_variable in x_variables:
     x = df_nonserial.loc[:, x_variable]
     res = siegelslopes(df_nonserial.loc[:, y_variable], x)
     print(res)
-    plt.plot(x, res[1] + res[0] * x, color="blue", linewidth=3)
+    plt.plot(x, res[1] + res[0] * x, color="grey", linewidth=3)
 
 
     #poly_df = df[df[y_variable] != 3]
@@ -387,11 +387,13 @@ plt.tight_layout()
 
 plt.show()
 
+boxplot_colors = dict(boxes='black', whiskers='black', medians='gray', caps='black')
 
-whole_df.boxplot(column="max_value", by="periods")
+whole_df.boxplot(column="max_value", by="periods", color=boxplot_colors)
 plt.xticks(rotation=90)
 plt.title("Boxplots: Gefahrenniveau für Teilzeiträume")
 plt.ylabel("Gefahrenlevel im Text")
+plt.xlabel("Teilzeiträume")
 plt.tight_layout()
 plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Spannung_für_Teilperioden20a.svg"))
 plt.show()

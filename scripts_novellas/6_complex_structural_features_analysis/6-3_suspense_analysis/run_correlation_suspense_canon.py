@@ -163,7 +163,7 @@ for genre, color in authors_dict.items():
 #authors_colors_list = [authors_dict[x] for x in df["author"].values.tolist()]
 
 canon_mpatches_list = []
-for canon, color in {"vergessen":"purple", "hoch":"cyan"}.items():
+for canon, color in {"vergessen":"grey", "hoch":"purple"}.items():
     patch = mpatches.Patch(color=color, label=canon)
     canon_mpatches_list.append(patch)
 
@@ -178,7 +178,7 @@ else: y_variable_legend = y_variable
 
 
 
-sns.lineplot(data=df, x=year_cat_name, y= y_variable, hue="Kanon_Status", palette={"hoch":"orange", "vergessen":"blue"})
+sns.lineplot(data=df, x=year_cat_name, y= y_variable, hue="Kanon_Status", palette={"hoch":"purple", "vergessen":"grey"})
 plt.title("Zeitliche Zu- und Abnahme von " + y_variable)
 plt.ylabel(y_variable)
 plt.xlabel("Jahr des Erstdrucks")
@@ -193,7 +193,7 @@ for x_variable in x_variables:
     print("Pearson's r: ", pearsonr(df.loc[:, x_variable], df.loc[:, y_variable])[0])
     fig, ax = plt.subplots()
 
-    plt.scatter(df_canon0.loc[:, x_variable], df_canon0.loc[:, y_variable], color="purple") #  authors_colors_list
+    plt.scatter(df_canon0.loc[:, x_variable], df_canon0.loc[:, y_variable], color="grey") #  authors_colors_list
     regr = LinearRegression()
     regr.fit(df_canon0.loc[:, x_variable].array.reshape(-1, 1), df_canon0.loc[:, y_variable])
     y_pred = regr.predict(df_canon0.loc[:, x_variable].array.reshape(-1, 1))
@@ -203,9 +203,9 @@ for x_variable in x_variables:
     x = df_canon0.loc[:, x_variable]
     res = siegelslopes(df_canon0.loc[:, y_variable], x)
     print(res)
-    plt.plot(x, res[1] + res[0] * x, color="purple", linewidth=3)
+    plt.plot(x, res[1] + res[0] * x, color="darkgrey", linewidth=3)
 
-    plt.scatter(df_canon3.loc[:, x_variable], df_canon3.loc[:, y_variable], color="cyan")  # authors_colors_list
+    plt.scatter(df_canon3.loc[:, x_variable], df_canon3.loc[:, y_variable], color="purple")  # authors_colors_list
     regr = LinearRegression()
     regr.fit(df_canon3.loc[:, x_variable].array.reshape(-1, 1), df_canon3.loc[:, y_variable])
     y_pred = regr.predict(df_canon3.loc[:, x_variable].array.reshape(-1, 1))
@@ -215,7 +215,7 @@ for x_variable in x_variables:
     x = df_canon3.loc[:, x_variable]
     res = siegelslopes(df_canon3.loc[:, y_variable], x)
     print(res)
-    plt.plot(x, res[1] + res[0] * x, color="cyan", linewidth=3)
+    plt.plot(x, res[1] + res[0] * x, color="purple", linewidth=3)
 
 
     #poly_df = df[df[y_variable] != 3]
@@ -238,7 +238,7 @@ for x_variable in x_variables:
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=canon_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_" + x_variable + y_variable + ".svg"
+    outfilename = "correlation_canon_" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

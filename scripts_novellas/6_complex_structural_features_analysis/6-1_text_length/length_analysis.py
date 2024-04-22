@@ -36,8 +36,8 @@ matrix_obj.data_matrix_df = full_genre_labels(matrix_obj.data_matrix_df, replace
 
 
 
-matrix_obj = matrix_obj.reduce_to_categories("periods", ["1800-1810","1810-1820","1820-1830", "1830-1840", "1840-1850", "1850-1860"])
-matrix_obj = matrix_obj.reduce_to_categories("Medientyp_ED", ["Taschenbuch", "Anthologie", "Buch", "Familienblatt"])
+matrix_obj = matrix_obj.reduce_to_categories("periods", ["1800-1810","1810-1820","1820-1830", "1830-1840", "1840-1850", "1850-1860", "1860–1870", "1870-1880", "1880-1890"])
+matrix_obj = matrix_obj.reduce_to_categories("Medientyp_ED", ["Taschenbuch", "Anthologie", "Buch", "Familienblatt", "Rundschau"])
 
 df = matrix_obj.data_matrix_df
 
@@ -127,24 +127,29 @@ plt.tight_layout()
 fig.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Textsortenabhängigkeit_Länge_Alle-Gattungen.svg"))
 plt.show()
 
-
+df.rename(columns={"token_count": "Länge"}, inplace=True)
 genre_grouped = df.groupby("Gattungslabel_ED_normalisiert")
 
 df_red = df.drop(columns=["Medientyp_ED", "Jahr_ED"], axis=1)
 grouped = df_red.groupby(["periods", "Gattungslabel_ED_normalisiert"]).mean()
 grouped_df = pd.DataFrame(grouped)
 #grouped_df = grouped_df.drop(columns=["Jahr_ED"], axis=1)
-print(grouped_df)
+grouped_df = grouped_df.unstack().reset_index()
 
+grouped_df.set_index("periods", inplace=True)
+
+grouped_df.columns = grouped_df.columns.droplevel()
+print(grouped_df)
+grouped_df.drop(columns=["Roman"], inplace=True) # remove the novels group for the genre subplot
 fig, axes = plt.subplots(1,2, figsize=(12,5))
-grouped_df.unstack().plot(kind='bar', stacked=False,
+grouped_df.plot(kind='bar', stacked=False,
                                        title=str("Entwicklung der Textlänge über Gattungen"),
 
-                          color=["green", "orange", "red", "blue", "yellow"],
+                          color={"Erzählung" : "green", "andere Label":"cyan","Novelle": "red","Roman": "blue", "kein Label" : "lightgrey"},
                           ylabel=str("Länge in Wort-Token"), ax=axes[0])
 left, right = axes[0].set_xlim()
 axes[0].hlines(y=25000,xmin=left, xmax=right, color="red")
-axes[0].set_ylim(0, 50000)
+axes[0].set_ylim(0, 80000)
 axes[0].set_xlabel("")
 
 #grouped_df.unstack().plot(kind="line", stacked=False,
@@ -155,18 +160,27 @@ axes[0].set_xlabel("")
 
 
 media_df =  df[df.isin({"Medientyp_ED": ["Taschenbuch", "Familienblatt", "Anthologie", "Rundschau", "Buch"]}).any(axis=1)]
-media_df_red = media_df.drop(columns=["Gattungslabel_ED_normalisiert"], axis=1)
+media_df_red = media_df.drop(columns=["Gattungslabel_ED_normalisiert", "Jahr_ED"], axis=1)
 grouped = media_df_red.groupby(["periods", "Medientyp_ED"]).median()
 grouped_df = pd.DataFrame(grouped)
 #grouped_df = grouped_df.drop(columns=["Jahr_ED"])
 
-grouped_df.unstack().plot(kind='bar', stacked=False,
+
+grouped_df = grouped_df.unstack().reset_index()
+
+grouped_df.set_index("periods", inplace=True)
+
+grouped_df.columns = grouped_df.columns.droplevel()
+print(grouped_df)
+
+
+grouped_df.plot(kind='bar', stacked=False,
                                        title=str("Entwicklung der Textlänge über Medientypen"),
-                                        color=["magenta", "cyan", "pink", "brown", "blue"],
+                                        color={"Anthologie":"yellow", "Taschenbuch": "purple", "Familienblatt":"lightgreen", "Rundschau":"grey", "Buch":"darkgreen"},
                                       ax=axes[1])
 left, right = axes[1].set_xlim()
 axes[1].hlines(y=25000,xmin=left, xmax=right, color="red")
-axes[1].set_ylim(0,50000)
+axes[1].set_ylim(0,80000)
 axes[1].set_xlabel("")
 plt.text(right, 25000, "100 Normseiten", ha="right",va="center", color="red", rotation= 90)
 fig.supxlabel("Zeitverlauf")

@@ -118,7 +118,7 @@ df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]
 
 colors_list = ["red", "green", "cyan"]
 colors_list = ["cyan", "yellow", "pink", "blue", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
-colors_list = ["cyan", "red", "green", "yellow", "orange", "blue", "pink", "grey", "magenta", "black", "darkgreen", "lightblue"]
+colors_list = ["cyan", "orange", "black", "blue", "magenta", "blue", "pink", "grey", "magenta", "black", "darkgreen", "lightblue"]
 genres_dict = dict(zip(genres_list, colors_list[:len(genres_list)]))
 
 #authors_dict = dict(zip(other_cat_labels_list, colors_list[:len(other_cat_labels_list)]))

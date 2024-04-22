@@ -106,12 +106,15 @@ plt.savefig(os.path.join(local_temp_directory(system), "figures", "Histogramm_Ze
 plt.show()
 
 # Subplots: Boxplot + Histogram:
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
 
 fig, axes = plt.subplots(1,2, figsize=(12,5))
-df.boxplot(column="scaled_centralization_conll", by="in_Deutscher_Novellenschatz", ax=axes[0])
+df.boxplot(column="scaled_centralization_conll", by="in_Deutscher_Novellenschatz", ax=axes[0],  medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 axes[0].set_title("Boxplot: Deutscher Novellenschatz")
 axes[0].set_ylabel("gewichtete skalierte Zentralisierung")
-df["scaled_centralization_conll"].hist(bins=30, ax=axes[1])
+df["scaled_centralization_conll"].hist(bins=30, ax=axes[1], color="grey", lw=1)
 axes[1].set_title("Historgramm")
 fig.suptitle("Gewichtete skalierte Zentralisierung")
 fig.tight_layout()
@@ -124,9 +127,11 @@ plt.show()
 df.boxplot(column="centralization_conll", by="in_Deutscher_Novellenschatz")
 plt.show()
 
-df.boxplot(column="Netzwerkdichte_conll", by="in_Deutscher_Novellenschatz")
-plt.title("Netzwerkdichte")
-plt.ylabel("gewichtete skalierte Zentralisierung")
+df.boxplot(column="Netzwerkdichte_conll", by="in_Deutscher_Novellenschatz", medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
+plt.suptitle("Netzwerkdichte – Novellenschatz")
+plt.ylabel("Netzwerkdichte")
+plt.title("Boxplot")
+plt.xlabel("In Deutscher Novellenschatz")
 plt.savefig(os.path.join(local_temp_directory(system),"figures","Boxplot_Netzwerkdichte_Novellenschatz.svg"))
 plt.show()
 
