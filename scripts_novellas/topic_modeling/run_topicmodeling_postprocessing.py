@@ -12,8 +12,8 @@ from sklearn import model_selection
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn import tree
 
-system_name = "wcph113" # "my_mac" # "wcph104"
-data_matrix_filepath = os.path.join(local_temp_directory(system_name), "output_composition_100topics.txt")
+system_name = "my_xps" # "wcph113" # "my_mac" # "wcph104"
+data_matrix_filepath = os.path.join(local_temp_directory(system_name), "output_composition_100topics1.txt")
 language_model = language_model_path(system_name)
 metadata_csv_filepath = os.path.join(global_corpus_representation_directory(system_name=system_name), "Bibliographie.csv")
 
@@ -38,7 +38,7 @@ matrix = DocFeatureMatrix(data_matrix_filepath=None, data_matrix_df = doc_topic_
                         mallet=False)
 
 
-matrix = matrix.reduce_to([34]) # = bestimmtes topic
+matrix = matrix.reduce_to([5,6,14,22,36,45, 58, 59, 63, 65, 66]) # = bestimmtes topic
 
 
 

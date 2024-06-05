@@ -263,7 +263,7 @@ class Text():
         for i, chunk in enumerate(self.chunks):
             basename = os.path.basename(self.filepath)
             basename = os.path.splitext(basename)[0]
-            chunk_filename = "{}{}{:04d}{}".format(basename, "_", i, ".txt")
+            chunk_filename = "{}{}{:04d}".format(basename, "_", i)
             with open(os.path.join(outfile_directory, chunk_filename), "w", encoding="utf8") as file:
                 file.write(chunk)
 

@@ -1,4 +1,4 @@
-system = "wcph113" # "my_xps" #
+system = "my_xps" # "wcph113" #
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -10,6 +10,8 @@ from preprocessing.prepare_corpus import join_episodes
 
 corpus_path = os.path.join(local_temp_directory(system), "episodes_temp" )
 my_model_de_path = language_model_path(system)
+my_model_de_path = "de_core_news_lg"
+
 output_directory = os.path.join(local_temp_directory(system), "episodes_joined")
 
-join_episodes(corpus_path, output_directory, language_model=language_model_path(system))
+join_episodes(corpus_path, output_directory, language_model=my_model_de_path)

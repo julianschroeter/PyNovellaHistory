@@ -95,7 +95,7 @@ for x_variable in x_variables:
     plt.yticks(rotation=45)
     plt.xlabel(x_variable_legend)
     plt.title("Modell: Suspense als Korrelation von Gefahr und Angst")
-    outfilename = "Modell_Suspense_Korrelation" + x_variable + y_variable + ".png"
+    outfilename = "Modell_Suspense_Korrelation" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

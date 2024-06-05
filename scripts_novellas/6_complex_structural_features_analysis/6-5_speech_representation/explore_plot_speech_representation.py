@@ -11,25 +11,11 @@ from preprocessing.metadata_transformation import standardize_meta_data_medium, 
 # standard libraries
 import pandas as pd
 import os
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import statsmodels.api as sm
-from statsmodels.formula.api import ols
-import seaborn as sns
-import pymc as pm
-from pymc import HalfCauchy, Model, Normal
-import arviz as az
-import bambi as bmb
-from scipy.stats import chi2_contingency
 from numpy import cov
 from scipy.stats import pearsonr, spearmanr, siegelslopes
 import seaborn as sns
-
-
 
 medium_cat = "Medientyp_ED"
 genre_cat = "Gattungslabel_ED_normalisiert"

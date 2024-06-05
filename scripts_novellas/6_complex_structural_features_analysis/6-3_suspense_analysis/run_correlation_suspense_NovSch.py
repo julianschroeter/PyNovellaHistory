@@ -152,7 +152,7 @@ for canon, color in {"sonst. MLP":"grey", "Novellenschatz":"coral"}.items():
     patch = mpatches.Patch(color=color, label=canon)
     canon_mpatches_list.append(patch)
 
-y_variable =  "max_value" #" # "lin_susp_model" "Liebe"
+y_variable = "Liebe"# "max_value" #" # "lin_susp_model"
 x_variables = [year_cat_name]
 
 if y_variable == "max_value":

@@ -148,7 +148,7 @@ class DocSentFearMatrix(DocFeatureMatrix):
                                                     remove_stopwords="before_chunking", stopword_list=None,
                                                     language_model=self.language_model)
                     theme_shares_obj()
-                    print("currently proceeds text with id: ", theme_shares_obj.id)
+                    print("currently processes text with id: ", theme_shares_obj.id)
                     shares_list = theme_shares_obj.calculate_share(fear_dict=self.sent_dict)
                     dic[theme_shares_obj.id] = shares_list
             print(dic)

@@ -11,8 +11,9 @@ import os
 
 
 corpus_path = os.path.join(local_temp_directory(system), "novella_episodes")
+corpus_path = global_corpus_directory(system)
 chunks5parts_directory = os.path.join(local_temp_directory(system), "episodes_5chunks")
-chunks_fixed_directory = os.path.join(local_temp_directory(system), "chunks_paragraph_wise")
+chunks_fixed_directory = os.path.join(local_temp_directory(system), "chunks_1000w")
 stopfilepath = os.path.join(vocab_lists_dicts_directory(system), "stopwords_all.txt")
 stoplist = load_stoplist(stopfilepath)
 my_model_de = language_model_path(system)
@@ -38,6 +39,5 @@ chunk5parts_corpus_object = ChunkCorpus(corpus_path=corpus_path, outfile_directo
                                        eliminate_pos_items=True, language_model=my_model_de, stopword_list=stoplist,
                                        list_of_pos_tags=["SYM", "PUNCT", "NUM", "SPACE"])
 
-#chunk_fixed_corpus_object()
-#chunk_fixed_corpus_object()
-chunk5parts_corpus_object()
+chunk_fixed_corpus_object()
+#chunk5parts_corpus_object()

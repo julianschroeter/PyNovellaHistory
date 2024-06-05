@@ -1,4 +1,4 @@
-system = "wcph113"
+system =  "my_xps" # "wcph113"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/git/Heftromane')
@@ -27,30 +27,36 @@ scaler = StandardScaler()
 scaler = MinMaxScaler()
 columns_transl_dict = {"Gewaltverbrechen":"Gewaltverbrechen", "verlassen": "SentLexFear", "grässlich":"embedding_Angstempfinden",
                        "Klinge":"Kampf", "Oberleutnant": "Krieg", "rauschen":"UnbekannteEindr", "Dauerregen":"Sturm",
-                       "zerstören": "Feuer", "entführen":"Entführung", "lieben": "Liebe", "Brustwarzen": "Erotik", "Geistwesen":"Spuk"}
+                       "zerstören": "Feuer", "entführen":"Entführung", "lieben": "Liebe", "Brustwarzen": "Erotik", "Geistwesen":"Spuk", "Wort,Klasse":"Hardseeds",
+                       "Charakter":"Abstrakta", "weiß":"Farben"}
 
 
-infile_path = os.path.join(local_temp_directory(system), "DocDangerTypesMatrix_novellas_episodes.csv")
+infile_path = os.path.join(global_corpus_representation_directory(system), "DocDangerTypesMatrix.csv")
 metadata_filepath = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv" )
 
-sent_fear_path = os.path.join(local_temp_directory(system), "DocSentFearMatrix_novellas_from-paragraph-chunks.csv")
+sent_fear_path = os.path.join(global_corpus_representation_directory(system), "DocSentFearMatrix_novellas_from-paragraph-chunks.csv")
 
-spuk_path = os.path.join(global_corpus_representation_directory(system), "Spuk_DocThemesMatrix_novellas_episodes.csv")
+#spuk_path = os.path.join(global_corpus_representation_directory(system), "Spuk_DocThemesMatrix_novellas.csv")
+#hardseed_path = os.path.join(global_corpus_representation_directory(system), "DocHardseedsMatrix.csv")
+
 matrix = DocFeatureMatrix(data_matrix_filepath=infile_path)
 df = matrix.data_matrix_df
 df_doc_danger = df.copy()
 
 sent_fear_df = pd.read_csv(sent_fear_path, index_col=0)
-spuk_df = pd.read_csv(spuk_path, index_col=0)
-df_concat1 = pd.concat([df, spuk_df], axis=1)
-df = pd.concat([df_concat1, sent_fear_df], axis=1)
+#spuk_df = pd.read_csv(spuk_path, index_col=0)
+#hardseed_df = pd.read_csv(hardseed_path, index_col=0)
+#df_concat1 = pd.concat([df, spuk_df], axis=1)
+df = pd.concat([df, sent_fear_df], axis=1)
+#df = pd.concat([df, hardseed_df], axis=1)
 
 df = df.rename(columns=columns_transl_dict)
 scaled_features = scaler.fit_transform(df)
 df = pd.DataFrame(scaled_features, index=df.index, columns=df.columns)
 
 
-danger_df = df.drop(columns=["Erotik", "Liebe", "SentLexFear", "embedding_Angstempfinden","UnbekannteEindr", "Angstempfinden", "großzügig", "verwerflich", "Sturm", "Feuer", "Dämon"])
+danger_df = df.drop(columns=["Erotik", "Liebe", "SentLexFear", "embedding_Angstempfinden","UnbekannteEindr", "Angstempfinden", "großzügig", "verwerflich", "Sturm", "Feuer", "Hardseeds",
+                             "Abstrakta","plötzlich","Farben"])
 
 danger_df["max_value"] = danger_df.max(axis=1)
 danger_df["max_danger_typ"] = danger_df.idxmax(axis=1)
@@ -62,6 +68,11 @@ danger_df["Liebe"] = df["Liebe"]
 danger_df["Erotik"] = df["Erotik"]
 danger_df["Sturm"] = df["Sturm"]
 danger_df["Feuer"] = df["Feuer"]
+danger_df["Hardseeds"] = df["Hardseeds"]
+danger_df["Spuk"] = df["Spuk"]
+danger_df["Abstrakta"] = df["Abstrakta"]
+danger_df["plötzlich"] = df["plötzlich"]
+danger_df["Farben"] = df["Farben"]
 
 danger_df["doc_chunk_id"] = danger_df.index
 #danger_df["doc_chunk_id"] = danger_df["doc_chunk_id"].apply(lambda x: str(x)[:-4])
@@ -79,7 +90,7 @@ max_chunk_danger_df.set_index("doc_chunk_id", inplace=True)
 
 
 
-endanger_char_df = pd.read_csv(os.path.join(local_temp_directory(system), "DocNamesCounterMatrix_novellas_episodes.csv"), index_col=0)
+endanger_char_df = pd.read_csv(os.path.join(global_corpus_representation_directory(system), "DocNamesCounterMatrix_novellas.csv"), index_col=0)
 max_danger_character_df = pd.concat([max_chunk_danger_df, endanger_char_df], axis=1)
 max_danger_character_df.rename(columns={"0":"EndCharName"}, inplace=True)
 
@@ -116,10 +127,10 @@ male_list, female_list = male_list(), female_list()
 #df["gender_EndChar"] = df.apply(lambda x: "male" if x.EndCharName_full in male_list else ("female" if x.EndCharName_full in female_list else "unknown" ), axis=1)
 
 print(df)
-df.to_csv(os.path.join(local_temp_directory(system), "MaxDangerFearCharacters_novellas_episodes_scaled.csv"))
+#df.to_csv(os.path.join(local_temp_directory(system), "MaxDangerFearCharactersHardseeds_Ganztexte_scaled.csv"))
 
 print(danger_df.max_danger_typ.values)
 
-danger_df.to_csv(os.path.join(local_temp_directory(system), "AllChunksDangerFearCharacters_novellas_episodes_scaled.csv"))
+danger_df.to_csv(os.path.join(local_temp_directory(system), "MaxDangerFearCharactersHardseeds_novellas_Ganztexte_scaled.csv"))
 
 print("finished!")

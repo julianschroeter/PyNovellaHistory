@@ -29,7 +29,7 @@ raw_corpus_object = DTM(corpus_path=corpus_path, dehyphen=True, lemmatize=True,
 raw_corpus_object.generate_corpus_as_dict()
 
 
-normalization_list = ["l1"]
+normalization_list = ["l1", "l2"]
 
 use_idf = False
 for normalization in normalization_list:
@@ -42,7 +42,7 @@ for normalization in normalization_list:
     dtm_outfile_path = os.path.join(outfile_dtm_path, outfile_basename)
     new_corpus_object.save_csv(dtm_outfile_path)
 
-use_idf = False
+use_idf = True
 for normalization in normalization_list:
     new_corpus_object = raw_corpus_object
     new_corpus_object.norm = normalization

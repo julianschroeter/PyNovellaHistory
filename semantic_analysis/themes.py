@@ -154,7 +154,7 @@ class DocThemesMatrix(DocFeatureMatrix):
                                                 remove_stopwords="before_chunking", stopword_list=None,
                                                 language_model=self.language_model)
                 theme_shares_obj()
-                print("currently proceeds text with id: ", theme_shares_obj.id)
+                print("currently processes text with id: ", theme_shares_obj.id)
                 shares_list = theme_shares_obj.calculate_share(list_of_wordlists=self.list_of_wordlists)
                 dic[theme_shares_obj.id] = shares_list
             df = pd.DataFrame(dic).T
