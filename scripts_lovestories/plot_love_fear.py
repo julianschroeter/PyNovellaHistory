@@ -41,13 +41,13 @@ novellas_df = novellas_df_full_media.drop(columns=["Medium_ED", "medium"])
 
 novellas_df = novellas_df.rename(columns={"Titel": "title", "Nachname":"author", "Jahr_ED":"Erscheinungsjahr",
                                           "Gattungslabel_ED_normalisiert":"Gattungen", "medium_type": "Medium",
-                                          "seriell":"Serialität"})
+                                          "seriell":"Serialität", "Kanon_Status":"Canonicity"})
 
 df = novellas_df
 
 df = df[df["Angstempfinden"].notna()]
 
-replace_dict = {"Kanon_Status": {0: "low", 1: "low", 2: "high",
+replace_dict = {"Canonicity": {0: "low", 1: "low", 2: "high",
                                                   3:"high"}}
 df = full_genre_labels(df, replace_dict=replace_dict)
 
@@ -103,8 +103,8 @@ df = df[df.isin({genre_cat_name: genres_list}).any(axis=1)]
 df_serial = df[df.isin({"Serialität": ["Serie"]}).any(axis=1)]
 df_nonserial = df[df.isin({"Serialität": ["nicht-seriell"]}).any(axis=1)]
 
-df_canon_high = df[df.isin({"Kanon_Status": ["high"]}).any(axis=1)]
-df_canon_low = df[df.isin({"Kanon_Status": ["low"]}).any(axis=1)]
+df_canon_high = df[df.isin({"Canonicity": ["high"]}).any(axis=1)]
+df_canon_low = df[df.isin({"Canonicity": ["low"]}).any(axis=1)]
 
 colors_list = ["cyan", "yellow", "pink", "blue", "green", "yellow", "cyan", "cyan", "cyan", "cyan"] # for genres
 media_colors_list = ["darkgreen", "lightblue","pink", "grey",  "cyan", "red", "green", "yellow", "orange", "blue", "magenta", "black"]
@@ -198,7 +198,7 @@ plt.show()
 
 
 fig, axes = plt.subplots(1,2, figsize=(12,6))
-sns.lineplot(data=df, x=year_cat_name, y="Liebe", hue="Kanon_Status",
+sns.lineplot(data=df, x=year_cat_name, y="Liebe", hue="Canonicity",
              palette={"low":"grey", "high":"purple"}, ax= axes[0])
 axes[0].set_title("Canonization")
 axes[0].set_ylabel("Love vocabulary")
@@ -229,7 +229,7 @@ axes[1].set_ylim(0,0.6)
 axes[1].set_xlabel("")
 fig.suptitle("Love in Canon and Gender")
 fig.tight_layout()
-fig.savefig(os.path.join(local_temp_directory(system), "figures", "Lineplots_love-canon-gender-timeline.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "Figure1_Lineplots_love-canon-gender-timeline.svg"))
 fig.show()
 
 
@@ -256,7 +256,7 @@ plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
-whole_df.boxplot(column=y_variable, by="Kanon_Status")
+whole_df.boxplot(column=y_variable, by="Canonicity")
 plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
@@ -277,17 +277,17 @@ plt.tight_layout()
 plt.show()
 
 
-whole_df.boxplot(column="Liebe", by="Kanon_Status")
+whole_df.boxplot(column="Liebe", by="Canonicity")
 plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
-whole_df.boxplot(column="Angstempfinden", by="Kanon_Status")
+whole_df.boxplot(column="Angstempfinden", by="Canonicity")
 plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
 
-whole_df.boxplot(column="max_value", by="Kanon_Status")
+whole_df.boxplot(column="max_value", by="Canonicity")
 plt.xticks(rotation=90)
 plt.tight_layout()
 

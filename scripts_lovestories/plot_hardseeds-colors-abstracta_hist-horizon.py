@@ -30,7 +30,7 @@ novellas_df = novellas_dtm_obj.data_matrix_df
 novellas_df_full_media = standardize_meta_data_medium(df=novellas_df, medium_column_name="Medium_ED")
 
 novellas_df = novellas_df_full_media.drop(columns=["Medium_ED", "medium"])
-canon_cat = "canonicity"
+canon_cat = "Canonicity"
 novellas_df = novellas_df.rename(columns={"Titel": "title", "Nachname":"author", "Jahr_ED":"Erscheinungsjahr",
                                           "Gattungslabel_ED_normalisiert":"Gattungen", "medium_type": "Medium",
                                           "seriell":"Serialität", "Kanon_Status":canon_cat})
@@ -151,7 +151,7 @@ fig.supxlabel("Year of first publication")
 fig.suptitle("Timeline for Hardseeds versus Abstract Concepts")
 fig.tight_layout()
 
-outfilename = "plot_hardseeds_timeline.svg"
+outfilename = "Figure2_plot_hardseeds-colors-abstracta_timeline.svg"
 fig.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
 fig.show()
 
