@@ -70,6 +70,7 @@ df = df[df["Jahr_ED"] <= 1900] # remove all rows where ...
 df_NovSch = df[df["Novellenschatz"]== "Novellenschatz"]
 df_Non_NovSch = df[df["Novellenschatz"]== "sonst. MLP"]
 df_canon3 = df[df["Kanon_Status"]== "Kanon"]
+df_canon0 = df[df["Kanon_Status"]== 0]
 
 
 N_df = df['token_count'][df['Gattungslabel_ED_normalisiert'] == 'Novelle']
@@ -103,6 +104,11 @@ plt.ylim(0,100000)
 plt.tight_layout()
 plt.savefig("/home/julian/Documents/CLS_temp/figures/Abb_Länge_Kanon_Novellenschatz.svg")
 plt.show()
+
+fig, ax = plt.subplots()
+ax.boxplot([df_canon3.token_count.values.tolist(), df_canon0.token_count.values.tolist()],labels=["high", "low"])
+plt.title("Canonicity – Length")
+fig.show()
 
 fig, axes = plt.subplots(1,2, figsize=(12,5))
 axes[0].boxplot([N_df.values.tolist(), E_df.values.tolist(), otherE_df.values.tolist(),

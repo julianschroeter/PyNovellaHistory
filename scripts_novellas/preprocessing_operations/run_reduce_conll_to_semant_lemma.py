@@ -33,10 +33,8 @@ for filename in os.listdir(corpus_path):
         df = pd.read_csv(filepath,engine="python" , sep=",", on_bad_lines="skip")
         print(df)
 
-        #df["Coref"] = df["Coref"].astype("category")
         df_per = df[df["Coref_Cluster"] == "['PER']"]
-        print(df_per)
-
+        
         grouped = df_per.groupby(by= "NER_ID")
         per_dfs = [grouped.get_group(df) for df in grouped.groups]
         id_name_dic = {}

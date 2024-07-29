@@ -90,7 +90,8 @@ ax[0].annotate("R", (.95,0), fontsize=30)
 ax[0].annotate("E", (0,.95), fontsize=30)
 
 # insert the improvement rates (I did it manually, here, from the improvement rate calculations
-ax[0].annotate("N/E: VR-Enth: 1.01 \n VR-nicht-lin: 1.00", (0,0.85), fontsize=12)
+#ax[0].annotate("N/E: VR-Enth: 1.01 \n VR-nicht-lin: 1.00", (0,0.85), fontsize=12) # mit Enthaltungsbereich für nicht-lineare Modelle (Familienähnlichkeit)
+ax[0].annotate("N/E: VR-Enth: 1.01", (0,0.85), fontsize=12)
 
 #ax[0].annotate("Mörike: Der Schatz", (df.loc["00367-00", periods_cat], df.loc["00367-00", "mean"]), arrowprops=dict(facecolor='black', shrink=0.05))
 ax[0].set_xlim(0,1)
@@ -168,7 +169,8 @@ genre_c_labels = list(map(subs_dict.get, labels, labels))
 
 ax[1].scatter(E_df.inv_R, E_df.inv_N, c="green")
 
-ax[1].annotate("E/R: VR-Enth: 1.04 \n VR-nicht-lin: 1.16", (0.85, 0.1), fontsize=12)
+# ax[1].annotate("E/R: VR-Enth: 1.04 \n VR-nicht-lin: 1.16", (0.85, 0.1), fontsize=12) # mit Verbesserungsrate für nicht-lineare Modelle
+ax[1].annotate("E/R: VR-Enth: 1.04", (0.85, 0.1), fontsize=12)
 
 ax[1].annotate(E_df.iloc[0,5], (E_df.iloc[0,1], E_df.iloc[0,0]), arrowprops=dict(facecolor='black', shrink=0.05))
 
@@ -218,6 +220,6 @@ ax[1].set_ylabel("Erzählung <–––> Novelle")
 #    mpatches_list.append(patch)
 #plt.legend(handles=mpatches_list)
 fig.tight_layout()
-fig.savefig(os.path.join(local_temp_directory(system), "figures", "N-E_perspektivisch_triadisch_2subplots.svg"))
+fig.savefig(os.path.join(local_temp_directory(system), "figures", "N-E_perspektivisch_triadisch_2subplots_ohne_VR-nicht-lin.svg"))
 plt.show()
 

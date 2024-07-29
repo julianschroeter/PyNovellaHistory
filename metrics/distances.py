@@ -8,7 +8,7 @@ from preprocessing.sampling import sample_n_from_cat
 from preprocessing.util import from_n_dict_entries, first_n_dict_entries
 
 name_cat = "Nachname"
-periods_cat = "periods"
+periods_cat = "Jahr_ED" # "periods"
 genre_cat = "Medientyp_ED" # nur für Gruppierung nach Medienformaten
 genre_cat = "in_Deutscher_Novellenschatz" # "Kanon_Status" #
 genre_cat = "Gattungslabel_ED_normalisiert"

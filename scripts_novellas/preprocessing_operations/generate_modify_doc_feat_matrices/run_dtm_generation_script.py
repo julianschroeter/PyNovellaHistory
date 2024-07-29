@@ -1,4 +1,5 @@
-system = "wcph113" # "my_mac"
+system = "my_xps" # "wcph113" # "my_mac"
+#
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -12,7 +13,7 @@ from preprocessing.corpus import DTM
 outfile_dtm_path = os.path.join(global_corpus_representation_directory(system), "raw_dtm")
 normalization_table_path = os.path.join(vocab_lists_dicts_directory(system), "normalization_table.txt")
 corpus_path = global_corpus_directory(system, test=False)
-my_model_de_path = language_model_path(system)
+my_model_de_path = "de_core_news_lg"
 n_mfw = 2500
 
 

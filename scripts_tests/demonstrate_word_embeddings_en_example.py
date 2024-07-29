@@ -15,7 +15,7 @@ print(my_language_model_en)
 vocabulary_path=os.path.join(vocab_lists_dicts_directory(system), "wordlist_german.txt" )
 
 lists_path = vocab_lists_dicts_directory(system)
-list_of_keywords=["honor", "guilt", "shame", "crime", "justice", "court"]
+list_of_keywords=["loyalty", "betrayal", "vaccine", "virus", "servant", "partner", "friend"]
 
 nlp = spacy.load(my_language_model_en)
 all_output_words, all_vectors = [], []
