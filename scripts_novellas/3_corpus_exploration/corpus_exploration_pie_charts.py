@@ -10,8 +10,9 @@ fig, ax = plt.subplots(figsize=(12,8))
 ax.pie(df.iloc[:,1], labels=df.iloc[:,0],autopct='%1.1f%%',
        colors=["red", "green", "cyan", "blue","orange", "grey", "magenta"])
 plt.title("Korpus nach Gattungen")
+plt.title("Corpus: Shares of Genres") # if en
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(sytem), "figures", "Korpusgroesse_Gattungen.svg"))
+plt.savefig(os.path.join(local_temp_directory(sytem), "figures", "en_Korpusgroesse_Gattungen.svg"))
 plt.show()
 
 df = pd.read_csv(os.path.join(local_temp_directory(sytem), "Korpusgroesse_Medienformate.csv")) # and here as well

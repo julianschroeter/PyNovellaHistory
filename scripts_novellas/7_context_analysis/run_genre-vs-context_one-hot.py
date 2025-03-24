@@ -15,18 +15,16 @@ df = pd.read_csv(metadata_filepath, index_col=0)
 
 df = df[["Gattungslabel_ED_normalisiert", "Nachname", "Gender", "Medientyp_ED", "Kanon_Status", "Jahr_ED"]]
 
-
-values_dict = {"Gattungslabel_ED_normalisiert": ["N", "E"]}
+genres_list = ["N", "E"]
+print(genres_list)
+values_dict = {"Gattungslabel_ED_normalisiert": genres_list}
 df = df[df.isin(values_dict).any(axis=1)]
 df = df.dropna()
 
 labels = df["Gattungslabel_ED_normalisiert"]
-
-
 data =  df[["Nachname", "Gender", "Medientyp_ED", "Kanon_Status", "Jahr_ED"]]
-
 columns_list = ["Nachname", "Gender", "Medientyp_ED", "Kanon_Status", "Jahr_ED"]
-
+columns_list = ["Nachname", "Jahr_ED"]
 df_dummies = pd.get_dummies(data, columns=columns_list)
 
 X = df_dummies.values
@@ -54,18 +52,14 @@ df_dummies = pd.concat([df_dummies, labels], axis=1)
 print(df_dummies)
 
 
-acc, f1 = resample_boostrapped_LR(n=1000, df=df_dummies, genre_category="Gattungslabel_ED_normalisiert",genre_labels=["N", "E"], train_size=0.8)
+acc, std = resample_boostrapped_LR(n=1000, df=df_dummies, genre_category="Gattungslabel_ED_normalisiert",genre_labels=["N", "E"], train_size=0.8)
 
 print("accuracy score results (all results, mean, std):")
 print(acc)
-print(np.mean(acc))
-print(np.std(acc))
+print(std)
 
-print("f1 score results (all results, mean, std):")
-print(f1)
-print(np.mean(f1))
-print(np.std(f1))
 
+print("Single RF clf:")
 model = RandomForestClassifier()
 model.fit(X_train, Y_train)
 
@@ -75,7 +69,7 @@ print(confusion_matrix(Y_validation, predictions))
 print(classification_report(Y_validation, predictions))
 
 
-print("same process based on bootstrapped resampling with equal sample size:")
+print("same process for RF based on bootstrapped resampling with equal sample size:")
 
 df_dummies = pd.concat([df_dummies, labels], axis=1)
 

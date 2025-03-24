@@ -102,7 +102,7 @@ class DocFeatureMatrix():
         :return: a copy of the object with data_matrix_df attribute is generated. This attribute is a data frame and supplied with the respective metadata category as an additional column
         """
         object = deepcopy(self)
-        object.data_matrix_df = object.data_matrix_df.join(self.metadata_df[metadata_category])
+        object.data_matrix_df = object.data_matrix_df.join(self.metadata_df[metadata_category]).drop_duplicates()
         return object
 
     def reduce_to_categories(self, metadata_category, label_list):

@@ -64,7 +64,7 @@ def principled_sampling(input_df_1, input_df_2, select_one_per_period=True, sele
 
 
     train_sample = equal_sample(df_1, df_2)
-#    train_sample = train_sample.drop(columns=[periods_cat])
+    train_sample = train_sample.drop(columns=[periods_cat])
     train_sample = train_sample.sample(frac=0.8)
 
     all_df = pd.concat([input_df_1, input_df_2])

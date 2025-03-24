@@ -143,17 +143,20 @@ for genre, color in authors_dict.items():
 #authors_colors_list = [authors_dict[x] for x in df["author"].values.tolist()]
 
 serial_mpatches_list = []
-for serial, color in {"seriell publiziert":"black", "nicht-seriell publiziert":"grey"}.items():
+#for serial, color in {"seriell publiziert":"black", "nicht-seriell publiziert":"grey"}.items():
+for serial, color in {"serial": "black", "non-serial": "grey"}.items():
     patch = mpatches.Patch(color=color, label=serial)
     serial_mpatches_list.append(patch)
 
-y_variable = "lin_susp_model"
+y_variable = "max_value" # "lin_susp_model"
 x_variables = [year_cat_name]
 
 if y_variable == "max_value":
     y_variable_legend = "Maximum Gefahrenlevel im Text"
+    y_variable_legend = "Maximum Danger Level per Text"
 elif y_variable == "lin_susp_model":
     y_variable_legend = "Baseline Modell: Gefahr-Angst-Spannung"
+    y_variable_legend = "Baseline Modell: Danger-based Suspense"
 else: y_variable_legend = y_variable
 
 
@@ -177,9 +180,9 @@ for x_variable in x_variables:
     regr = LinearRegression()
     regr.fit(df_serial.loc[:, x_variable].array.reshape(-1, 1), df_serial.loc[:, y_variable])
     y_pred = regr.predict(df_serial.loc[:, x_variable].array.reshape(-1, 1))
-    plt.plot(df_serial.loc[:, x_variable], y_pred, color="black", linewidth=1, linestyle=":")
+    #plt.plot(df_serial.loc[:, x_variable], y_pred, color="black", linewidth=1, linestyle=":")
 
-    # siegel-slope forgotten texts:
+    # siegel-slope:
     x = df_serial.loc[:, x_variable]
     res = siegelslopes(df_serial.loc[:, y_variable], x)
     print(res)
@@ -189,7 +192,7 @@ for x_variable in x_variables:
     regr = LinearRegression()
     regr.fit(df_nonserial.loc[:, x_variable].array.reshape(-1, 1), df_nonserial.loc[:, y_variable])
     y_pred = regr.predict(df_nonserial.loc[:, x_variable].array.reshape(-1, 1))
-    plt.plot(df_nonserial.loc[:, x_variable], y_pred, color="grey", linewidth=1, linestyle=":")
+    #plt.plot(df_nonserial.loc[:, x_variable], y_pred, color="grey", linewidth=1, linestyle=":")
 
     # siegel-slope forgotten texts:
     x = df_nonserial.loc[:, x_variable]
@@ -205,6 +208,7 @@ for x_variable in x_variables:
 
     if x_variable == year_cat_name:
         x_variable_legend = "Jahr des Erstdrucks"
+        x_variable_legend = "Year of Publication"
     else:
         x_variable_legend = x_variable
 
@@ -214,11 +218,12 @@ for x_variable in x_variables:
     plt.yticks(rotation=45)
     plt.xlabel(x_variable_legend)
     plt.title("Korrelation zwischen Zeit und Spannung für serielle/nicht-serielle Texte")
+    plt.title("Correlation Between Time and Suspense for serial/non-serial Texts")
 
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=serial_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_seriality" + x_variable + y_variable + ".svg"
+    outfilename = "en_correlation_seriality" + x_variable + y_variable + ".svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

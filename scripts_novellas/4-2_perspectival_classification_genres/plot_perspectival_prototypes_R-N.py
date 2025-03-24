@@ -69,6 +69,9 @@ plt.annotate("Schnitzler: Leutnant Gustl", (df.loc["00494-00", periods_cat], df.
 plt.axhline(y= 0.5 - ( optimum_x / 2))
 plt.axhline(y=0.5 + ( optimum_x / 2))
 plt.title("Historisierende perspektivische Modellierung")
+plt.title("Perspectival model with temporal index")
+plt.xlabel("Time course")
+plt.ylabel("Predictive probability")
 plt.ylim(0.05, 0.95 )
 plt.xlim(1760,1940)
 

@@ -49,10 +49,12 @@ genre_c_labels = list(map(subs_dict.get, labels, labels))
 #annotation = ["Romeo und Julia auf dem Dorfe", romeo_prototyp]
 
 legend_dict = {"Novelle": "red", "Erzählung":"green"}
-
-outfile_path = "/home/julian/git/PyNovellaHistory/figures/prototype_circle_N-E.svg"
+system = "my_xps"
+import os
+from preprocessing.presetting import local_temp_directory
+outfile_path = os.path.join(local_temp_directory(system), "figures", "en_prototype_circle_N-E.svg")
 plot_prototype_concepts(predict_probs_inv, genre_c_labels, threshold=optimum_x, annotation=None,
-                        lang="de", legend_dict=legend_dict, filepath=outfile_path)
+                        lang="en", legend_dict=legend_dict, filepath=outfile_path)
 
 #romeo_prototyp = df.loc["00306-00", "mean"]
 #annotation = ["Romeo und Julia auf dem Dorfe", romeo_prototyp]
@@ -76,9 +78,12 @@ for key, value in legend_dict.items():
     mpatches_list.append(patch)
 plt.legend(handles=mpatches_list, loc="lower right")
 plt.title("Synchrones perspektivisches Modell mit zeitlichem Verlauf")
+plt.title("Perspectival Model with temporal index")
 plt.xlabel("Zeitlicher Verlauf")
+plt.xlabel("Time course")
 plt.ylabel("Vorhersagewahrscheinlichkeit")
+plt.ylabel("Predictive probability")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "N-vs-E_temporal_perspectival_one_model.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "en_N-vs-E_temporal_perspectival_one_model.svg"))
 plt.show()
 

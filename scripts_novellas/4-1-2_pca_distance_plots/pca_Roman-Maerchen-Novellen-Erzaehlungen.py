@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 system =  "my_xps" # "wcph113" # "my_mac" # "wcph104"
-lang = "de"
+lang = "en" # "de"
+
 
 colors_list = ["red", "green", "blue", "orange", "cyan"]
 
@@ -87,9 +88,9 @@ list_targetcolors = [zipped_dict[label] for label in list_target]
 axes[0].scatter(pc_df.pc_target_df.iloc[:, 0], pc_df.pc_target_df.iloc[:, 1], c=list_targetcolors, cmap='rainbow',
             alpha=0.8)
 if lang == "en":
-    plt.xlabel(str('First Component, var expl.: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
-    plt.ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
-    plt.title("Principal Component Analyses (PCA)")
+    axes[0].set_xlabel(str('First Component, var expl.: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
+    axes[0].set_ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
+
 elif lang == "de":
     axes[0].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2)).replace(".", ",")))
     axes[0].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2)).replace(".", ",")))
@@ -157,9 +158,9 @@ list_targetcolors = [zipped_dict[label] for label in list_target]
 axes[1].scatter(pc_df.pc_target_df.iloc[:, 0], pc_df.pc_target_df.iloc[:, 1], c=list_targetcolors, cmap='rainbow',
             alpha=0.8)
 if lang == "en":
-    plt.xlabel(str('First Component, var expl.: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
-    plt.ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
-    plt.title("Principal Component Analyses (PCA)")
+    axes[1].set_xlabel(str('First Component, var expl.: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2))))
+    axes[1].set_ylabel(str('Second Component, var. expl: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2))))
+
 elif lang == "de":
     axes[1].set_xlabel(str('Erste Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[0], 2)).replace(".", ",")))
     axes[1].set_ylabel(str('Zweite Komponente, erklärte Varianz: ' + str(round(pc_df.pca.explained_variance_ratio_[1], 2)).replace(".",",")))
@@ -176,9 +177,11 @@ axes[1].legend(handles=mpatches_list)
 
 
 
-
-fig.suptitle("Hauptkomponentenanalyse (PCA)")
+if lang == "en":
+    fig.suptitle("Principal Component Analyses (PCA)")
+elif lang == "de":
+    fig.suptitle("Hauptkomponentenanalyse (PCA)")
 fig.tight_layout()
-filename=os.path.join(local_temp_directory(system), "figures","genres_pca-R-M_and_N-E.svg")
+filename=os.path.join(local_temp_directory(system), "figures", lang + "_genres_pca-R-M_and_N-E.svg")
 fig.savefig(filename)
 plt.show()

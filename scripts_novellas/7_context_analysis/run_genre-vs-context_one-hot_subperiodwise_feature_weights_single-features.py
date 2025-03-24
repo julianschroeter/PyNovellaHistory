@@ -26,6 +26,7 @@ labels = ["N", "E"]
 values_dict = {"Gattungslabel_ED_normalisiert": labels}
 df = df[df.isin(values_dict).any(axis=1)]
 df = df.dropna()
+df = df.drop_duplicates()
 
 medium_cat = "Medientyp_ED"
 df = df[df.isin({medium_cat:["Familienblatt","Rundschau", "Anthologie", "Taschenbuch", "Buch", "Illustrierte", "Kalender", "Nachlass", "Sammlung", "Werke"
@@ -50,9 +51,10 @@ data =  data[["Nachname" , "periods5a" , "Gender","Jahr_ED","Medientyp_ED" , "Ga
 data = years_to_periods(input_df=data, category_name="Jahr_ED", start_year=1790, end_year=1900, epoch_length=30,
                       new_periods_column_name="periods")
 
-
+data = data.rename(columns={"periods5a": "Periods 5 years", "Nachname": "Author", "Medientyp_ED": "Media type",})
 
 columns_list = ["periods5a", "Nachname","Medientyp_ED"] # "Jahr_ED" ,,  ,"Kanon_Status","Gender",  ,
+columns_list = ["Periods 5 years", "Author","Media type"] # "Jahr_ED" ,,  ,"Kanon_Status","Gender",  ,
 
 train_size = 0.8
 
@@ -64,7 +66,7 @@ all_dict = {}
 for period in periods:
     print("period is: ", period)
     period_data = data[data["periods"] == period]
-    n = 5
+    n = 50
     factor_results = []
     for factor in columns_list:
         lr_acc_scores, N_f1_scores = [], []
@@ -124,11 +126,12 @@ print(df_results)
 
 df_results.plot(kind="line")
 plt.title("Persp. Modellierung nach einzelnen Kontextfaktoren")
+plt.title("Perspectival context modeling for each factor \n Comparing Novellen and Erzählungen")
 plt.xticks([0,1,2,3], ["1805", "1835", "1865", "1895"])
 plt.xlabel("Zeit")
 plt.ylabel("Vorhersagegenauigkeit")
-plt.savefig("/home/julian/Documents/Uni/01_Habil/03_Abbildungen/persp-hist-modellierung-N-vs-E_textfeat-vs-contextfactors_kap7_ind-factors.svg")
+plt.ylabel("Predictive accuracy")
+plt.savefig("/home/julian/Documents/CLS_temp/figures/en_persp-hist-modellierung-N-vs-E_textfeat-vs-contextfactors_kap7_ind-factors.svg")
 plt.show()
 
-ho933unt
 

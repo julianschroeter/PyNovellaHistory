@@ -88,7 +88,7 @@ whole_df[["Gewaltverbrechen", "Kampf", "Entführung", "Krieg","Spuk","Gefahrenle
 whole_df = years_to_periods(input_df=whole_df, category_name="date", start_year=1750,end_year=1900, epoch_length=100,
                             new_periods_column_name="periods")
 
-#whole_df = whole_df[whole_df["Spannungsindikator"] != 0]
+whole_df = whole_df[whole_df["Spannungsindikator"] != 0]
 df = whole_df.copy()
 
 danger_df = df.drop(columns=["Erotik", "Liebe", "embedding_Angstempfinden","UnbekannteEindr", "Angstempfinden", "Liebe", "Erotik"])
@@ -155,6 +155,7 @@ if y_variable == "Gefahrenlevel":
     y_variable_legend = "Maximum Gefahrenlevel im Text"
 elif y_variable == "Spannungsindikator":
     y_variable_legend = "Baseline Modell: Gefahr-Angst-Spannung"
+    y_variable_legend = "Danger and Fear Level as Suspense Indicator"
 else: y_variable_legend = y_variable
 
 
@@ -178,7 +179,7 @@ for x_variable in x_variables:
     regr = LinearRegression()
     regr.fit(df_serial.loc[:, x_variable].array.reshape(-1, 1), df_serial.loc[:, y_variable])
     y_pred = regr.predict(df_serial.loc[:, x_variable].array.reshape(-1, 1))
-    plt.plot(df_serial.loc[:, x_variable], y_pred, color="black", linewidth=1, linestyle=":")
+   # plt.plot(df_serial.loc[:, x_variable], y_pred, color="black", linewidth=1, linestyle=":")
 
     # siegel-slope forgotten texts:
     x = df_serial.loc[:, x_variable]
@@ -190,7 +191,7 @@ for x_variable in x_variables:
     regr = LinearRegression()
     regr.fit(df_nonserial.loc[:, x_variable].array.reshape(-1, 1), df_nonserial.loc[:, y_variable])
     y_pred = regr.predict(df_nonserial.loc[:, x_variable].array.reshape(-1, 1))
-    plt.plot(df_nonserial.loc[:, x_variable], y_pred, color="grey", linewidth=1, linestyle=":")
+    #plt.plot(df_nonserial.loc[:, x_variable], y_pred, color="grey", linewidth=1, linestyle=":")
 
     # siegel-slope forgotten texts:
     x = df_nonserial.loc[:, x_variable]
@@ -200,6 +201,7 @@ for x_variable in x_variables:
 
     if x_variable == year_cat_name:
         x_variable_legend = "Jahr des Erstdrucks"
+        x_variable_legend = "Year of Publication"
     else:
         x_variable_legend = x_variable
 
@@ -208,11 +210,12 @@ for x_variable in x_variables:
     plt.yticks(rotation=45)
     plt.xlabel(x_variable_legend)
     plt.title("Korrelation zwischen Zeit und Spannung für serielle/nicht-serielle Texte")
+    plt.title("Correlation Between Time and Suspense for serial/non-serial Texts")
 
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=serial_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_seriality" + x_variable + y_variable + ".png"
+    outfilename = "en_correlation_seriality" + x_variable + y_variable + ".png"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

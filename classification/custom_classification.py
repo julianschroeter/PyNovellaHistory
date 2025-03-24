@@ -34,7 +34,7 @@ def resample_boostrapped_LR(n, df, genre_category="Gattungslabel_ED_normalisiert
             accuracy_scores_list.append(element)
     return mean(accuracy_scores_list), std(accuracy_scores_list)
 
-def resample_boostrapped_SVM(n, df, genre_category="Gattungslabel_ED_normalisiert",genre_labels=["N", "E"], train_size=0.8):
+def resample_bs_linSVM(n, df, genre_category="Gattungslabel_ED_normalisiert",genre_labels=["N", "E"], train_size=0.8):
     accuracy_scores_list, f1_scores_list = [], []
 
     df_1 = df[df[genre_category] == genre_labels[0]]

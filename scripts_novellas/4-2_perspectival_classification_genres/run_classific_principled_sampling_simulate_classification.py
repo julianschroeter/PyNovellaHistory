@@ -15,9 +15,15 @@ from sklearn.datasets import make_blobs, make_classification, make_gaussian_quan
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.decomposition import PCA
+from sklearn.svm import SVC, LinearSVC
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 lang = "de"
 n = 300
+
+flip_y = 0.1
+class_sep = 2
 
 fig, axes = plt.subplots(5, 3, figsize=(15,25))
 
@@ -26,29 +32,30 @@ probabs_dict = {}
 acc_scores = []
 optima_x, optima_y = [], []
 improvements = []
+lin_scores, nonlin_scores = [], []
 
 for i in range(n):
     if i < 100:
-        n_informative = 5
+        n_informative = 2
         n_redundant = 0
         n_clusters_per_class = 1
-        title = "5 informative Features, 1 Cluster"
+        title = "2 informative Features, 1 Cluster"
 
         k = 0
 
     elif i < 200:
-        n_informative = 5
+        n_informative = 2
         n_redundant = 0
         n_clusters_per_class = 2
-        title = "5 informative Features, 2 Cluster"
+        title = "2 informative Features, 2 Cluster"
         k = 1
 
 
     else:
-        n_informative = 5
+        n_informative = 3
         n_redundant = 0
-        n_clusters_per_class = 5
-        title = "5 informative Features, 5 Cluster"
+        n_clusters_per_class = 3
+        title = "3 informative Features, 3 Cluster"
         k = 2
 
     if  i in [100,200]:
@@ -57,9 +64,10 @@ for i in range(n):
         acc_scores = []
         optima_x, optima_y = [], []
         improvements = []
+        lin_scores, nonlin_scores = [], []
 
-    X, Y = make_classification(n_samples=500, flip_y=0.0001, class_sep=3,
-                               n_features=10, n_redundant=n_redundant, n_informative=n_informative, n_clusters_per_class=n_clusters_per_class)
+    X, Y = make_classification(n_samples=500, flip_y=flip_y, class_sep=class_sep,
+                               n_features=5, n_redundant=n_redundant, n_informative=n_informative, n_clusters_per_class=n_clusters_per_class)
 
 
     pca = PCA(n_components=0.95)
@@ -127,6 +135,35 @@ for i in range(n):
     improvements.append(improvement)
     print("Improvement: ", title, ": ", improvement)
 
+    lin_model = LinearSVC()
+    nonlin_model = SVC()
+
+
+    # train a linear SVM :
+    lin_model.fit(X_train, Y_train)
+    Y_pred_linear = lin_model.predict(X_test)
+    print("Linear SVM Classification Report:")
+    print(classification_report(Y_test, Y_pred_linear))
+    print("Accuracy: ", accuracy_score(Y_test, Y_pred_linear))
+    lin_scores.append(accuracy_score(Y_test, Y_pred_linear))
+
+    # Train a non-linear SVM with RBF kernel and standard parameter settings
+    nonlinear_svm = make_pipeline(StandardScaler(), SVC(kernel='rbf', C=1, gamma='scale'))
+    nonlinear_svm.fit(X_train, Y_train)
+    Y_pred = nonlinear_svm.predict(X_test)
+    print("Non-linear SVM Classification Report:")
+    print(classification_report(Y_test, Y_pred))
+    print(f"Accuracy: {accuracy_score(Y_test, Y_pred):.2f}")
+    nonlin_scores.append(accuracy_score(Y_test, Y_pred))
+
+    lin_mean = np.mean(np.asarray(lin_scores))
+    print("Mean accuracy for linear SVM: ", lin_mean)
+
+    nonlin_mean = np.mean(np.asarray(nonlin_scores))
+    print("Mean accuracy for non-linear SVM: ", nonlin_mean)
+
+
+
     if i in [0,100,200]:
         axes[1,k].plot([e[0] for e in thresholds_scores], [e[1] for e in thresholds_scores])
         axes[1,k].vlines(optimum_x, ymin=0, ymax=optimum_Y, colors="blue")
@@ -134,7 +171,7 @@ for i in range(n):
         axes[1,k].set_ylim(0,1)
         axes[1,0].set_ylabel("c@1")
         axes[1,1].set_xlabel("Enthaltungsbereich")
-        axes[1,1].set_title("Gridsuche")
+        axes[1,k].set_title("accuracy: " + str(np.mean(acc_scores))[:4] + " – c@1: " + str(optimum_Y)[:4])
 
     threshold = optimum_x
     x_results, y_results = rd_vectors_around_center(predict_probs)
@@ -163,17 +200,20 @@ for i in range(n):
         axes[2,k].set_ylim(-1, 1)
 
         print(optima_x)
-    axes[3,k].boxplot(optima_x, vert=True)
-    axes[3, k].set_ylim(0,1)
-    axes[3,0].set_ylabel("Boxplot: Enthaltungsbereiche")
-    axes[3, 1].set_xlabel("Enthaltungsbereich")
-    axes[4, k].boxplot(improvements, vert=True)
-    axes[4,k].set_ylim(1.00,1.06)
-    axes[4,0].set_ylabel("Boxplot: Verbesserung")
-    axes[4, 1].set_xlabel("Verbesserung")
+    if i in [99, 199, 299]:
+        axes[3,k].boxplot(optima_x, vert=True)
+        axes[3, k].set_ylim(0,1)
+        axes[3,0].set_ylabel("Boxplot: Enthaltungsbereiche")
+        axes[3, 1].set_xlabel("Enthaltungsbereich")
+        axes[4, k].boxplot(improvements, vert=True)
+        axes[4,k].set_ylim(1.00,1.06)
+        axes[4,0].set_ylabel("Boxplot: Verbesserung")
+        axes[4, k].set_xlabel("LR accuracy: " + str(np.mean(acc_scores))[:4] + " – c@1: " + str(optimum_Y)[:4] +"\n" +
+        "SVC lin acc: " + str(lin_mean)[:4] + " / Non-Lin SVC acc: " + str(nonlin_mean)[:4] + "\n" +
+                              "Nonlin Impr.Rate: " + str(nonlin_mean/lin_mean)[:4])
 
 
 fig.tight_layout()
-fig.savefig("/home/julian/git/PyNovellaHistory/figures/gridsuche_c-at-one_simulate.svg")
+fig.savefig("/home/julian/Documents/CLS_temp/figures/5features_gridsuche_c-at-one_simulate_class_sep-" + str(class_sep) + "flip_y-" + str(flip_y) + ".svg")
 plt.show()
 

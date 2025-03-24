@@ -25,6 +25,7 @@ labels = ["N", "E"]
 values_dict = {"Gattungslabel_ED_normalisiert": labels}
 df = df[df.isin(values_dict).any(axis=1)]
 df = df.dropna()
+df = df.drop_duplicates()
 
 medium_cat = "Medientyp_ED"
 df = df[df.isin({medium_cat:["Familienblatt","Rundschau", "Anthologie", "Taschenbuch", "Buch", "Illustrierte", "Kalender", "Nachlass", "Sammlung", "Werke"

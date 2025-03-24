@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-system_name = "my_mac" # "wcph104"
+system_name =  "my_xps" # "my_mac" # "wcph104"
 data_matrix_filepath = os.path.join(mallet_directory(system_name), "doc-topics.txt")
 language_model = os.path.join(set_DistReading_directory(system_name=system_name), "language_models", "model_de_lg")
 metadata_csv_filepath = os.path.join(global_corpus_representation_directory(system_name=system_name), "Bibliographie.csv")
@@ -18,7 +18,7 @@ df = pd.read_csv(os.path.join(global_corpus_representation_directory(system_name
 
 colors_list = load_stoplist(os.path.join(global_corpus_representation_directory(system_name), "my_colors.txt"))
 textanalytic_metadata_filepath = os.path.join(global_corpus_representation_directory(system_name), "textanalytic_metadata.csv")
-char_netw_infile_path = os.path.join(global_corpus_representation_directory(system_name), "Networkdata_document_Matrix.csv")
+char_netw_infile_path = os.path.join(global_corpus_representation_directory(system_name), "all_complex_features_matrix.csv")
 
 topic_doc_matrix = DocTopicMatrix(data_matrix_filepath= data_matrix_filepath, data_matrix_df=None, metadata_df=None,
                                   metadata_csv_filepath = char_netw_infile_path, mallet=True)
@@ -38,12 +38,12 @@ matrix = topic_doc_matrix.last_chunk()
 matrix = matrix.reduce_to([66, 74, 76]) # = tragische Topics
 matrix.data_matrix_df["topic_mean"] = matrix.data_matrix_df.mean(axis=1).values
 
-matrix = matrix.add_metadata("Länge")
+matrix = matrix.add_metadata("length")
 #matrix = matrix.add_metadata("Netzwerkdichte")
 #matrix = matrix.add_metadata("Anteil")
 
 
-matrix.data_matrix_df["log_Länge"] = matrix.data_matrix_df["Länge"].apply(lambda x: np.log(x))
+matrix.data_matrix_df["log_Länge"] = matrix.data_matrix_df["length"].apply(lambda x: np.log(x))
 
 matrix = matrix.reduce_to(["log_Länge", "topic_mean"])
 

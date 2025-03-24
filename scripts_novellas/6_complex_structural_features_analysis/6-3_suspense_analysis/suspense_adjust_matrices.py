@@ -158,7 +158,7 @@ for genre, color in authors_dict.items():
 #authors_colors_list = [authors_dict[x] for x in df["author"].values.tolist()]
 
 serial_mpatches_list = []
-for serial, color in {"seriell publiziert":"orange", "nicht-seriell publiziert":"grey"}.items():
+for serial, color in {"seriell publiziert":"black", "nicht-seriell publiziert":"grey"}.items():
     patch = mpatches.Patch(color=color, label=serial)
     serial_mpatches_list.append(patch)
 
@@ -220,7 +220,7 @@ for x_variable in x_variables:
 
     fig, ax = plt.subplots()
 
-    plt.scatter(df_serial.loc[:, x_variable], df_serial.loc[:, y_variable], color="orange")
+    plt.scatter(df_serial.loc[:, x_variable], df_serial.loc[:, y_variable], color="black")
     regr = LinearRegression()
     regr.fit(df_serial.loc[:, x_variable].array.reshape(-1, 1), df_serial.loc[:, y_variable])
     y_pred = regr.predict(df_serial.loc[:, x_variable].array.reshape(-1, 1))
@@ -229,7 +229,7 @@ for x_variable in x_variables:
     # siegel-slope
     x = df_serial.loc[:, x_variable]
     res = siegelslopes(df_serial.loc[:, y_variable], x)
-    plt.plot(x, res[1] + res[0] * x, color="orange", linewidth=3)
+    plt.plot(x, res[1] + res[0] * x, color="black", linewidth=3)
 
     plt.scatter(df_nonserial.loc[:, x_variable], df_nonserial.loc[:, y_variable], color="grey")
     regr = LinearRegression()
@@ -264,7 +264,7 @@ for x_variable in x_variables:
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles=serial_mpatches_list ) # authors_mpatches_list
 
-    outfilename = "correlation_seriality" + x_variable + y_variable + ".svg"
+    outfilename = "correlation_seriality" + x_variable + y_variable + "_grey.svg"
     plt.savefig(os.path.join(local_temp_directory(system), "figures", outfilename))
     plt.show()
 

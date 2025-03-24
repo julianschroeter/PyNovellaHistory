@@ -64,12 +64,12 @@ print(dist_matrix)
 sns.set(font_scale=0.5)
 cmap = sns.cm.rocket_r
 sns.heatmap(dist_matrix, annot=True, xticklabels=True, yticklabels=True,
-            vmin=0.1, vmax=1.1, cmap=cmap)
+            vmin=0.1, vmax=1.1, cmap="gray")
 plt.title("Heatmap für Fassungsvergleiche")
 plt.ylabel("Erstdruck")
 plt.xlabel("Spät-/Buchdruck")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "heatmap_Fassungsvergleiche.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "heatmap_Fassungsvergleiche_grey.svg"))
 plt.show()
 
 results = results_2groups_dist(1, data_ED, data_BD, metric="cosine", select_one_author=False,select_one_per_period=False)

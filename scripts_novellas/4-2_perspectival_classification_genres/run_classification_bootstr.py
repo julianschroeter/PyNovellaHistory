@@ -10,7 +10,7 @@ import pandas as pd
 from preprocessing.presetting import global_corpus_representation_directory, global_corpus_raw_dtm_directory, local_temp_directory
 from preprocessing.corpus import DTM
 
-from classification.custom_classification import resample_boostrapped_LR, resample_boostrapped_SVM
+from classification.custom_classification import resample_boostrapped_LR, resample_bs_linSVM
 
 metadata_path = os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv")
 
@@ -33,7 +33,7 @@ for filename in os.listdir(global_corpus_raw_dtm_directory(system)):
     print("LR classification report for " + str(filename) + ": ")
     print(mean_lr, std_lr)
 
-    mean_svm, std_svm = resample_boostrapped_SVM(50, df, genre_labels=label_list)
+    mean_svm, std_svm = resample_bs_linSVM(50, df, genre_labels=label_list)
 
     print("SVM classification report for " + str(filename) + ": ")
     print(mean_svm, std_svm)

@@ -10,6 +10,7 @@ system = "my_xps" # "wcph113" #
 # Skript ist erst im Aufbau
 
 infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "raw_dtm_l1_lemmatized_use_idf_False2500mfw.csv") # set the filepath for the document-feature-matrix file (see data folder)
+infile_name = os.path.join(global_corpus_raw_dtm_directory(system), "scaled_raw_dtm_l1__use_idf_False2500mfw.csv" )
 metadata_filepath= os.path.join(global_corpus_representation_directory(system), "Bibliographie.csv") # set the filepath for the metadata.csv filepath (see data folder)
 
 # metadata categories to be added

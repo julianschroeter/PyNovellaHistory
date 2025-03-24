@@ -1,4 +1,4 @@
-system = "wcph113" # "my_xps" # "my_mac"
+system = "my_xps" #  "wcph113" # "my_mac"
 if system == "wcph113":
     import sys
     sys.path.append('/mnt/data/users/schroeter/PyNovellaHistory')
@@ -86,7 +86,7 @@ Y_color = list(map(subs_dict.get, Y, Y))
 
 
 rf_acc_scores, lr_acc_scores = [],[]
-for i in range(10):
+for i in range(1):
     X_train, X_test, Y_train, Y_test = model_selection.train_test_split(X, Y, train_size=0.8)
 
     rf_model = RandomForestClassifier()

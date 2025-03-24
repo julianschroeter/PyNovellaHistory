@@ -45,21 +45,24 @@ print(data)
 ED_values = data_ED.max_value.tolist()
 BD_values = data_BD.max_value.tolist()
 
+whiskerprops = dict(color="black", linewidth=1)
+boxprops = dict(color="black", linewidth=1)
+medianprops = dict(color="grey", linewidth=1)
 fig, ax = plt.subplots()
-ax.boxplot([ED_values, BD_values])
+ax.boxplot([ED_values, BD_values], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 plt.xticks([1,2], ["Erstdrucke", "Buchdrucke"])
 plt.xlabel("Medienformate")
 plt.ylabel("Gefahrenlevel")
 plt.title("Boxplots: Max. Gefahrenlevel – Fassungsvergleiche")
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Fassungsvergleiche_Max_Gefahrenlevel.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Fassungsvergleiche_Max_Gefahrenlevel_grey.svg"))
 plt.show()
 
 print(ttest_ind(ED_values, BD_values, alternative="greater"))
 print(ttest_rel(ED_values, BD_values, alternative="greater"))
 
 fig, ax=plt.subplots()
-ax.scatter([0,1,2,3,4,5,6,7,8,9,10], ED_values, color="blue", alpha=0.8, label="Erstdrucke")
-ax.scatter([0,1,2,3,4,5,6,7,8,9,10], BD_values, color="red", alpha=0.5, label="Buchdrucke")
+ax.scatter([0,1,2,3,4,5,6,7,8,9,10], ED_values, color="black", marker="x", alpha=0.8, label="Erstdrucke")
+ax.scatter([0,1,2,3,4,5,6,7,8,9,10], BD_values, color="black",marker="o",  alpha=0.5, label="Buchdrucke")
 plt.xticks([0,1,2,3,4,5,6,7,8,9,10], ["Stifter: Mantel/Bergmilch", "S.: Haidedorf", "S.: Heiliger Abend/Bergkr.",
                                       "Musil:Verz. Haus/Veronika", "Goethe: Melusine", "Schefer:Düvecke",
                                       "G.: Mann v. 50 Jahren", "S.: Mappe Urgroßv.", "Schiller: Geisterseher",
@@ -68,7 +71,7 @@ plt.legend()
 plt.ylabel("Max. Gefahrenlevel")
 plt.title("Wertepaare: Fassungsvergleich")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Wertepaare_Fassungsvergleiche_Max_Gefahrenlevel.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Wertepaare_Fassungsvergleiche_Max_Gefahrenlevel_grey.svg"))
 plt.show()
 
 data_ED = data_ED.loc[:,["Kampf", "Sturm", "Krieg", "Feuer", "Gewaltverbrechen"]]
@@ -81,21 +84,22 @@ ED_values = data_ED.mean_values.tolist()
 BD_values = data_BD.mean_values.tolist()
 
 
+
 fig, ax = plt.subplots()
-ax.boxplot([ED_values, BD_values])
+ax.boxplot([ED_values, BD_values], medianprops=medianprops, boxprops=boxprops, whiskerprops=whiskerprops)
 plt.xticks([1,2], ["Erstdrucke", "Buchdrucke"])
 plt.xlabel("Medienformate")
 plt.ylabel("Mittleres Gefahrenlevel")
 plt.title("Boxplots: Mittleres Gefahrenlevel – Fassungsvergleiche")
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Fassungsvergleiche_Mittleres_Gefahrenlevel.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Boxplot_Fassungsvergleiche_Mittleres_Gefahrenlevel_grey.svg"))
 plt.show()
 
 print(ttest_ind(ED_values, BD_values, alternative="greater"))
 print(ttest_rel(ED_values, BD_values, alternative="greater"))
 
 fig, ax=plt.subplots()
-ax.scatter([0,1,2,3,4,5,6,7,8,9,10], ED_values, color="blue", alpha=0.8, label="Erstdrucke")
-ax.scatter([0,1,2,3,4,5,6,7,8,9,10], BD_values, color="red", alpha=0.5, label="Buchdrucke")
+ax.scatter([0,1,2,3,4,5,6,7,8,9,10], ED_values, color="black", marker="x", alpha=0.8, label="Erstdrucke")
+ax.scatter([0,1,2,3,4,5,6,7,8,9,10], BD_values, color="black", marker = "o", alpha=0.5, label="Buchdrucke")
 plt.xticks([0,1,2,3,4,5,6,7,8,9,10], ["Stifter: Mantel/Bergmilch", "S.: Haidedorf", "S.: Heiliger Abend/Bergkr.",
                                       "Musil:Verz. Haus/Veronika", "Goethe: Melusine", "Schefer:Düvecke",
                                       "G.: Mann v. 50 Jahren", "S.: Mappe Urgroßv.", "Schiller: Geisterseher",
@@ -104,5 +108,5 @@ plt.legend()
 plt.ylabel("Gefahrenlevel")
 plt.title("Wertepaare: Fassungsvergleich")
 plt.tight_layout()
-plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Wertepaare_Fassungsvergleiche_Mittleres_Gefahrenlevel.svg"))
+plt.savefig(os.path.join(local_temp_directory(system), "figures", "Abb_Wertepaare_Fassungsvergleiche_Mittleres_Gefahrenlevel_grey.svg"))
 plt.show()
